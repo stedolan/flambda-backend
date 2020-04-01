@@ -198,6 +198,7 @@ let print_op oc = function
   | Probe { name; handler_code_sym } ->
       Printf.fprintf oc "probe %s %s" name handler_code_sym
   | Probe_is_enabled { name } -> Printf.fprintf oc "probe_is_enabled %s" name
+  | Opaque -> Printf.fprintf oc "opaque"
   | Name_for_debugger _ -> Printf.fprintf oc "name_for_debugger"
 
 let print_call oc = function

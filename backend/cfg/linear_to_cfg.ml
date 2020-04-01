@@ -443,6 +443,7 @@ let to_basic (mop : Mach.operation) : C.basic =
   | Icompf c -> Op (Compf c)
   | Ifloatofint -> Op Floatofint
   | Iintoffloat -> Op Intoffloat
+  | Iopaque -> Op Opaque
   | Ispecific op -> Op (Specific op)
   | Iname_for_debugger { ident; which_parameter; provenance; is_assignment }
     ->
@@ -623,6 +624,7 @@ let rec create_blocks (t : t) (i : L.instruction) (block : C.basic_block)
       | Istore (_, _, _)
       | Ialloc _ | Iintop _
       | Iintop_imm (_, _)
+      | Iopaque
       | Iprobe _ | Iprobe_is_enabled _ | Ispecific _ | Iname_for_debugger _
         ->
           let desc = to_basic mop in
