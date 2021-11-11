@@ -180,7 +180,7 @@ let mk_inline_toplevel f =
 
 let mk_inlining_report f =
   "-inlining-report", Arg.Unit f, " Emit `.<round>.inlining' file(s) (one per \
-      round) showing the inliner's decisions"
+      round) showing the inliner's decisions (Flambda 1 and 2)"
 ;;
 
 let mk_dump_pass f =
@@ -300,6 +300,22 @@ let mk_no_keep_locs f =
   "-no-keep-locs", Arg.Unit f, " Do not keep locations in .cmi files"
 ;;
 
+let mk_probes f =
+  if Config.probes then
+    "-probes", Arg.Unit f, " Emit tracing probes as specified by [%%probe ..]"
+  else
+    let err () =
+      raise (Arg.Bad "OCaml has been configured without support for \
+                      tracing probes: -probes not available.")
+    in
+    "-probes", Arg.Unit err, " (option not available)"
+;;
+
+let mk_no_probes f =
+    "-no-probes", Arg.Unit f, " Ignore [%%probe ..]"
+;;
+
+
 let mk_labels f =
   "-labels", Arg.Unit f, " Use commuting label mode"
 ;;
@@ -310,6 +326,10 @@ let mk_linkall f =
 
 let mk_linscan f =
   "-linscan", Arg.Unit f, " Use the linear scan register allocator"
+;;
+
+let mk_ocamlcfg f =
+  "-ocamlcfg", Arg.Unit f, " Use ocamlcfg"
 ;;
 
 let mk_make_runtime f =
@@ -744,30 +764,30 @@ let mk_dclambda f =
 ;;
 
 let mk_dflambda f =
-  "-dflambda", Arg.Unit f, " Print Flambda terms"
+  "-dflambda", Arg.Unit f, " Print Flambda (1 or 2) terms on exit from Flambda"
 ;;
 
 let mk_drawflambda f =
-  "-drawflambda", Arg.Unit f, " Print Flambda terms after closure conversion"
+  "-drawflambda", Arg.Unit f, " Print Flambda terms after closure conversion\n\
+  \     (for Flambda 2, after [Lambda_to_flambda])"
 ;;
 
 let mk_dflambda_invariants f =
-  "-dflambda-invariants", Arg.Unit f, " Check Flambda invariants \
-      around each pass"
+  "-dflambda-invariants", Arg.Unit f, " Check Flambda (1 and 2) invariants"
 ;;
 
 let mk_dflambda_no_invariants f =
-  "-dflambda-no-invariants", Arg.Unit f, " Do not Check Flambda invariants \
-      around each pass"
+  "-dflambda-no-invariants", Arg.Unit f, " Do not check Flambda (1 and 2) \
+      invariants"
 ;;
 
 let mk_dflambda_let f =
-  "-dflambda-let", Arg.Int f, "<stamp>  Print when the given Flambda [Let] \
+  "-dflambda-let", Arg.Int f, "<stamp>  Print when the given Flambda 1 [Let] \
       is created"
 ;;
 
 let mk_dflambda_verbose f =
-  "-dflambda-verbose", Arg.Unit f, " Print Flambda terms including around \
+  "-dflambda-verbose", Arg.Unit f, " Print Flambda 1 terms including around \
       each pass"
 ;;
 
@@ -777,6 +797,14 @@ let mk_dinstr f =
 
 let mk_dcamlprimc f =
   "-dcamlprimc", Arg.Unit f, " (undocumented)"
+;;
+
+let mk_dcfg f =
+  "-dcfg", Arg.Unit f, " (undocumented)"
+;;
+
+let mk_dcmm_invariants f =
+  "-dcmm-invariants", Arg.Unit f, " Extra sanity checks on Cmm"
 ;;
 
 let mk_dcmm f =
@@ -897,6 +925,331 @@ let mk_afl_inst_ratio f =
 let mk__ f =
   "-", Arg.String f,
   "<file>  Treat <file> as a file name (even if it starts with `-')"
+;;
+
+let format_default flag = if flag then " (default)" else ""
+let format_not_default flag = if flag then "" else " (default)"
+
+module Flambda2 = Clflags.Flambda2
+
+let mk_flambda2_join_points f =
+  "-flambda2-join-points", Arg.Unit f,
+  Printf.sprintf "Propagate information from all incoming edges to a join\n\
+      \     point%s (Flambda 2 only)"
+    (format_default Flambda2.Default.join_points)
+;;
+
+let mk_no_flambda2_join_points f =
+  "-no-flambda2-join-points", Arg.Unit f,
+  Printf.sprintf " Propagate information to a join point only if there are\n\
+      \     zero or one incoming edge(s)%s (Flambda 2 only)"
+    (format_not_default Flambda2.Default.join_points)
+;;
+
+let mk_flambda2_unbox_along_intra_function_control_flow f =
+  "-flambda2-unbox-along-intra-function-control-flow", Arg.Unit f,
+  Printf.sprintf " Pass values within\n\
+      \     a function as unboxed where possible%s (Flambda 2 only)"
+    (format_default Flambda2.Default.unbox_along_intra_function_control_flow)
+;;
+
+let mk_no_flambda2_unbox_along_intra_function_control_flow f =
+  "-no-flambda2-unbox-along-intra-function-control-flow", Arg.Unit f,
+  Printf.sprintf " Pass values within\n\
+      \     a function in their normal representation%s (Flambda 2 only)"
+    (format_not_default
+      Flambda2.Default.unbox_along_intra_function_control_flow)
+;;
+
+let mk_flambda2_backend_cse_at_toplevel f =
+  "-flambda2-backend-cse-at-toplevel", Arg.Unit f,
+  Printf.sprintf " Apply the backend CSE pass to module\n\
+      \     initializers%s (Flambda 2 only)"
+    (format_default Flambda2.Default.backend_cse_at_toplevel)
+;;
+
+let mk_no_flambda2_backend_cse_at_toplevel f =
+  "-no-flambda2-backend-cse-at-toplevel", Arg.Unit f,
+  Printf.sprintf " Do not apply the backend CSE pass to\n\
+      \     module initializers%s (Flambda 2 only)"
+    (format_not_default Flambda2.Default.backend_cse_at_toplevel)
+;;
+
+let mk_flambda2_cse_depth f =
+  "-flambda2-cse-depth", Arg.Int f,
+  Printf.sprintf " Depth threshold for eager tracking of CSE equations\n\
+      \     (default %d) (Flambda 2 only)"
+    Flambda2.Default.cse_depth
+;;
+
+let mk_flambda2_expert_code_id_and_symbol_scoping_checks f =
+  "-flambda2-expert-code-id-and-symbol-scoping-checks", Arg.Unit f,
+  Printf.sprintf " Perform checks on static\n\
+      \     scopes of code IDs and symbols during To_cmm%s\n\
+      \     (Flambda 2 only)"
+    (format_default Flambda2.Expert.Default.code_id_and_symbol_scoping_checks)
+;;
+
+let mk_no_flambda2_expert_code_id_and_symbol_scoping_checks f =
+  "-no-flambda2-expert-code-id-and-symbol-scoping-checks", Arg.Unit f,
+  Printf.sprintf " Do not perform checks\n\
+      \     on static scopes of code IDs and symbols during To_cmm%s\n\
+      \     (Flambda 2 only)"
+    (format_not_default
+      Flambda2.Expert.Default.code_id_and_symbol_scoping_checks)
+;;
+
+let mk_flambda2_expert_fallback_inlining_heuristic f =
+  "-flambda2-expert-fallback-inlining-heuristic", Arg.Unit f,
+  Printf.sprintf " Prevent inlining of functions\n\
+      \     whose bodies contain closures%s (Flambda 2 only)"
+    (format_default Flambda2.Expert.Default.fallback_inlining_heuristic)
+;;
+
+let mk_no_flambda2_expert_fallback_inlining_heuristic f =
+  "-no-flambda2-expert-fallback-inlining-heuristic", Arg.Unit f,
+  Printf.sprintf " Allow inlining of functions\n\
+      \     whose bodies contain closures%s (Flambda 2 only)"
+    (format_not_default Flambda2.Expert.Default.fallback_inlining_heuristic)
+;;
+
+let mk_flambda2_expert_inline_effects_in_cmm f =
+  "-flambda2-expert-inline-effects-in-cmm", Arg.Unit f,
+  Printf.sprintf " Allow inlining of effectful\n\
+      \     expressions in the produced Cmm code%s (Flambda 2 only)"
+    (format_default Flambda2.Expert.Default.inline_effects_in_cmm)
+;;
+
+let mk_no_flambda2_expert_inline_effects_in_cmm f =
+  "-no-flambda2-expert-inline-effects-in-cmm", Arg.Unit f,
+  Printf.sprintf " Prevent inlining of effectful\n\
+      \     expressions in the produced Cmm code%s (Flambda 2 only)"
+    (format_not_default Flambda2.Expert.Default.inline_effects_in_cmm)
+;;
+
+let mk_flambda2_expert_phantom_lets f =
+  "-flambda2-expert-phantom-lets", Arg.Unit f,
+  Printf.sprintf " Generate phantom lets when -g\n\
+      \     is specified%s (Flambda 2 only)"
+    (format_default Flambda2.Expert.Default.phantom_lets)
+;;
+
+let mk_no_flambda2_expert_phantom_lets f =
+  "-no-flambda2-expert-phantom-lets", Arg.Unit f,
+  Printf.sprintf " Do not generate phantom lets even when -g\n\
+      \     is specified%s (Flambda 2 only)"
+    (format_not_default Flambda2.Expert.Default.phantom_lets)
+;;
+
+let mk_flambda2_expert_max_block_size_for_projections f =
+  "-flambda2-expert-max-block-size-for-projections", Arg.Int f,
+  Printf.sprintf " Do not simplify projections\n\
+      \     from blocks if the block size exceeds this value (default %s)\n\
+      \     (Flambda 2 only)"
+    (match Flambda2.Expert.Default.max_block_size_for_projections with
+     | None -> "not set"
+     | Some max -> string_of_int max)
+;;
+
+let mk_flambda2_expert_max_unboxing_depth f =
+  "-flambda2-expert-max-unboxing-depth", Arg.Int f,
+  Printf.sprintf " Do not unbox (nested) values deeper\n\
+      \     than this many levels (default %d) (Flambda 2 only)"
+    Flambda2.Expert.Default.max_unboxing_depth
+;;
+
+let mk_flambda2_expert_can_inline_recursive_functions f =
+  "-flambda2-expert-can-inline-recursive-functions", Arg.Unit f,
+  Printf.sprintf " Consider inlining\n\
+     \      recursive functions (default %s) (Flambda 2 only)"
+    (format_default Flambda2.Expert.Default.can_inline_recursive_functions)
+;;
+
+let mk_no_flambda2_expert_can_inline_recursive_functions f =
+  "-no-flambda2-expert-can-inline-recursive-functions", Arg.Unit f,
+  Printf.sprintf " Only inline recursive\n\
+      \     functions if forced to so do by an attribute\n\
+      \     (default %s) (Flambda 2 only)"
+    (format_not_default Flambda2.Expert.Default.can_inline_recursive_functions)
+;;
+
+let mk_flambda2_debug_permute_every_name f =
+  "-flambda2-debug-permute-every-name", Arg.Unit f,
+  Printf.sprintf " Permute every name to test name\n\
+      \     permutation code%s (Flambda 2 only)"
+    (format_default Flambda2.Debug.Default.permute_every_name)
+;;
+
+let mk_no_flambda2_debug_permute_every_name f =
+  "-no-flambda2-debug-permute-every-name", Arg.Unit f,
+  Printf.sprintf " Do not permute every name to test\n\
+      \     name permutation code%s (Flambda 2 only)"
+    (format_not_default Flambda2.Debug.Default.permute_every_name)
+;;
+
+let mk_flambda2_debug_concrete_types_only_on_canonicals f =
+  "-flambda2-debug-concrete-types-only-on-canonicals", Arg.Unit f,
+  Printf.sprintf " Check that concrete\n\
+      \     types are only assigned to canonical\n\
+      \     names%s (Flambda 2 only)"
+    (format_default Flambda2.Debug.Default.concrete_types_only_on_canonicals)
+;;
+
+let mk_no_flambda2_debug_concrete_types_only_on_canonicals f =
+  "-no-flambda2-debug-concrete-types-only-on-canonicals", Arg.Unit f,
+  Printf.sprintf " Do not check that\n\
+      \     concrete types are only assigned to canonical\n\
+      \     names%s (Flambda 2 only)"
+    (format_not_default
+      Flambda2.Debug.Default.concrete_types_only_on_canonicals)
+;;
+
+let mk_flambda2_inline_max_depth f =
+  "-flambda2-inline-max-depth", Arg.String f,
+  Printf.sprintf "<int>|<round>=<int>[,...]\n\
+      \     Maximum depth of search for inlining opportunities inside\n\
+      \     inlined functions (default %d) (Flambda 2 only)"
+    Clflags.Flambda2.Inlining.Default.max_depth
+;;
+
+let mk_flambda2_inline_max_rec_depth f =
+  "-flambda2-inline-max-rec-depth", Arg.String f,
+  Printf.sprintf "<int>|<round>=<int>[,...]\n\
+      \     Maximum depth of search for inlining opportunities inside\n\
+      \     inlined recursive functions (default %d) (Flambda 2 only)"
+    Clflags.Flambda2.Inlining.Default.max_rec_depth
+;;
+
+let mk_flambda2_inline_cost arg descr ~default f =
+  Printf.sprintf "-flambda2-inline-%s-cost" arg,
+  Arg.String f,
+  Printf.sprintf "<float>|<round>=<float>[,...]\n\
+      \     The cost of not removing %s during inlining\n\
+      \     (default %.03f, higher = more costly) (Flambda 2 only)"
+    descr
+    default
+;;
+
+let mk_flambda2_inline_call_cost =
+  mk_flambda2_inline_cost "call" "a call"
+    ~default:Clflags.Flambda2.Inlining.Default.call_cost
+
+let mk_flambda2_inline_alloc_cost =
+  mk_flambda2_inline_cost "alloc" "an allocation"
+    ~default:Clflags.Flambda2.Inlining.Default.alloc_cost
+
+let mk_flambda2_inline_prim_cost =
+  mk_flambda2_inline_cost "prim" "a primitive"
+    ~default:Clflags.Flambda2.Inlining.Default.prim_cost
+
+let mk_flambda2_inline_branch_cost =
+  mk_flambda2_inline_cost "branch" "a conditional"
+    ~default:Clflags.Flambda2.Inlining.Default.branch_cost
+
+let mk_flambda2_inline_indirect_call_cost =
+  mk_flambda2_inline_cost "indirect" "an indirect call"
+    ~default:Clflags.Flambda2.Inlining.Default.indirect_call_cost
+
+let mk_flambda2_inline_poly_compare_cost =
+  mk_flambda2_inline_cost "poly-compare" "a polymorphic comparison"
+    ~default:Clflags.Flambda2.Inlining.Default.poly_compare_cost
+
+(* CR-someday mshinwell: We should have a check that the parameters provided by
+   the user are sensible, e.g. small_function_size <= large_function_size. *)
+
+let mk_flambda2_inline_small_function_size f =
+  "-flambda2-inline-small-function-size", Arg.String f,
+  Printf.sprintf "<int>|<round>=<int>[,...]\n\
+      \     Functions with a cost less than this will always be inlined\n\
+      \     unless an attribute instructs otherwise (default %d)\n\
+      \     (Flambda 2 only)"
+    Clflags.Flambda2.Inlining.Default.small_function_size
+;;
+
+let mk_flambda2_inline_large_function_size f =
+  "-flambda2-inline-large-function-size", Arg.String f,
+  Printf.sprintf "<int>|<round>=<int>[,...]\n\
+      \     Functions with a cost greater than this will never be inlined\n\
+      \     unless an attribute instructs otherwise (default %d); speculative\n\
+      \     inlining will be disabled if equal to the small function size\n\
+      \     (Flambda 2 only)"
+    Clflags.Flambda2.Inlining.Default.large_function_size
+;;
+
+let mk_flambda2_inline_threshold f =
+  "-flambda2-inline-threshold", Arg.String f,
+    Printf.sprintf "<float>|<round>=<float>[,...]\n\
+        \     Aggressiveness of inlining (default %.02f, higher numbers mean\n\
+        \     more aggressive) (Flambda 2 only)"
+      Clflags.Flambda2.Inlining.Default.threshold
+
+let mk_flambda2_speculative_inlining_only_if_arguments_useful f =
+  "-flambda2-speculative-inlining-only-if-arguments-useful", Arg.Unit f,
+    Printf.sprintf " Only\n\
+        \    perform speculative inlining if the Flambda type system has\n\
+        \    useful information about the argument(s) at the call site%s\n\
+        \    (Flambda 2 only)"
+      (format_default
+        Flambda2.Inlining.Default.speculative_inlining_only_if_arguments_useful)
+
+let mk_no_flambda2_speculative_inlining_only_if_arguments_useful f =
+  "-no-flambda2-speculative-inlining-only-if-arguments-useful", Arg.Unit f,
+    Printf.sprintf " Ignore\n\
+        \     whether the Flambda type system has useful information\n\
+        \     about the argument(s) at the call site when performing\n\
+        \     speculative inlining%s (Flambda 2 only)"
+      (format_not_default
+        Flambda2.Inlining.Default.speculative_inlining_only_if_arguments_useful)
+
+let mk_flambda2_treat_invalid_code_as_unreachable f =
+  "-flambda2-treat-invalid-code-as-unreachable", Arg.Unit f,
+  Printf.sprintf " Treat code deemed as\n\
+      \     invalid by the Flambda 2 type system as unreachable, thus causing\n\
+      \     it (and potentially calling code) to be deleted%s\n\
+      \     (Flambda 2 only)"
+    (format_default Flambda2.Default.treat_invalid_code_as_unreachable)
+;;
+
+let mk_no_flambda2_treat_invalid_code_as_unreachable f =
+  "-no-flambda2-treat-invalid-code-as-unreachable", Arg.Unit f,
+  Printf.sprintf " Do not treat code deemed as\n\
+      \     invalid by the Flambda 2 type system as unreachable, instead\n\
+      \     replacing it by a trap (which currently causes a segfault)%s\n\
+      \     (Flambda 2 only)"
+    (format_not_default Flambda2.Default.treat_invalid_code_as_unreachable)
+;;
+
+let mk_flambda2_inlining_report_bin f =
+  "-flambda2-inlining-report-bin", Arg.Unit f, " Write inlining report\n\
+    \     in binary format (Flambda 2 only)"
+;;
+
+let mk_flambda2_unicode f =
+  "-flambda2-unicode", Arg.Unit f, " Use Unicode output when printing\n\
+    \     Flambda 2 code"
+;;
+
+let mk_drawfexpr f =
+  "-drawfexpr", Arg.Unit f, " Like -drawflambda but outputs fexpr language\n\
+    \     (Flambda 2 only)"
+;;
+
+let mk_dfexpr f =
+  "-dfexpr", Arg.Unit f, " Like -dflambda but outputs fexpr language\n\
+    \     (Flambda 2 only)"
+;;
+
+let mk_dflexpect f =
+  "-dflexpect", Arg.Unit f, " Like -dflambda but outputs a .flt file\n\
+    \     whose basename matches that of the input .ml file (Flambda 2 only)"
+;;
+
+let mk_dclosure_offsets f =
+  "-dclosure-offsets", Arg.Unit f, " Dump closure offsets (Flambda 2 only)"
+;;
+
+let mk_dfreshen f =
+  "-dfreshen", Arg.Unit f, " Freshen bound names when printing (Flambda 2 only)"
 ;;
 
 module type Common_options = sig
@@ -1076,6 +1429,7 @@ module type Optcommon_options = sig
   val _insn_sched : unit -> unit
   val _no_insn_sched : unit -> unit
   val _linscan : unit -> unit
+  val _ocamlcfg : unit -> unit
   val _no_float_const_prop : unit -> unit
 
   val _clambda_checks : unit -> unit
@@ -1087,6 +1441,8 @@ module type Optcommon_options = sig
   val _dflambda_verbose : unit -> unit
   val _drawclambda : unit -> unit
   val _dclambda : unit -> unit
+  val _dcfg : unit -> unit
+  val _dcmm_invariants : unit -> unit
   val _dcmm : unit -> unit
   val _dsel : unit -> unit
   val _dcombine : unit -> unit
@@ -1104,6 +1460,57 @@ module type Optcommon_options = sig
   val _dlinear :  unit -> unit
   val _dinterval : unit -> unit
   val _dstartup :  unit -> unit
+
+  val _flambda2_join_points : unit -> unit
+  val _no_flambda2_join_points : unit -> unit
+  val _flambda2_unbox_along_intra_function_control_flow : unit -> unit
+  val _no_flambda2_unbox_along_intra_function_control_flow : unit -> unit
+  val _flambda2_backend_cse_at_toplevel : unit -> unit
+  val _no_flambda2_backend_cse_at_toplevel : unit -> unit
+  val _flambda2_cse_depth : int -> unit
+  val _flambda2_expert_code_id_and_symbol_scoping_checks : unit -> unit
+  val _no_flambda2_expert_code_id_and_symbol_scoping_checks : unit -> unit
+  val _flambda2_expert_fallback_inlining_heuristic : unit -> unit
+  val _no_flambda2_expert_fallback_inlining_heuristic : unit -> unit
+  val _flambda2_expert_inline_effects_in_cmm : unit -> unit
+  val _no_flambda2_expert_inline_effects_in_cmm : unit -> unit
+  val _flambda2_expert_phantom_lets : unit -> unit
+  val _no_flambda2_expert_phantom_lets : unit -> unit
+  val _flambda2_expert_max_block_size_for_projections : int -> unit
+  val _flambda2_expert_max_unboxing_depth : int -> unit
+  val _flambda2_expert_can_inline_recursive_functions : unit -> unit
+  val _no_flambda2_expert_can_inline_recursive_functions : unit -> unit
+  val _flambda2_debug_permute_every_name : unit -> unit
+  val _no_flambda2_debug_permute_every_name : unit -> unit
+  val _flambda2_debug_concrete_types_only_on_canonicals : unit -> unit
+  val _no_flambda2_debug_concrete_types_only_on_canonicals : unit -> unit
+
+  val _flambda2_inline_max_depth : string -> unit
+  val _flambda2_inline_max_rec_depth : string -> unit
+  val _flambda2_inline_call_cost : string -> unit
+  val _flambda2_inline_alloc_cost : string -> unit
+  val _flambda2_inline_prim_cost : string -> unit
+  val _flambda2_inline_branch_cost : string -> unit
+  val _flambda2_inline_indirect_call_cost : string -> unit
+  val _flambda2_inline_poly_compare_cost : string -> unit
+  val _flambda2_inline_small_function_size : string -> unit
+  val _flambda2_inline_large_function_size : string -> unit
+  val _flambda2_inline_threshold : string -> unit
+  val _flambda2_speculative_inlining_only_if_arguments_useful : unit -> unit
+  val _no_flambda2_speculative_inlining_only_if_arguments_useful : unit -> unit
+
+  val _flambda2_inlining_report_bin : unit -> unit
+
+  val _flambda2_unicode : unit -> unit
+
+  val _flambda2_treat_invalid_code_as_unreachable : unit -> unit
+  val _no_flambda2_treat_invalid_code_as_unreachable : unit -> unit
+
+  val _drawfexpr : unit -> unit
+  val _dfexpr : unit -> unit
+  val _dflexpect : unit -> unit
+  val _dclosure_offsets : unit -> unit
+  val _dfreshen : unit -> unit
 end;;
 
 module type Optcomp_options = sig
@@ -1119,6 +1526,8 @@ module type Optcomp_options = sig
   val _afl_inst_ratio : int -> unit
   val _function_sections : unit -> unit
   val _save_ir_after : string -> unit
+  val _probes : unit -> unit
+  val _no_probes : unit -> unit
 end;;
 
 module type Opttop_options = sig
@@ -1348,6 +1757,8 @@ struct
     mk_function_sections F._function_sections;
     mk_stop_after ~native:true F._stop_after;
     mk_save_ir_after ~native:true F._save_ir_after;
+    mk_probes F._probes;
+    mk_no_probes F._no_probes;
     mk_i F._i;
     mk_I F._I;
     mk_impl F._impl;
@@ -1373,6 +1784,7 @@ struct
     mk_alias_deps F._alias_deps;
     mk_no_alias_deps F._no_alias_deps;
     mk_linscan F._linscan;
+    mk_ocamlcfg F._ocamlcfg;
     mk_app_funct F._app_funct;
     mk_no_app_funct F._no_app_funct;
     mk_no_float_const_prop F._no_float_const_prop;
@@ -1433,6 +1845,76 @@ struct
     mk_where F._where;
     mk__ F.anonymous;
 
+    mk_flambda2_join_points F._flambda2_join_points;
+    mk_no_flambda2_join_points F._no_flambda2_join_points;
+    mk_flambda2_unbox_along_intra_function_control_flow
+      F._flambda2_unbox_along_intra_function_control_flow;
+    mk_no_flambda2_unbox_along_intra_function_control_flow
+      F._no_flambda2_unbox_along_intra_function_control_flow;
+    mk_flambda2_backend_cse_at_toplevel F._flambda2_backend_cse_at_toplevel;
+    mk_no_flambda2_backend_cse_at_toplevel
+      F._no_flambda2_backend_cse_at_toplevel;
+    mk_flambda2_cse_depth F._flambda2_cse_depth;
+    mk_flambda2_expert_code_id_and_symbol_scoping_checks
+      F._flambda2_expert_code_id_and_symbol_scoping_checks;
+    mk_no_flambda2_expert_code_id_and_symbol_scoping_checks
+      F._no_flambda2_expert_code_id_and_symbol_scoping_checks;
+    mk_flambda2_expert_fallback_inlining_heuristic
+      F._flambda2_expert_fallback_inlining_heuristic;
+    mk_no_flambda2_expert_fallback_inlining_heuristic
+      F._no_flambda2_expert_fallback_inlining_heuristic;
+    mk_flambda2_expert_inline_effects_in_cmm
+      F._flambda2_expert_inline_effects_in_cmm;
+    mk_no_flambda2_expert_inline_effects_in_cmm
+      F._no_flambda2_expert_inline_effects_in_cmm;
+    mk_flambda2_expert_phantom_lets
+      F._flambda2_expert_phantom_lets;
+    mk_no_flambda2_expert_phantom_lets
+      F._no_flambda2_expert_phantom_lets;
+    mk_flambda2_expert_max_block_size_for_projections
+      F._flambda2_expert_max_block_size_for_projections;
+    mk_flambda2_expert_max_unboxing_depth
+      F._flambda2_expert_max_unboxing_depth;
+    mk_flambda2_expert_can_inline_recursive_functions
+      F._flambda2_expert_can_inline_recursive_functions;
+    mk_no_flambda2_expert_can_inline_recursive_functions
+      F._no_flambda2_expert_can_inline_recursive_functions;
+    mk_flambda2_debug_permute_every_name
+      F._flambda2_debug_permute_every_name;
+    mk_no_flambda2_debug_permute_every_name
+      F._no_flambda2_debug_permute_every_name;
+    mk_flambda2_debug_concrete_types_only_on_canonicals
+      F._flambda2_debug_concrete_types_only_on_canonicals;
+    mk_no_flambda2_debug_concrete_types_only_on_canonicals
+      F._no_flambda2_debug_concrete_types_only_on_canonicals;
+
+    mk_flambda2_inline_max_depth F._flambda2_inline_max_depth;
+    mk_flambda2_inline_max_rec_depth F._flambda2_inline_max_rec_depth;
+    mk_flambda2_inline_alloc_cost F._flambda2_inline_alloc_cost;
+    mk_flambda2_inline_branch_cost F._flambda2_inline_branch_cost;
+    mk_flambda2_inline_call_cost F._flambda2_inline_call_cost;
+    mk_flambda2_inline_prim_cost F._flambda2_inline_prim_cost;
+    mk_flambda2_inline_indirect_call_cost F._flambda2_inline_indirect_call_cost;
+    mk_flambda2_inline_poly_compare_cost F._flambda2_inline_poly_compare_cost;
+    mk_flambda2_inline_small_function_size
+      F._flambda2_inline_small_function_size;
+    mk_flambda2_inline_large_function_size
+      F._flambda2_inline_large_function_size;
+    mk_flambda2_inline_threshold F._flambda2_inline_threshold;
+    mk_flambda2_speculative_inlining_only_if_arguments_useful
+      F._flambda2_speculative_inlining_only_if_arguments_useful;
+    mk_no_flambda2_speculative_inlining_only_if_arguments_useful
+      F._no_flambda2_speculative_inlining_only_if_arguments_useful;
+
+    mk_flambda2_inlining_report_bin F._flambda2_inlining_report_bin;
+
+    mk_flambda2_unicode F._flambda2_unicode;
+
+    mk_flambda2_treat_invalid_code_as_unreachable
+      F._flambda2_treat_invalid_code_as_unreachable;
+    mk_no_flambda2_treat_invalid_code_as_unreachable
+      F._no_flambda2_treat_invalid_code_as_unreachable;
+
     mk_match_context_rows F._match_context_rows;
     mk_dno_unique_ids F._dno_unique_ids;
     mk_dunique_ids F._dunique_ids;
@@ -1445,12 +1927,19 @@ struct
     mk_dlambda F._dlambda;
     mk_drawclambda F._drawclambda;
     mk_dclambda F._dclambda;
+    mk_dcmm_invariants F._dcmm_invariants;
     mk_dflambda F._dflambda;
     mk_drawflambda F._drawflambda;
     mk_dflambda_invariants F._dflambda_invariants;
     mk_dflambda_no_invariants F._dflambda_no_invariants;
     mk_dflambda_let F._dflambda_let;
     mk_dflambda_verbose F._dflambda_verbose;
+    mk_drawfexpr F._drawfexpr;
+    mk_dfexpr F._dfexpr;
+    mk_dflexpect F._dflexpect;
+    mk_dclosure_offsets F._dclosure_offsets;
+    mk_dfreshen F._dfreshen;
+    mk_dcfg F._dcfg;
     mk_dcmm F._dcmm;
     mk_dsel F._dsel;
     mk_dcombine F._dcombine;
@@ -1502,6 +1991,7 @@ module Make_opttop_options (F : Opttop_options) = struct
     mk_alias_deps F._alias_deps;
     mk_no_alias_deps F._no_alias_deps;
     mk_linscan F._linscan;
+    mk_ocamlcfg F._ocamlcfg;
     mk_app_funct F._app_funct;
     mk_no_app_funct F._no_app_funct;
     mk_no_float_const_prop F._no_float_const_prop;
@@ -1549,14 +2039,92 @@ module Make_opttop_options (F : Opttop_options) = struct
     mk_color F._color;
     mk_error_style F._error_style;
 
+    mk_flambda2_join_points F._flambda2_join_points;
+    mk_no_flambda2_join_points F._no_flambda2_join_points;
+    mk_flambda2_unbox_along_intra_function_control_flow
+      F._flambda2_unbox_along_intra_function_control_flow;
+    mk_no_flambda2_unbox_along_intra_function_control_flow
+      F._no_flambda2_unbox_along_intra_function_control_flow;
+    mk_flambda2_backend_cse_at_toplevel F._flambda2_backend_cse_at_toplevel;
+    mk_no_flambda2_backend_cse_at_toplevel
+      F._no_flambda2_backend_cse_at_toplevel;
+    mk_flambda2_cse_depth F._flambda2_cse_depth;
+    mk_flambda2_expert_code_id_and_symbol_scoping_checks
+      F._flambda2_expert_code_id_and_symbol_scoping_checks;
+    mk_no_flambda2_expert_code_id_and_symbol_scoping_checks
+      F._no_flambda2_expert_code_id_and_symbol_scoping_checks;
+    mk_flambda2_expert_fallback_inlining_heuristic
+      F._flambda2_expert_fallback_inlining_heuristic;
+    mk_no_flambda2_expert_fallback_inlining_heuristic
+      F._no_flambda2_expert_fallback_inlining_heuristic;
+    mk_flambda2_expert_inline_effects_in_cmm
+      F._flambda2_expert_inline_effects_in_cmm;
+    mk_no_flambda2_expert_inline_effects_in_cmm
+      F._no_flambda2_expert_inline_effects_in_cmm;
+    mk_flambda2_expert_phantom_lets
+      F._flambda2_expert_phantom_lets;
+    mk_no_flambda2_expert_phantom_lets
+      F._no_flambda2_expert_phantom_lets;
+    mk_flambda2_expert_max_block_size_for_projections
+      F._flambda2_expert_max_block_size_for_projections;
+    mk_flambda2_expert_max_unboxing_depth
+      F._flambda2_expert_max_unboxing_depth;
+    mk_flambda2_expert_can_inline_recursive_functions
+      F._flambda2_expert_can_inline_recursive_functions;
+    mk_no_flambda2_expert_can_inline_recursive_functions
+      F._no_flambda2_expert_can_inline_recursive_functions;
+    mk_flambda2_debug_permute_every_name
+      F._flambda2_debug_permute_every_name;
+    mk_no_flambda2_debug_permute_every_name
+      F._no_flambda2_debug_permute_every_name;
+    mk_flambda2_debug_concrete_types_only_on_canonicals
+      F._flambda2_debug_concrete_types_only_on_canonicals;
+    mk_no_flambda2_debug_concrete_types_only_on_canonicals
+      F._no_flambda2_debug_concrete_types_only_on_canonicals;
+
+    mk_flambda2_inline_max_depth F._flambda2_inline_max_depth;
+    mk_flambda2_inline_max_rec_depth F._flambda2_inline_max_rec_depth;
+    mk_flambda2_inline_alloc_cost F._flambda2_inline_alloc_cost;
+    mk_flambda2_inline_branch_cost F._flambda2_inline_branch_cost;
+    mk_flambda2_inline_call_cost F._flambda2_inline_call_cost;
+    mk_flambda2_inline_prim_cost F._flambda2_inline_prim_cost;
+    mk_flambda2_inline_indirect_call_cost F._flambda2_inline_indirect_call_cost;
+    mk_flambda2_inline_poly_compare_cost F._flambda2_inline_poly_compare_cost;
+    mk_flambda2_inline_small_function_size
+      F._flambda2_inline_small_function_size;
+    mk_flambda2_inline_large_function_size
+      F._flambda2_inline_large_function_size;
+    mk_flambda2_inline_threshold F._flambda2_inline_threshold;
+    mk_flambda2_speculative_inlining_only_if_arguments_useful
+      F._flambda2_speculative_inlining_only_if_arguments_useful;
+    mk_no_flambda2_speculative_inlining_only_if_arguments_useful
+      F._no_flambda2_speculative_inlining_only_if_arguments_useful;
+
+    mk_flambda2_inlining_report_bin F._flambda2_inlining_report_bin;
+
+    mk_flambda2_unicode F._flambda2_unicode;
+
+    mk_flambda2_treat_invalid_code_as_unreachable
+      F._flambda2_treat_invalid_code_as_unreachable;
+    mk_no_flambda2_treat_invalid_code_as_unreachable
+      F._no_flambda2_treat_invalid_code_as_unreachable;
+
+    mk_drawfexpr F._drawfexpr;
+    mk_dfexpr F._dfexpr;
+    mk_dflexpect F._dflexpect;
+    mk_dclosure_offsets F._dclosure_offsets;
+    mk_dfreshen F._dfreshen;
+
     mk_dsource F._dsource;
     mk_dparsetree F._dparsetree;
     mk_dtypedtree F._dtypedtree;
     mk_drawlambda F._drawlambda;
     mk_drawclambda F._drawclambda;
     mk_dclambda F._dclambda;
+    mk_dcmm_invariants F._dcmm_invariants;
     mk_drawflambda F._drawflambda;
     mk_dflambda F._dflambda;
+    mk_dcfg F._dcfg;
     mk_dcmm F._dcmm;
     mk_dsel F._dsel;
     mk_dcombine F._dcombine;
@@ -1731,12 +2299,14 @@ module Default = struct
   module Native = struct
     let _S = set keep_asm_file
     let _clambda_checks () = clambda_checks := true
-    let _classic_inlining () = classic_inlining := true
+    let _classic_inlining () = set_oclassic ()
     let _compact = clear optimize_for_speed
     let _dalloc = set dump_regalloc
     let _davail () = dump_avail := true
     let _dclambda = set dump_clambda
+    let _dcfg = set dump_cfg
     let _dcmm = set dump_cmm
+    let _dcmm_invariants = set cmm_invariants
     let _dcombine = set dump_combine
     let _dcse = set dump_cse
     let _dflambda = set dump_flambda
@@ -1804,6 +2374,7 @@ module Default = struct
     let _insn_sched = set insn_sched
     let _no_insn_sched = clear insn_sched
     let _linscan = set use_linscan
+    let _ocamlcfg = set use_ocamlcfg
     let _no_float_const_prop = clear float_const_prop
     let _no_unbox_free_vars_of_closures = clear unbox_free_vars_of_closures
     let _no_unbox_specialised_args = clear unbox_specialised_args
@@ -1816,20 +2387,136 @@ module Default = struct
        collected, then checked all at once for illegal combinations, and then
        transformed into the settings of the individual parameters.
     *)
-    let _o2 () =
-      default_simplify_rounds := 2;
-      use_inlining_arguments_set o2_arguments;
-      use_inlining_arguments_set ~round:0 o1_arguments
-    let _o3 () =
-      default_simplify_rounds := 3;
-      use_inlining_arguments_set o3_arguments;
-      use_inlining_arguments_set ~round:1 o2_arguments;
-      use_inlining_arguments_set ~round:0 o1_arguments
+    let _o2 () = Clflags.set_o2 ()
+    let _o3 () = Clflags.set_o3 ()
     let _remove_unused_arguments = set remove_unused_arguments
     let _rounds n = simplify_rounds := (Some n)
     let _unbox_closures = set unbox_closures
     let _unbox_closures_factor f = unbox_closures_factor := f
     let _verbose = set verbose
+
+    let _flambda2_join_points = set Flambda2.join_points
+    let _no_flambda2_join_points = clear Flambda2.join_points
+    let _flambda2_unbox_along_intra_function_control_flow =
+      set Flambda2.unbox_along_intra_function_control_flow
+    let _no_flambda2_unbox_along_intra_function_control_flow =
+      clear Flambda2.unbox_along_intra_function_control_flow
+    let _flambda2_backend_cse_at_toplevel =
+      set Flambda2.backend_cse_at_toplevel
+    let _no_flambda2_backend_cse_at_toplevel =
+      clear Flambda2.backend_cse_at_toplevel
+    let _flambda2_cse_depth n = Flambda2.cse_depth := n
+    let _flambda2_expert_code_id_and_symbol_scoping_checks =
+      set Flambda2.Expert.code_id_and_symbol_scoping_checks
+    let _no_flambda2_expert_code_id_and_symbol_scoping_checks =
+      clear Flambda2.Expert.code_id_and_symbol_scoping_checks
+    let _flambda2_expert_fallback_inlining_heuristic =
+      set Flambda2.Expert.fallback_inlining_heuristic
+    let _no_flambda2_expert_fallback_inlining_heuristic =
+      clear Flambda2.Expert.fallback_inlining_heuristic
+    let _flambda2_expert_inline_effects_in_cmm =
+      set Flambda2.Expert.inline_effects_in_cmm
+    let _no_flambda2_expert_inline_effects_in_cmm =
+      clear Flambda2.Expert.inline_effects_in_cmm
+    let _flambda2_expert_phantom_lets =
+      set Flambda2.Expert.phantom_lets
+    let _no_flambda2_expert_phantom_lets =
+      clear Flambda2.Expert.phantom_lets
+    let _flambda2_expert_max_block_size_for_projections size =
+      Flambda2.Expert.max_block_size_for_projections := Some size
+    let _flambda2_expert_max_unboxing_depth depth =
+      Flambda2.Expert.max_unboxing_depth := depth
+    let _flambda2_expert_can_inline_recursive_functions () =
+      Flambda2.Expert.can_inline_recursive_functions := true
+    let _no_flambda2_expert_can_inline_recursive_functions () =
+      Flambda2.Expert.can_inline_recursive_functions := false
+    let _flambda2_debug_permute_every_name =
+      set Flambda2.Debug.permute_every_name
+    let _no_flambda2_debug_permute_every_name =
+      clear Flambda2.Debug.permute_every_name
+    let _flambda2_debug_concrete_types_only_on_canonicals =
+      set Flambda2.Debug.concrete_types_only_on_canonicals
+    let _no_flambda2_debug_concrete_types_only_on_canonicals =
+      clear Flambda2.Debug.concrete_types_only_on_canonicals
+
+    let _flambda2_inline_max_depth spec =
+      Int_arg_helper.parse spec
+        "Syntax: -flambda2-inline-max-depth <int> | <round>=<int>[,...]"
+        Flambda2.Inlining.max_depth
+
+    let _flambda2_inline_max_rec_depth spec =
+      Int_arg_helper.parse spec
+        "Syntax: -flambda2-inline-max-rec-depth <int> | <round>=<int>[,...]"
+        Flambda2.Inlining.max_rec_depth
+    let _flambda2_inline_alloc_cost spec =
+      Float_arg_helper.parse spec
+        "Syntax: -flambda2-inline-alloc-cost <float> | <round>=<float>[,...]"
+        Flambda2.Inlining.alloc_cost
+
+    let _flambda2_inline_branch_cost spec =
+      Float_arg_helper.parse spec
+        "Syntax: -flambda2-inline-branch-cost <float> | <round>=<float>[,...]"
+        Flambda2.Inlining.branch_cost
+
+    let _flambda2_inline_call_cost spec =
+      Float_arg_helper.parse spec
+        "Syntax: -flambda2-inline-call-cost <float> | <round>=<float>[,...]"
+        Flambda2.Inlining.call_cost
+
+    let _flambda2_inline_prim_cost spec =
+      Float_arg_helper.parse spec
+        "Syntax: -flambda2-inline-prim-cost <float> | <round>=<float>[,...]"
+        Flambda2.Inlining.prim_cost
+
+    let _flambda2_inline_indirect_call_cost spec =
+      Float_arg_helper.parse spec
+        "Syntax: -flambda2-inline-indirect-call-cost <float> | \
+         <round>=<float>[,...]"
+        Flambda2.Inlining.indirect_call_cost
+
+    let _flambda2_inline_poly_compare_cost spec =
+      Float_arg_helper.parse spec
+        "Syntax: -flambda2-inline-poly-compare-cost <float> | \
+         <round>=<float>[,...]"
+        Flambda2.Inlining.poly_compare_cost
+
+    let _flambda2_inline_small_function_size spec =
+      Int_arg_helper.parse spec
+        "Syntax: -flambda2-inline-small-function-size <int> | \
+         <round>=<int>[,...]"
+        Flambda2.Inlining.small_function_size
+
+    let _flambda2_inline_large_function_size spec =
+      Int_arg_helper.parse spec
+        "Syntax: -flambda2-inline-large-function-size <int> | \
+         <round>=<int>[,...]"
+        Flambda2.Inlining.large_function_size
+
+    let _flambda2_inline_threshold spec =
+      Float_arg_helper.parse spec
+        "Syntax: -flambda2-inline-threshold <float> | <round>=<float>[,...]"
+        Flambda2.Inlining.threshold
+
+    let _flambda2_speculative_inlining_only_if_arguments_useful =
+      set Flambda2.Inlining.speculative_inlining_only_if_arguments_useful
+
+    let _no_flambda2_speculative_inlining_only_if_arguments_useful =
+      clear Flambda2.Inlining.speculative_inlining_only_if_arguments_useful
+
+    let _flambda2_inlining_report_bin = set Flambda2.Inlining.report_bin
+
+    let _flambda2_unicode = set Flambda2.unicode
+
+    let _flambda2_treat_invalid_code_as_unreachable =
+      set Flambda2.treat_invalid_code_as_unreachable
+    let _no_flambda2_treat_invalid_code_as_unreachable =
+      clear Flambda2.treat_invalid_code_as_unreachable
+
+    let _drawfexpr = set Flambda2.Dump.rawfexpr
+    let _dfexpr = set Flambda2.Dump.fexpr
+    let _dflexpect = set Flambda2.Dump.flexpect
+    let _dclosure_offsets = set Flambda2.Dump.closure_offsets
+    let _dfreshen = set Flambda2.Dump.freshen
   end
 
   module Compiler = struct
@@ -1947,6 +2634,8 @@ module Default = struct
          OCaml 4.08.0"
     let _shared () = shared := true; dlcode := true
     let _v () = Compenv.print_version_and_library "native-code compiler"
+    let _no_probes = clear probes
+    let _probes = set probes
   end
 
   module Odoc_args = struct

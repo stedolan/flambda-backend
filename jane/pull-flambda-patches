@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+J="$(dirname "$0")"
+cd "$J"
+cd "$(git rev-parse --show-toplevel)"
+
+if ! git diff --quiet; then
+    echo "Working directory must be clean before using this script,"
+    echo "but currently has the following changes:"
+    git diff --stat
+    exit 1
+fi
+
+"$J/configure-remotes"
+
+git fetch -q origin
+git fetch -q flambda-backend
+
+git checkout -q flambda-backend/main
+rev=$(git subtree split -P ocaml --annotate='flambda-backend: ' flambda-backend/main)
+git push -q origin $rev:refs/heads/flambda-patches |& sed '/^remote: /d'
+git checkout -q -
+
+count=$(git rev-list HEAD..origin/flambda-patches | wc -l)
+echo "$count patches outstanding"
+

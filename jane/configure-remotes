@@ -1,0 +1,23 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+
+configure_remote () {
+    name="$1"
+    url="$2"
+    curr="$(git remote get-url "$name" 2>/dev/null)"
+    if [ $? = 2 ]; then
+        git remote add "$name" "$url"
+    elif [ "$curr" != "$url" ]; then
+        {
+            echo "Error: remote $name should point to $url, not $curr"
+            echo "Try 'git remote rm $name'." 
+        } 1>&2
+        exit 1
+    fi
+}
+
+configure_remote origin 'git@github.com:janestreet/ocaml-jst'
+configure_remote flambda-backend 'git@github.com:ocaml-flambda/flambda-backend'
+configure_remote ocaml 'git@github.com:ocaml/ocaml'
+

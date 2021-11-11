@@ -1,3 +1,4 @@
+# 1 "stdlib.ml"
 (**************************************************************************)
 (*                                                                        *)
 (*                                 OCaml                                  *)
@@ -13,6 +14,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+[@@@ocaml.warning "-49"]
+
 (* Exceptions *)
 
 external register_named_value : string -> 'a -> unit
@@ -23,7 +26,7 @@ let () =
   register_named_value "Pervasives.array_bound_error"
     (Invalid_argument "index out of bounds")
 
-external raise : exn -> 'a = "%raise"
+external raise : exn -> 'a = "%reraise"
 external raise_notrace : exn -> 'a = "%raise_notrace"
 
 let failwith s = raise(Failure s)
@@ -225,8 +228,8 @@ external ignore : 'a -> unit = "%ignore"
 
 (* Pair operations *)
 
-external fst : 'a * 'b -> 'a = "%field0"
-external snd : 'a * 'b -> 'b = "%field1"
+external fst : 'a * 'b -> 'a = "%field0_immut"
+external snd : 'a * 'b -> 'b = "%field1_immut"
 
 (* References *)
 

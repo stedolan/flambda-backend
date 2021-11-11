@@ -52,6 +52,7 @@ and debug = ref false                   (* -g *)
 and debug_full = ref false              (* For full DWARF support *)
 and unsafe = ref false                  (* -unsafe *)
 and use_linscan = ref false             (* -linscan *)
+and use_ocamlcfg = ref false            (* -ocamlcfg *)
 and link_everything = ref false         (* -linkall *)
 and custom_runtime = ref false          (* -custom *)
 and no_check_prims = ref false          (* -no-check-prims *)
@@ -116,6 +117,7 @@ let optimize_for_speed = ref true       (* -compact *)
 and opaque = ref false                  (* -opaque *)
 
 and dump_cmm = ref false                (* -dcmm *)
+let dump_cfg = ref false                (* -dcfg *)
 let dump_selection = ref false          (* -dsel *)
 let dump_cse = ref false                (* -dcse *)
 let dump_live = ref false               (* -dlive *)
@@ -139,6 +141,8 @@ let native_code = ref false             (* set to true under ocamlopt *)
 
 let force_slash = ref false             (* for ocamldep *)
 let clambda_checks = ref false          (* -clambda-checks *)
+let cmm_invariants =
+  ref Config.with_cmm_invariants        (* -dcmm-invariants *)
 
 let flambda_invariant_checks =
   ref Config.with_flambda_invariants    (* -flambda-(no-)invariants *)
@@ -181,7 +185,7 @@ let afl_instrument = ref Config.afl_instrument (* -afl-instrument *)
 let afl_inst_ratio = ref 100           (* -afl-inst-ratio *)
 
 let function_sections = ref false      (* -function-sections *)
-
+let probes = ref Config.probes         (* -probes *)
 let simplify_rounds = ref None        (* -rounds *)
 let default_simplify_rounds = ref 1        (* -rounds *)
 let rounds () =
@@ -416,18 +420,17 @@ let unboxed_types = ref false
 
 (* This is used by the -save-ir-after option. *)
 module Compiler_ir = struct
-  type t = Linear
+  type t = Linear | Cfg
 
   let all = [
-    Linear;
+    Linear; Cfg
   ]
 
-  let extension t =
-    let ext =
-    match t with
-      | Linear -> "linear"
-    in
-    ".cmir-" ^ ext
+  let to_string = function
+    | Linear -> "linear"
+    | Cfg -> "cfg"
+
+  let extension t = ".cmir-" ^ (to_string t)
 
   (** [extract_extension_with_pass filename] returns the IR whose extension
       is a prefix of the extension of [filename], and the suffix,
@@ -456,6 +459,254 @@ module Compiler_ir = struct
     end
 end
 
+module Flambda2 = struct
+  module Default = struct
+    let classic_mode = false
+    let join_points = false
+    let unbox_along_intra_function_control_flow = true
+    let backend_cse_at_toplevel = false
+    let cse_depth = 2
+    let treat_invalid_code_as_unreachable = false
+    let unicode = true
+  end
+
+  let classic_mode = ref Default.classic_mode
+  let join_points = ref Default.join_points
+  let unbox_along_intra_function_control_flow =
+    ref Default.unbox_along_intra_function_control_flow
+  let backend_cse_at_toplevel = ref Default.backend_cse_at_toplevel
+  let cse_depth = ref Default.cse_depth
+  let treat_invalid_code_as_unreachable =
+    ref Default.treat_invalid_code_as_unreachable
+  let unicode = ref Default.unicode
+
+  module Dump = struct
+    let rawfexpr = ref false
+    let fexpr = ref false
+    let flexpect = ref false
+    let closure_offsets = ref false
+    let freshen = ref false
+  end
+
+  module Expert = struct
+    module Default = struct
+      let code_id_and_symbol_scoping_checks = false
+      let fallback_inlining_heuristic = false
+      let inline_effects_in_cmm = false
+      let phantom_lets = true
+      let max_block_size_for_projections = None
+      let max_unboxing_depth = 3
+      let can_inline_recursive_functions = false
+    end
+
+    let code_id_and_symbol_scoping_checks =
+      ref Default.code_id_and_symbol_scoping_checks
+    let fallback_inlining_heuristic = ref Default.fallback_inlining_heuristic
+    let inline_effects_in_cmm = ref Default.inline_effects_in_cmm
+    let phantom_lets = ref Default.phantom_lets
+    let max_block_size_for_projections =
+      ref Default.max_block_size_for_projections
+    let max_unboxing_depth = ref Default.max_unboxing_depth
+    let can_inline_recursive_functions =
+      ref Default.can_inline_recursive_functions
+  end
+
+  module Debug = struct
+    module Default = struct
+      let permute_every_name = false
+      let concrete_types_only_on_canonicals = false
+    end
+
+    let permute_every_name = ref Default.permute_every_name
+    let concrete_types_only_on_canonicals =
+      ref Default.concrete_types_only_on_canonicals
+  end
+
+  module Inlining = struct
+    module Default = struct
+      let cost_divisor = 8.
+
+      let max_depth = 1
+      let max_rec_depth = 0
+
+      let call_cost = 5. /. cost_divisor
+      let alloc_cost = 7. /. cost_divisor
+      let prim_cost = 3. /. cost_divisor
+      let branch_cost = 5. /. cost_divisor
+      let indirect_call_cost = 4. /. cost_divisor
+      let poly_compare_cost = 10. /. cost_divisor
+
+      let small_function_size = 10
+      let large_function_size = 10
+
+      let threshold = 10.
+
+      let speculative_inlining_only_if_arguments_useful = true
+    end
+
+    module F = Float_arg_helper
+    module I = Int_arg_helper
+
+    let max_depth = ref (I.default Default.max_depth)
+    let max_rec_depth = ref (I.default Default.max_rec_depth)
+
+    let call_cost = ref (F.default Default.call_cost)
+    let alloc_cost = ref (F.default Default.alloc_cost)
+    let prim_cost = ref (F.default Default.prim_cost)
+    let branch_cost = ref (F.default Default.branch_cost)
+    let indirect_call_cost = ref (F.default Default.indirect_call_cost)
+    let poly_compare_cost = ref (F.default Default.poly_compare_cost)
+
+    let small_function_size = ref (I.default Default.small_function_size)
+    let large_function_size = ref (I.default Default.large_function_size)
+
+    let threshold = ref (F.default Default.threshold)
+
+    let speculative_inlining_only_if_arguments_useful =
+      ref Default.speculative_inlining_only_if_arguments_useful
+
+    let report_bin = ref false
+
+    type inlining_arguments = {
+      max_depth : int option;
+      max_rec_depth : int option;
+      call_cost : float option;
+      alloc_cost : float option;
+      prim_cost : float option;
+      branch_cost : float option;
+      indirect_call_cost : float option;
+      poly_compare_cost : float option;
+      small_function_size : int option;
+      large_function_size : int option;
+      threshold : float option;
+    }
+
+    let use_inlining_arguments_set ?round (arg : inlining_arguments) =
+      let set_int = set_int_arg round in
+      let set_float = set_float_arg round in
+      set_int max_depth Default.max_depth arg.max_depth;
+      set_int max_rec_depth Default.max_rec_depth arg.max_rec_depth;
+      set_float call_cost Default.call_cost arg.call_cost;
+      set_float alloc_cost Default.alloc_cost arg.alloc_cost;
+      set_float prim_cost Default.prim_cost arg.prim_cost;
+      set_float branch_cost Default.branch_cost arg.branch_cost;
+      set_float indirect_call_cost
+        Default.indirect_call_cost arg.indirect_call_cost;
+      set_float poly_compare_cost
+        Default.poly_compare_cost arg.poly_compare_cost;
+      set_int small_function_size
+        Default.small_function_size arg.small_function_size;
+      set_int large_function_size
+        Default.large_function_size arg.large_function_size;
+      set_float threshold Default.threshold arg.threshold
+
+    let oclassic_arguments = {
+      max_depth = None;
+      max_rec_depth = None;
+      call_cost = None;
+      alloc_cost = None;
+      prim_cost = None;
+      branch_cost = None;
+      indirect_call_cost = None;
+      poly_compare_cost = None;
+      (* We set the small and large function sizes to the same value here to
+         recover "classic mode" semantics (no speculative inlining). *)
+      small_function_size = Some Default.small_function_size;
+      large_function_size = Some Default.small_function_size;
+      (* [threshold] matches the current compiler's default.  (The factor of
+         8 in that default is accounted for by [cost_divisor], above.) *)
+      threshold = Some 10.;
+    }
+
+    let o2_arguments = {
+      max_depth = Some 2;
+      max_rec_depth = Some 0;
+      call_cost = Some (2.0 *. Default.call_cost);
+      alloc_cost = Some (2.0 *. Default.alloc_cost);
+      prim_cost = Some (2.0 *. Default.prim_cost);
+      branch_cost = Some (2.0 *. Default.branch_cost);
+      indirect_call_cost = Some (2.0 *. Default.indirect_call_cost);
+      poly_compare_cost = Some (2.0 *. Default.poly_compare_cost);
+      small_function_size = Some (2 * Default.small_function_size);
+      large_function_size = Some (4 * Default.large_function_size);
+      threshold = Some 25.;
+    }
+
+    let o3_arguments = {
+      max_depth = Some 3;
+      max_rec_depth = Some 0;
+      call_cost = Some (3.0 *. Default.call_cost);
+      alloc_cost = Some (3.0 *. Default.alloc_cost);
+      prim_cost = Some (3.0 *. Default.prim_cost);
+      branch_cost = Some (3.0 *. Default.branch_cost);
+      indirect_call_cost = Some (3.0 *. Default.indirect_call_cost);
+      poly_compare_cost = Some (3.0 *. Default.poly_compare_cost);
+      small_function_size = Some (10 * Default.small_function_size);
+      large_function_size = Some (50 * Default.large_function_size);
+      threshold = Some 100.;
+    }
+  end
+
+  let oclassic_flags () =
+    classic_mode := true;
+    cse_depth := 2;
+    join_points := false;
+    unbox_along_intra_function_control_flow := true;
+    Expert.fallback_inlining_heuristic := true;
+    backend_cse_at_toplevel := false
+
+  let o2_flags () =
+    cse_depth := 2;
+    join_points := false;
+    unbox_along_intra_function_control_flow := true;
+    Expert.fallback_inlining_heuristic := false;
+    backend_cse_at_toplevel := false
+
+  let o3_flags () =
+    cse_depth := 2;
+    join_points := true;
+    unbox_along_intra_function_control_flow := true;
+    Expert.fallback_inlining_heuristic := false;
+    backend_cse_at_toplevel := false
+end
+
+let is_flambda2 () =
+  Config.flambda2 && !native_code
+
+let set_oclassic () =
+  if is_flambda2 () then begin
+    Flambda2.Inlining.use_inlining_arguments_set
+      Flambda2.Inlining.oclassic_arguments;
+    Flambda2.oclassic_flags ()
+  end else begin
+    classic_inlining := true;
+    default_simplify_rounds := 1;
+    use_inlining_arguments_set classic_arguments;
+    unbox_free_vars_of_closures := false;
+    unbox_specialised_args := false
+  end
+
+let set_o2 () =
+  if is_flambda2 () then begin
+    Flambda2.Inlining.use_inlining_arguments_set Flambda2.Inlining.o2_arguments;
+    Flambda2.o2_flags ()
+  end else begin
+    default_simplify_rounds := 2;
+    use_inlining_arguments_set o2_arguments;
+    use_inlining_arguments_set ~round:0 o1_arguments
+  end
+
+let set_o3 () =
+  if is_flambda2 () then begin
+    Flambda2.Inlining.use_inlining_arguments_set Flambda2.Inlining.o3_arguments;
+    Flambda2.o3_flags ()
+  end else begin
+    default_simplify_rounds := 3;
+    use_inlining_arguments_set o3_arguments;
+    use_inlining_arguments_set ~round:1 o2_arguments;
+    use_inlining_arguments_set ~round:0 o1_arguments
+  end
+
 (* This is used by the -stop-after option. *)
 module Compiler_pass = struct
   (* If you add a new pass, the following must be updated:
@@ -463,24 +714,27 @@ module Compiler_pass = struct
      - the manpages in man/ocaml{c,opt}.m
      - the manual manual/manual/cmds/unified-options.etex
   *)
-  type t = Parsing | Typing | Scheduling | Emit
+  type t = Parsing | Typing | Scheduling | Emit | Simplify_cfg
 
   let to_string = function
     | Parsing -> "parsing"
     | Typing -> "typing"
     | Scheduling -> "scheduling"
     | Emit -> "emit"
+    | Simplify_cfg -> "simplify_cfg"
 
   let of_string = function
     | "parsing" -> Some Parsing
     | "typing" -> Some Typing
     | "scheduling" -> Some Scheduling
     | "emit" -> Some Emit
+    | "simplify_cfg" -> Some Simplify_cfg
     | _ -> None
 
   let rank = function
     | Parsing -> 0
     | Typing -> 1
+    | Simplify_cfg -> 49
     | Scheduling -> 50
     | Emit -> 60
 
@@ -489,16 +743,19 @@ module Compiler_pass = struct
     Typing;
     Scheduling;
     Emit;
+    Simplify_cfg;
   ]
   let is_compilation_pass _ = true
   let is_native_only = function
     | Scheduling -> true
     | Emit -> true
-    | _ -> false
+    | Simplify_cfg -> true
+    | Parsing | Typing -> false
 
   let enabled is_native t = not (is_native_only t) || is_native
   let can_save_ir_after = function
     | Scheduling -> true
+    | Simplify_cfg -> true
     | _ -> false
 
   let available_pass_names ~filter ~native =
@@ -513,11 +770,13 @@ module Compiler_pass = struct
   let to_output_filename t ~prefix =
     match t with
     | Scheduling -> prefix ^ Compiler_ir.(extension Linear)
-    | _ -> Misc.fatal_error "Not supported"
+    | Simplify_cfg -> prefix ^ Compiler_ir.(extension Cfg)
+    | Emit | Parsing | Typing -> Misc.fatal_error "Not supported"
 
   let of_input_filename name =
     match Compiler_ir.extract_extension_with_pass name with
     | Some (Linear, _) -> Some Emit
+    | Some (Cfg, _) -> None
     | None -> None
 end
 

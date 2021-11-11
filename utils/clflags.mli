@@ -43,29 +43,6 @@ module Float_arg_helper : sig
   val get : key:int -> parsed -> float
 end
 
-type inlining_arguments = {
-  inline_call_cost : int option;
-  inline_alloc_cost : int option;
-  inline_prim_cost : int option;
-  inline_branch_cost : int option;
-  inline_indirect_cost : int option;
-  inline_lifting_benefit : int option;
-  inline_branch_factor : float option;
-  inline_max_depth : int option;
-  inline_max_unroll : int option;
-  inline_threshold : float option;
-  inline_toplevel_threshold : int option;
-}
-
-val classic_arguments : inlining_arguments
-val o1_arguments : inlining_arguments
-val o2_arguments : inlining_arguments
-val o3_arguments : inlining_arguments
-
-(** Set all the inlining arguments for a round.
-    The default is set if no round is provided. *)
-val use_inlining_arguments_set : ?round:int -> inlining_arguments -> unit
-
 val objfiles : string list ref
 val ccobjs : string list ref
 val dllibs : string list ref
@@ -79,6 +56,7 @@ val debug : bool ref
 val debug_full : bool ref
 val unsafe : bool ref
 val use_linscan : bool ref
+val use_ocamlcfg : bool ref
 val link_everything : bool ref
 val custom_runtime : bool ref
 val no_check_prims : bool ref
@@ -138,6 +116,7 @@ val dump_instr : bool ref
 val keep_camlprimc_file : bool ref
 val keep_asm_file : bool ref
 val optimize_for_speed : bool ref
+val dump_cfg : bool ref
 val dump_cmm : bool ref
 val dump_selection : bool ref
 val dump_cse : bool ref
@@ -201,6 +180,7 @@ val default_unbox_closures_factor : int
 val unbox_free_vars_of_closures : bool ref
 val unbox_specialised_args : bool ref
 val clambda_checks : bool ref
+val cmm_invariants : bool ref
 val default_inline_max_depth : int
 val inline_max_depth : Int_arg_helper.parsed ref
 val remove_unused_arguments : bool ref
@@ -209,6 +189,7 @@ val classic_inlining : bool ref
 val afl_instrument : bool ref
 val afl_inst_ratio : int ref
 val function_sections : bool ref
+val probes : bool ref
 
 val all_passes : string list ref
 val dumped_pass : string -> bool
@@ -235,8 +216,120 @@ val unboxed_types : bool ref
 val insn_sched : bool ref
 val insn_sched_default : bool
 
+module Flambda2 : sig
+  module Default : sig
+    val classic_mode : bool
+    val join_points : bool
+    val unbox_along_intra_function_control_flow : bool
+    val backend_cse_at_toplevel : bool
+    val cse_depth : int
+    val treat_invalid_code_as_unreachable : bool
+
+    val unicode : bool
+  end
+
+  val classic_mode : bool ref
+  val join_points : bool ref
+  val unbox_along_intra_function_control_flow : bool ref
+  val backend_cse_at_toplevel : bool ref
+  val cse_depth : int ref
+  val treat_invalid_code_as_unreachable : bool ref
+
+  val unicode : bool ref
+
+  module Dump : sig
+    val rawfexpr : bool ref
+    val fexpr : bool ref
+    val flexpect : bool ref
+    val closure_offsets : bool ref
+    val freshen : bool ref
+  end
+
+  module Expert : sig
+    module Default : sig
+      val code_id_and_symbol_scoping_checks : bool
+      val fallback_inlining_heuristic : bool
+      val inline_effects_in_cmm : bool
+      val phantom_lets : bool
+      val max_block_size_for_projections : int option
+      val max_unboxing_depth : int
+      val can_inline_recursive_functions : bool
+    end
+
+    val code_id_and_symbol_scoping_checks : bool ref
+    val fallback_inlining_heuristic : bool ref
+    val inline_effects_in_cmm : bool ref
+    val phantom_lets : bool ref
+    val max_block_size_for_projections : int option ref
+    val max_unboxing_depth : int ref
+    val can_inline_recursive_functions : bool ref
+  end
+
+  module Debug : sig
+    module Default : sig
+      val permute_every_name : bool
+      val concrete_types_only_on_canonicals : bool
+    end
+
+    val permute_every_name : bool ref
+    val concrete_types_only_on_canonicals : bool ref
+  end
+
+  module Inlining : sig
+    module Default : sig
+      val max_depth : int
+      val max_rec_depth : int
+
+      val call_cost : float
+      val alloc_cost : float
+      val prim_cost : float
+      val branch_cost : float
+      val indirect_call_cost : float
+      val poly_compare_cost : float
+
+      val small_function_size : int
+      val large_function_size : int
+
+      val threshold : float
+
+      val speculative_inlining_only_if_arguments_useful : bool
+    end
+
+    val max_depth : Int_arg_helper.parsed ref
+    val max_rec_depth : Int_arg_helper.parsed ref
+
+    val call_cost : Float_arg_helper.parsed ref
+    val alloc_cost : Float_arg_helper.parsed ref
+    val prim_cost : Float_arg_helper.parsed ref
+    val branch_cost : Float_arg_helper.parsed ref
+    val indirect_call_cost : Float_arg_helper.parsed ref
+    val poly_compare_cost : Float_arg_helper.parsed ref
+
+    val small_function_size : Int_arg_helper.parsed ref
+    val large_function_size : Int_arg_helper.parsed ref
+
+    val threshold : Float_arg_helper.parsed ref
+
+    val speculative_inlining_only_if_arguments_useful : bool ref
+
+    val report_bin : bool ref
+  end
+end
+
+val set_oclassic : unit -> unit
+val set_o2 : unit -> unit
+val set_o3 : unit -> unit
+
+module Compiler_ir : sig
+  type t = Linear | Cfg
+  val all : t list
+  val to_string : t -> string
+  val extension : t -> string
+  val extract_extension_with_pass : string -> (t * string) option
+end
+
 module Compiler_pass : sig
-  type t = Parsing | Typing | Scheduling | Emit
+  type t = Parsing | Typing | Scheduling | Emit | Simplify_cfg
   val of_string : string -> t option
   val to_string : t -> string
   val is_compilation_pass : t -> bool
@@ -250,6 +343,8 @@ val stop_after : Compiler_pass.t option ref
 val should_stop_after : Compiler_pass.t -> bool
 val set_save_ir_after : Compiler_pass.t -> bool -> unit
 val should_save_ir_after : Compiler_pass.t -> bool
+
+val is_flambda2 : unit -> bool
 
 val arg_spec : (string * Arg.spec * string) list ref
 
