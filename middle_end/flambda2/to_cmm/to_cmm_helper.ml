@@ -537,7 +537,7 @@ let ccatch ~rec_flag ~handlers ~body =
 (* Function calls *)
 
 let direct_call ?(dbg = Debuginfo.none) ty f_code_sym args =
-  Cmm.Cop (Cmm.Capply (ty,Apply_nontail), f_code_sym :: args, dbg)
+  Cmm.Cop (Cmm.Capply (ty, Apply_nontail), f_code_sym :: args, dbg)
 
 let indirect_call ?(dbg = Debuginfo.none) ty f = function
   | [arg] ->
@@ -565,7 +565,8 @@ let indirect_full_call ?(dbg = Debuginfo.none) ty f = function
     let fun_ptr =
       load Cmm.Word_int Asttypes.Mutable @@ field_address (var v) 2 dbg
     in
-    letin v' f @@ Cmm.Cop (Cmm.Capply (ty, Apply_nontail), (fun_ptr :: args) @ [var v], dbg)
+    letin v' f
+    @@ Cmm.Cop (Cmm.Capply (ty, Apply_nontail), (fun_ptr :: args) @ [var v], dbg)
 
 (* Cmm phrases *)
 

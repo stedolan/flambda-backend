@@ -51,7 +51,8 @@ let from_basic (basic : Cfg.basic) : L.instruction_desc =
   | Call (P (Checkbound { immediate = None })) -> Lop (Iintop Icheckbound)
   | Call (P (Checkbound { immediate = Some i })) ->
     Lop (Iintop_imm (Icheckbound, i))
-  | Call (P (Alloc { bytes; dbginfo; mode })) -> Lop (Ialloc { bytes; dbginfo; mode })
+  | Call (P (Alloc { bytes; dbginfo; mode })) ->
+    Lop (Ialloc { bytes; dbginfo; mode })
   | Op op ->
     let op : Mach.operation =
       match op with

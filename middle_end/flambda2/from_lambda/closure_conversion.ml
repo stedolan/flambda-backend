@@ -440,7 +440,7 @@ let close_c_call acc ~let_bound_var
       then Misc.fatal_errorf "Expected arity one for %s" prim_native_name
       else
         match prim_native_repr_args, prim_native_repr_res with
-        | [_, Unboxed_integer Pint64], (_, Unboxed_float) -> begin
+        | [(_, Unboxed_integer Pint64)], (_, Unboxed_float) -> begin
           match args with
           | [arg] ->
             let result = Variable.create "reinterpreted_int64" in
@@ -482,7 +482,8 @@ let close_c_call acc ~let_bound_var
           match arg_repr with
           | _, Same_as_ocaml_repr -> None
           | _, Unboxed_float -> Some (P.Unbox_number Naked_float)
-          | _, Unboxed_integer Pnativeint -> Some (P.Unbox_number Naked_nativeint)
+          | _, Unboxed_integer Pnativeint ->
+            Some (P.Unbox_number Naked_nativeint)
           | _, Unboxed_integer Pint32 -> Some (P.Unbox_number Naked_int32)
           | _, Unboxed_integer Pint64 -> Some (P.Unbox_number Naked_int64)
           | _, Untagged_int -> Some (P.Unbox_number Untagged_immediate)

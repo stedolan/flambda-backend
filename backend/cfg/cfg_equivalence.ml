@@ -276,8 +276,14 @@ let check_prim_call_operation :
   match expected, result with
   | External expected, External result ->
     check_external_call_operation location expected result
-  | ( Alloc { bytes = expected_bytes; dbginfo = _expected_dbginfo; mode = expected_mode },
-      Alloc { bytes = result_bytes; dbginfo = _result_dbginfo; mode = result_mode } )
+  | ( Alloc
+        { bytes = expected_bytes;
+          dbginfo = _expected_dbginfo;
+          mode = expected_mode
+        },
+      Alloc
+        { bytes = result_bytes; dbginfo = _result_dbginfo; mode = result_mode }
+    )
     when Int.equal expected_bytes result_bytes
          && Lambda.eq_mode expected_mode result_mode ->
     (* CR xclerc for xclerc: also check debug info *)

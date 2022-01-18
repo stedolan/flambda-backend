@@ -216,10 +216,7 @@ let rec prepare_letrec (recursive_set : Ident.Set.t)
       { letrec with pre }
     | None -> dead_code lam letrec
   end
-  | Lprim
-      ( ((Pmakeblock _ | Pmakearray _ | Pduprecord _) as prim),
-        args,
-        dbg )
+  | Lprim (((Pmakeblock _ | Pmakearray _ | Pduprecord _) as prim), args, dbg)
     when not (List.for_all is_simple args) ->
     (* If there are some non-trivial expressions as arguments, we first extract
        the arguments (to let-bound variables) before deconstructing. Arguments
@@ -486,8 +483,7 @@ let rec prepare_letrec (recursive_set : Ident.Set.t)
   | Lstaticcatch (_, _, _)
   | Ltrywith (_, _, _)
   | Lifthenelse (_, _, _)
-  | Lsend _
-  | Lvar _
+  | Lsend _ | Lvar _
   | Lprim (_, _, _) ->
     (* This cannot be recursive, otherwise it should have been caught by the
        well formedness check. Hence it is ok to evaluate it before anything
@@ -522,8 +518,7 @@ let rec prepare_letrec (recursive_set : Ident.Set.t)
       | None -> fun ~tail : Lambda.lambda -> Lsequence (lam, letrec.pre ~tail)
     in
     { letrec with pre }
-  | Lregion _ ->
-     Lambda_conversions.local_unsupported ()
+  | Lregion _ -> Lambda_conversions.local_unsupported ()
 
 let dissect_letrec ~bindings ~body =
   let letbound = Ident.Set.of_list (List.map fst bindings) in

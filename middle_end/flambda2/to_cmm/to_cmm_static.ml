@@ -214,7 +214,7 @@ and fill_static_slot s symbs decls startenv elts env acc offset updates slot =
     let code_name = Linkage_name.to_string (Symbol.linkage_name code_symbol) in
     let acc = List.rev (C.define_symbol ~global:true external_name) @ acc in
     let fnarity = Env.get_func_decl_params_arity env code_id in
-    let arity = (Lambda.Curried {nlocal=0}, fnarity) in
+    let arity = Lambda.Curried { nlocal = 0 }, fnarity in
     let closure_info = C.closure_info ~arity ~startenv:(startenv - offset) in
     (* We build here the **reverse** list of fields for the closure *)
     if fnarity = 1 || fnarity = 0

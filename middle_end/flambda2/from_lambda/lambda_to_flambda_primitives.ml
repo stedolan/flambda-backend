@@ -30,7 +30,8 @@ let tag_int (arg : H.expr_primitive) : H.expr_primitive =
 let untag_int (arg : H.simple_or_prim) : H.simple_or_prim =
   Prim (Unary (Unbox_number Untagged_immediate, arg))
 
-let box_float (mode : L.alloc_mode) (arg : H.expr_primitive) : H.expr_primitive =
+let box_float (mode : L.alloc_mode) (arg : H.expr_primitive) : H.expr_primitive
+    =
   C.alloc_mode mode;
   Unary (Box_number Flambda_kind.Boxable_number.Naked_float, Prim arg)
 
@@ -308,7 +309,8 @@ let array_load_unsafe ~array ~index (array_kind : P.Array_kind.t) :
   | Immediates | Values ->
     Binary (Array_load (array_kind, Mutable), array, index)
   | Naked_floats ->
-    box_float Alloc_heap (Binary (Array_load (Naked_floats, Mutable), array, index))
+    box_float Alloc_heap
+      (Binary (Array_load (Naked_floats, Mutable), array, index))
 
 let array_set_unsafe ~array ~index ~new_value (array_kind : P.Array_kind.t) :
     H.expr_primitive =
@@ -437,16 +439,22 @@ let convert_lprim ~big_endian (prim : L.primitive) (args : Simple.t list)
     let src = K.Standard_int_or_float.Tagged_immediate in
     let dst = K.Standard_int_or_float.Naked_float in
     box_float mode (Unary (Num_conv { src; dst }, arg))
-  | Pnegfloat mode, [arg] -> box_float mode (Unary (Float_arith Neg, unbox_float arg))
-  | Pabsfloat mode, [arg] -> box_float mode (Unary (Float_arith Abs, unbox_float arg))
+  | Pnegfloat mode, [arg] ->
+    box_float mode (Unary (Float_arith Neg, unbox_float arg))
+  | Pabsfloat mode, [arg] ->
+    box_float mode (Unary (Float_arith Abs, unbox_float arg))
   | Paddfloat mode, [arg1; arg2] ->
-    box_float mode (Binary (Float_arith Add, unbox_float arg1, unbox_float arg2))
+    box_float mode
+      (Binary (Float_arith Add, unbox_float arg1, unbox_float arg2))
   | Psubfloat mode, [arg1; arg2] ->
-    box_float mode (Binary (Float_arith Sub, unbox_float arg1, unbox_float arg2))
+    box_float mode
+      (Binary (Float_arith Sub, unbox_float arg1, unbox_float arg2))
   | Pmulfloat mode, [arg1; arg2] ->
-    box_float mode (Binary (Float_arith Mul, unbox_float arg1, unbox_float arg2))
+    box_float mode
+      (Binary (Float_arith Mul, unbox_float arg1, unbox_float arg2))
   | Pdivfloat mode, [arg1; arg2] ->
-    box_float mode (Binary (Float_arith Div, unbox_float arg1, unbox_float arg2))
+    box_float mode
+      (Binary (Float_arith Div, unbox_float arg1, unbox_float arg2))
   | Pfloatcomp comp, [arg1; arg2] ->
     tag_int
       (Binary

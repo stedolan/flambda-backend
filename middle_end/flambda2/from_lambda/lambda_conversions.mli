@@ -88,4 +88,5 @@ val convert_field_read_semantics : Lambda.field_read_semantics -> Mutability.t
 val convert_lambda_block_size : int -> Targetint_31_63.Imm.t Or_unknown.t
 
 val local_unsupported : unit -> 'a
+
 val alloc_mode : Lambda.alloc_mode -> unit

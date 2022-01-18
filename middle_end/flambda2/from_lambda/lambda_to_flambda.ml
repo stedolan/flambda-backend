@@ -605,13 +605,13 @@ let primitive_can_raise (prim : Lambda.primitive) =
   | Pnegint | Paddint | Psubint | Pmulint | Pandint | Porint | Pxorint | Plslint
   | Plsrint | Pasrint | Pintcomp _ | Pcompare_ints | Pcompare_floats
   | Pcompare_bints _ | Poffsetint _ | Poffsetref _ | Pintoffloat | Pfloatofint _
-  | Pnegfloat _ | Pabsfloat _ | Paddfloat _ | Psubfloat _ | Pmulfloat _ | Pdivfloat _
-  | Pfloatcomp _ | Pstringlength | Pstringrefu | Pbyteslength | Pbytesrefu
-  | Pbytessetu | Pmakearray _ | Pduparray _ | Parraylength _ | Parrayrefu _
-  | Parraysetu _ | Pisint | Pisout | Pbintofint _ | Pintofbint _ | Pcvtbint _
-  | Pnegbint _ | Paddbint _ | Psubbint _ | Pmulbint _ | Pdivbint _ | Pmodbint _
-  | Pandbint _ | Porbint _ | Pxorbint _ | Plslbint _ | Plsrbint _ | Pasrbint _
-  | Pbintcomp _ | Pbigarraydim _
+  | Pnegfloat _ | Pabsfloat _ | Paddfloat _ | Psubfloat _ | Pmulfloat _
+  | Pdivfloat _ | Pfloatcomp _ | Pstringlength | Pstringrefu | Pbyteslength
+  | Pbytesrefu | Pbytessetu | Pmakearray _ | Pduparray _ | Parraylength _
+  | Parrayrefu _ | Parraysetu _ | Pisint | Pisout | Pbintofint _ | Pintofbint _
+  | Pcvtbint _ | Pnegbint _ | Paddbint _ | Psubbint _ | Pmulbint _ | Pdivbint _
+  | Pmodbint _ | Pandbint _ | Porbint _ | Pxorbint _ | Plslbint _ | Plsrbint _
+  | Pasrbint _ | Pbintcomp _ | Pbigarraydim _
   | Pbigarrayref (true, _, _, _)
   | Pbigarrayset (true, _, _, _)
   | Pstring_load_16 true
@@ -939,8 +939,7 @@ let rec cps_non_tail acc env ccenv (lam : L.lambda)
        by completely removing it (replacing by unit). *)
     Misc.fatal_error
       "[Lifused] should have been removed by [Simplif.simplify_lets]"
-  | Lregion _ ->
-    LC.local_unsupported ()
+  | Lregion _ -> LC.local_unsupported ()
 
 and cps_non_tail_simple acc env ccenv (lam : L.lambda)
     (k : Acc.t -> Env.t -> CCenv.t -> IR.simple -> Acc.t * Expr_with_acc.t)
@@ -1238,8 +1237,7 @@ and cps_tail acc env ccenv (lam : L.lambda) (k : Continuation.t)
        by completely removing it (replacing by unit). *)
     Misc.fatal_error
       "[Lifused] should have been removed by [Simplif.simplify_lets]"
-  | Lregion _ ->
-    LC.local_unsupported ()
+  | Lregion _ -> LC.local_unsupported ()
 
 and name_then_cps_non_tail acc env ccenv name defining_expr k _k_exn :
     Acc.t * Expr_with_acc.t =
@@ -1280,8 +1278,9 @@ and cps_function_bindings env (bindings : (Ident.t * L.lambda) list) =
     List.map
       (fun (fun_id, binding) ->
         match binding with
-        | L.Lfunction { kind; params; body = fbody; attr; loc; mode; region; return; _ } ->
-          begin
+        | L.Lfunction
+            { kind; params; body = fbody; attr; loc; mode; region; return; _ }
+          -> begin
           match
             Simplif.split_default_wrapper ~id:fun_id ~kind ~params ~body:fbody
               ~return ~attr ~loc ~mode ~region
@@ -1369,8 +1368,8 @@ and cps_function_bindings env (bindings : (Ident.t * L.lambda) list) =
     [] bindings_with_wrappers
 
 and cps_function env ~fid ~stub ~(recursive : Recursive.t) ?free_idents
-    ({ kind; params; return; body; attr; loc; mode; region=_ } : L.lfunction) : Function_decl.t
-    =
+    ({ kind; params; return; body; attr; loc; mode; region = _ } : L.lfunction)
+    : Function_decl.t =
   LC.alloc_mode mode;
   let body_cont = Continuation.create ~sort:Return () in
   let body_exn_cont = Continuation.create () in
@@ -1454,8 +1453,7 @@ and cps_switch acc env ccenv (switch : L.lambda_switch) ~scrutinee
             (arm, k, None, IR.Const cst :: extra_args) :: consts_rev
           in
           consts_rev, wrappers
-        | Lregion _ ->
-           LC.local_unsupported ()
+        | Lregion _ -> LC.local_unsupported ()
         | Lvar _ (* mutable *)
         | Lapply _ | Lfunction _ | Llet _ | Lletrec _ | Lprim _ | Lswitch _
         | Lstringswitch _ | Lstaticraise _ | Lstaticcatch _ | Ltrywith _

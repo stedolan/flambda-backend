@@ -1465,7 +1465,7 @@ and fill_slot decls startenv elts env acc offset slot =
     let code_symbol = Code_id.code_symbol code_id in
     let code_name = Linkage_name.to_string (Symbol.linkage_name code_symbol) in
     let fnarity = Env.get_func_decl_params_arity env code_id in
-    let arity = (Lambda.Curried {nlocal=0}, fnarity) in
+    let arity = Lambda.Curried { nlocal = 0 }, fnarity in
     let closure_info = C.closure_info ~arity ~startenv:(startenv - offset) in
     (* We build here the **reverse** list of fields for the closure *)
     if fnarity = 1 || fnarity = 0

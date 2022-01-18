@@ -32,9 +32,7 @@ let local_unsupported () =
   Misc.fatal_errorf "Local allocations are not yet supported in Flambda2"
 
 let alloc_mode (mode : L.alloc_mode) =
-  match mode with
-  | Alloc_heap -> ()
-  | Alloc_local -> local_unsupported ()
+  match mode with Alloc_heap -> () | Alloc_local -> local_unsupported ()
 
 let rec value_kind (vk : L.value_kind) =
   match vk with
@@ -71,7 +69,8 @@ let inlined_attribute (attr : L.inlined_attribute) : Inlined_attribute.t =
   | Unroll i -> Unroll i
   | Default_inlined -> Default_inlined
 
-let kind_of_primitive_native_repr (repr : Primitive.mode * Primitive.native_repr) =
+let kind_of_primitive_native_repr
+    (repr : Primitive.mode * Primitive.native_repr) =
   match repr with
   | _, Same_as_ocaml_repr -> K.value
   | _, Unboxed_float -> K.naked_float
@@ -196,8 +195,7 @@ let convert_init_or_assign (i_or_a : L.initialization_or_assignment) :
   | Heap_initialization -> Initialization
   | Root_initialization ->
     Misc.fatal_error "[Root_initialization] should not appear in Flambda input"
-  | Local_assignment ->
-    local_unsupported ()
+  | Local_assignment -> local_unsupported ()
 
 type converted_array_kind =
   | Array_kind of P.Array_kind.t

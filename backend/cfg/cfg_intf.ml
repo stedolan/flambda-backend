@@ -50,7 +50,7 @@ module S = struct
     | Alloc of
         { bytes : int;
           dbginfo : Debuginfo.alloc_dbginfo;
-          mode : Lambda.alloc_mode;
+          mode : Lambda.alloc_mode
         }
     | Checkbound of { immediate : int option }
 
