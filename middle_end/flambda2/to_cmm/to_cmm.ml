@@ -1038,7 +1038,7 @@ and apply_call env e =
     let meth, env, _ = simple env f in
     let kind = meth_kind kind in
     let args, env, _ = arg_list env args in
-    C.send kind meth obj args dbg, env, effs
+    C.send kind meth obj args (Apply_nontail, Alloc_heap) dbg, env, effs
 
 (* function calls that have an exn continuation with extra arguments must be
    wrapped with assignments for the mutable variables used to pass the extra
@@ -1464,10 +1464,11 @@ and fill_slot decls startenv elts env acc offset slot =
     let dbg = Debuginfo.none in
     let code_symbol = Code_id.code_symbol code_id in
     let code_name = Linkage_name.to_string (Symbol.linkage_name code_symbol) in
-    let arity = Env.get_func_decl_params_arity env code_id in
+    let fnarity = Env.get_func_decl_params_arity env code_id in
+    let arity = (Lambda.Curried {nlocal=0}, fnarity) in
     let closure_info = C.closure_info ~arity ~startenv:(startenv - offset) in
     (* We build here the **reverse** list of fields for the closure *)
-    if arity = 1 || arity = 0
+    if fnarity = 1 || fnarity = 0
     then
       let acc =
         C.nativeint ~dbg closure_info :: C.symbol ~dbg code_name :: acc
