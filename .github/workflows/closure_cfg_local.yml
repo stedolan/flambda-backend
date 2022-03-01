@@ -24,7 +24,7 @@ jobs:
       id: cache
       with:
         path: ${{ github.workspace }}/dune_build_compiler/_install
-        key: ${{ matrix.os }}-cache-dune-build-compiler
+        key: ${{ matrix.os }}-cache-dune-build-compiler-2.7.0-275-gf01752f7
 
     - name: Checkout OCaml 4.12 (dune build compiler)
       uses: actions/checkout@master
@@ -44,6 +44,7 @@ jobs:
 
     - name: Checkout dune github repo
       uses: actions/checkout@master
+      if: steps.cache.outputs.cache-hit != 'true'
       with:
         repository: 'ocaml-flambda/dune'
         ref: 'special_dune'
@@ -51,8 +52,10 @@ jobs:
 
     - name: Build dune
       working-directory: dune
+      if: steps.cache.outputs.cache-hit != 'true'
       run: |
         PATH=$GITHUB_WORKSPACE/dune_build_compiler/_install/bin:$PATH make release
+        cp dune.exe $GITHUB_WORKSPACE/dune_build_compiler/_install/bin/dune
 
     - name: Run autoconf for Flambda backend
       working-directory: flambda_backend
@@ -64,10 +67,10 @@ jobs:
         ./configure \
           --prefix=$GITHUB_WORKSPACE/_install \
           --enable-middle-end=closure \
-          --with-dune=$GITHUB_WORKSPACE/dune/dune.exe
+          --with-dune=$GITHUB_WORKSPACE/dune_build_compiler/_install/bin/dune
 
     - name: Build, install and test Flambda backend (Closure mode with ocamlcfg and local allocs)
       working-directory: flambda_backend
-      run: make -j $J ci
+      run: PATH=$GITHUB_WORKSPACE/dune_build_compiler/_install/bin:$PATH make -j $J ci
       env:
         OCAMLPARAM: '_,ocamlcfg=1,extension=local'
