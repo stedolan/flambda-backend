@@ -1,5 +1,6 @@
 install_prefix = @prefix@
 dune = @dune@
+middle_end = @middle_end@
 export ARCH = amd64
 
 SHELL = /bin/bash
@@ -10,6 +11,80 @@ SHELL = /bin/bash
 #           --disable-flambda \
 #           --disable-ocamldoc \
 #           --enable-ocamltest
+
+main_type=$(if $(ifeq,$(middle_end),flambda2),flambda2,noflambda2)
+main_libs=$(if $(ifeq,$(middle_end),flambda2),flambda2 flambda2_ui flambda2_to_cmm,)
+optcomp=ocamloptcomp$(if $(ifeq,$(middle_end),flambda2),_with_flambda2,)
+define main_exec
+(rule
+ (targets flambda_backend_main.ml)
+ (action (copy driver/main_$(main_type)_memtrace.ml %{targets})))
+(executable
+ (name flambda_backend_main)
+ (modes byte)
+ (flags (:standard -principal))
+ (libraries
+  flambda_backend_driver
+  memtrace
+  $(main_libs)
+  ocamloptcomp
+  ocamlcommon)
+ (modules flambda_backend_main))
+
+(rule
+ (targets flambda_backend_main_native.ml)
+ (action (copy flambda_backend_main.ml %{targets})))
+(executable
+ (name flambda_backend_main_native)
+ (modes native)
+ (flags
+  (:standard -principal))
+ (libraries
+  flambda_backend_driver
+  memtrace
+  $(main_libs)
+  ocamloptcomp
+  ocamlcommon)
+ (modules flambda_backend_main_native))
+
+(rule
+ (targets boot_ocamlopt.ml)
+ (action (copy driver/main_$(main_type).ml %{targets})))
+(executable
+ (name boot_ocamlopt)
+ (modes native)
+ (flags
+  (:standard -principal))
+ (libraries
+   flambda_backend_driver
+   $(main_libs)
+   ocamloptcomp
+   ocamlcommon)
+ (modules boot_ocamlopt))
+
+(install
+ (files
+  ($(optcomp).cma as compiler-libs/ocamloptcomp.cma)
+  ($(optcomp).cmxa as compiler-libs/ocamloptcomp.cmxa)
+  ($(optcomp).a as compiler-libs/ocamloptcomp.a))
+ (section lib)
+ (package ocaml))
+endef
+
+
+
+main_exec.sexp:
+	$(file >$@,$(main_exec))
+
+ifeq ($(middle_end),flambda2)
+main_libs.sexp:
+	@echo '(flambda2 flambda2_ui flambda2_to_cmm)' > $@
+else
+main_libs.sexp:
+	@echo > $@
+endif
+
+main_flambda2_libs.sexp:
 
 ocamlopt_flags.sexp: ocaml/Makefile.config
 # natdynlinkops2
@@ -61,9 +136,8 @@ _boot/_bootinstall: ocaml/Makefile.config
 	done
 
 .PHONY: boot-compiler runtime-stdlib
-boot-compiler: ocamlopt_flags.sexp _boot/_bootinstall
+boot-compiler: ocamlopt_flags.sexp main_exec.sexp _boot/_bootinstall
 	$(dune) build --profile=release --root=. --build-dir=_boot \
-	  --trace-file trace.json \
 	  boot_ocamlopt.exe \
 	  ocaml/main_native.exe \
 	  ocaml/tools/ocamlmklib_native.exe
