@@ -117,11 +117,23 @@ let make_symbol ?(unitname = current_unit.ui_symbol) idopt =
   | None -> prefix
   | Some id -> concat_symbol prefix id
 
+let make_legacy_fun_symbol ~loc ~unit_prefix ~unique_name =
+  let fname = loc.Location.loc_start.pos_fname in
+  let symbol = concat_symbol unit_prefix unique_name in
+  match String.rindex fname '@' with
+  | exception Not_found -> symbol
+  | i ->
+     let suffix = String.sub fname (i+1) (String.length fname - (i+1)) in
+     concat_symbol symbol ("tag@" ^ suffix)
+
 let make_fun_symbol ?(unitname = current_unit.ui_symbol) loc id =
   if Config.with_cpp_mangling then
     Mangling.fun_symbol ~unitname ~loc ~id
   else
-    make_symbol ~unitname (Some id)
+    make_legacy_fun_symbol
+      ~loc:(Debuginfo.Scoped_location.to_location loc)
+      ~unit_prefix:("caml" ^ unitname)
+      ~unique_name:id
 
 let current_unit_linkage_name () =
   Linkage_name.create (make_symbol ~unitname:current_unit.ui_symbol None)
@@ -460,7 +472,10 @@ let legacy_function_label fv =
     Linkage_name.to_string
       (Compilation_unit.get_linkage_name compilation_unit)
   in
-  (concat_symbol unitname (Closure_id.unique_name fv))
+  make_legacy_fun_symbol
+    ~loc:(Closure_id.debug_info fv |> Debuginfo.to_location)
+    ~unit_prefix:unitname
+    ~unique_name:(Closure_id.unique_name fv)
 
 let cpp_function_label closure_id =
   let unitname =
