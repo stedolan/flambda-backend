@@ -51,3 +51,16 @@
   (modes native)
   (modules merge_archives)
   (libraries ocamlcommon ocamlbytecomp ocamloptcomp))
+
+(executable
+  (name taildump)
+  (modes native)
+  (modules taildump)
+  (libraries ocamlcommon ocamloptcomp))
+
+(install
+  (files
+    (taildump.exe as ocamltaildump)
+  )
+  (section bin)
+  (package ocaml))

@@ -485,7 +485,7 @@ and to_clambda_direct_apply t func args direct_func probe dbg pos mode env
        dropping any side effects.) *)
     if closed then uargs else uargs @ [subst_var env func]
   in
-  Udirect_apply (label, uargs, probe, (pos, mode), dbg)
+  Udirect_apply (label, false, uargs, probe, (pos, mode), dbg)
 
 (* Describe how to build a runtime closure block that corresponds to the
    given Flambda set of closures.

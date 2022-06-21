@@ -1609,7 +1609,7 @@ fun k acc fmt -> match fmt with
     make_printf k' End_of_acc fmt'
 
   | End_of_format ->
-    k acc
+    Sys.opaque_identity (k acc)
 
 (* Delay the error (Invalid_argument "Printf: bad conversion %_"). *)
 (* Generate functions to take remaining arguments (after the "%_"). *)
@@ -1862,7 +1862,7 @@ let rec make_iprintf : type a b c d e f state.
     | Formatting_gen (Open_box (Format (fmt', _)), rest) ->
         make_iprintf (fun koc -> make_iprintf k koc rest) o fmt'
     | End_of_format ->
-        k o
+        Sys.opaque_identity (k o)
 and fn_of_padding_precision :
   type x y z a b c d e f state.
   (state -> f) -> state -> (a, b, c, d, e, f) fmt ->

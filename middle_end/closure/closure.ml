@@ -89,7 +89,7 @@ let occurs_var var u =
   let rec occurs = function
       Uvar v -> v = var
     | Uconst _ -> false
-    | Udirect_apply(_lbl, args, _, _, _) -> List.exists occurs args
+    | Udirect_apply(_lbl, _, args, _, _, _) -> List.exists occurs args
     | Ugeneric_apply(funct, args, _, _) ->
         occurs funct || List.exists occurs args
     | Uclosure(_fundecls, clos) -> List.exists occurs clos
@@ -176,7 +176,7 @@ let lambda_smaller lam threshold =
     match lam with
       Uvar _ -> ()
     | Uconst _ -> incr size
-    | Udirect_apply(_, args, None, _, _) ->
+    | Udirect_apply(_, _, args, None, _, _) ->
         size := !size + 4; lambda_list_size args
     | Udirect_apply _ -> ()
     (* We aim for probe points to not affect inlining decisions.
@@ -583,9 +583,9 @@ let rec substitute loc ((backend, fpc) as st) sb rn ulam =
     Uvar v ->
       begin try V.Map.find v sb with Not_found -> ulam end
   | Uconst _ -> ulam
-  | Udirect_apply(lbl, args, probe, kind, dbg) ->
+  | Udirect_apply(lbl, may_tail, args, probe, kind, dbg) ->
       let dbg = subst_debuginfo loc dbg in
-      Udirect_apply(lbl, List.map (substitute loc st sb rn) args,
+      Udirect_apply(lbl, may_tail, List.map (substitute loc st sb rn) args,
                     probe, kind, dbg)
   | Ugeneric_apply(fn, args, kind, dbg) ->
       let dbg = subst_debuginfo loc dbg in
@@ -745,6 +745,41 @@ type env = {
   mutable_vars : V.Set.t;
 }
 
+let rec exp_may_tail = function
+  | Udirect_apply(lbl, true, _, _, _, dbg) -> [Some lbl, dbg]
+  | Ugeneric_apply(_, _, _, dbg) -> [None, dbg]
+
+  | Uvar _ | Uconst _
+  | Udirect_apply(_, false, _, _, _, _) -> []
+  | Uclosure _
+  | Uoffset _
+  | Uprim _                     (* FIXME sequand/or, id *)
+  | Ustaticfail _
+  | Uwhile _
+  | Ufor _
+  | Uassign _
+  | Uunreachable -> []
+
+  | Usend _ -> [] (* wrong *)
+
+  | Ulet (_, _, _, _, u)
+  | Uphantom_let (_, _, u)
+  | Uletrec(_, u)
+  | Utrywith (_, _, u, _)
+  | Usequence (_, u)
+  | Uregion u
+  | Utail u -> exp_may_tail u
+
+  | Uifthenelse(_, u1, u2, _) -> exp_may_tail u1 @ exp_may_tail u2
+  | Ucatch(_, _, u1, u2, _) -> exp_may_tail u1 @ exp_may_tail u2
+
+  | Uswitch (_, s, _, _) ->
+     List.concat
+       ((Array.to_list s.us_actions_consts |> List.map exp_may_tail) @
+        (Array.to_list s.us_actions_blocks |> List.map exp_may_tail))
+  | Ustringswitch(_, ss, uopt, _) ->
+     List.concat (List.map (fun (_, u) -> exp_may_tail u) ss @ Option.to_list (Option.map exp_may_tail uopt))
+
 (* Perform an inline expansion:
 
    If [f p = body], substitute [f a] by [let p = a in body].
@@ -840,6 +875,7 @@ let direct_apply env fundesc ufunct uargs pos mode ~probe ~loc ~attribute =
   | _, Never_inlined
   | None, _ ->
      let dbg = Debuginfo.from_location loc in
+     let may_tail = fundesc.fun_may_tail <> [] in
      let kind = (pos, mode) in
      warning_if_forced_inlined ~loc ~attribute
        "Function information unavailable";
@@ -853,10 +889,10 @@ let direct_apply env fundesc ufunct uargs pos mode ~probe ~loc ~attribute =
        fail_if_probe ~probe "Erroneously marked to be inlined"
      end;
      if fundesc.fun_closed && is_pure ufunct then
-       Udirect_apply(fundesc.fun_label, uargs, probe, kind, dbg)
+       Udirect_apply(fundesc.fun_label, may_tail, uargs, probe, kind, dbg)
      else if not fundesc.fun_closed &&
                is_substituable ~mutable_vars:env.mutable_vars ufunct then
-       Udirect_apply(fundesc.fun_label, uargs @ [ufunct], probe, kind, dbg)
+       Udirect_apply(fundesc.fun_label, may_tail, uargs @ [ufunct], probe, kind, dbg)
      else begin
        let args = List.map (fun arg ->
          if is_substituable ~mutable_vars:env.mutable_vars arg then
@@ -871,12 +907,12 @@ let direct_apply env fundesc ufunct uargs pos mode ~probe ~loc ~attribute =
            | Some (v, e) -> Ulet(Immutable, Pgenval, v, e, app))
          (if fundesc.fun_closed then
             Usequence (ufunct,
-                       Udirect_apply (fundesc.fun_label, app_args,
+                       Udirect_apply (fundesc.fun_label, may_tail, app_args,
                                       probe, kind, dbg))
           else
             let clos = V.create_local "clos" in
             Ulet(Immutable, Pgenval, VP.create clos, ufunct,
-                 Udirect_apply(fundesc.fun_label, app_args @ [Uvar clos],
+                 Udirect_apply(fundesc.fun_label, may_tail, app_args @ [Uvar clos],
                                probe, kind, dbg)))
          args
        end
@@ -1403,12 +1439,14 @@ and close_functions { backend; fenv; cenv; mutable_vars } fun_defs =
                fun_closed = initially_closed;
                fun_inline = None;
                fun_float_const_prop = !Clflags.float_const_prop;
-               fun_region = region} in
+               fun_region = region;
+               fun_may_tail = []} in
             let dbg = Debuginfo.from_location loc in
             (id, params, return, body, mode, fundesc, dbg)
         | (_, _) -> fatal_error "Closure.close_functions")
       fun_defs in
   (* Build an approximate fenv for compiling the functions *)
+  (* NB: self calls have fun_may_tail = [] *)
   let fenv_rec =
     List.fold_right
       (fun (id, _params, _return, _body, mode, fundesc, _dbg) fenv ->
@@ -1482,8 +1520,14 @@ and close_functions { backend; fenv; cenv; mutable_vars } fun_defs =
     let fun_params = List.map (fun (var, _) -> VP.create var) fun_params in
     if lambda_smaller ubody threshold
     then fundesc.fun_inline <- Some(fun_params, ubody);
-
-    (f, (id, env_pos, Value_closure(mode, fundesc, approx))) in
+    let may_tail = exp_may_tail ubody in
+    let may_tail =
+      match Compilenv.current_unit_name () with
+      | "Stdlib__Format" | "Stdlib__Printf" -> []
+      | _ -> may_tail
+    in
+    Printf.printf "%s\n" (Compilenv.current_unit_name ());
+    (f, (fundesc, may_tail), (id, env_pos, Value_closure(mode, fundesc, approx))) in
   (* Translate all function definitions. *)
   let clos_info_list =
     if initially_closed then begin
@@ -1508,6 +1552,9 @@ and close_functions { backend; fenv; cenv; mutable_vars } fun_defs =
     in
   (* Update nesting depth *)
   decr function_nesting_depth;
+  let clos_info_list =
+    List.map (fun (f, (fdesc, mt), r) -> fdesc.fun_may_tail <- mt; (f, r)) clos_info_list
+  in
   (* Return the Uclosure node and the list of all identifiers defined,
      with offsets and approximations. *)
   let (clos, infos) = List.split clos_info_list in
@@ -1602,7 +1649,7 @@ let collect_exported_structured_constants a =
   and ulam = function
     | Uvar _ -> ()
     | Uconst c -> const c
-    | Udirect_apply (_, ul, _, _, _) -> List.iter ulam ul
+    | Udirect_apply (_, _, ul, _, _, _) -> List.iter ulam ul
     | Ugeneric_apply (u, ul, _, _) -> ulam u; List.iter ulam ul
     | Uclosure (fl, ul) ->
         List.iter (fun f -> ulam f.body) fl;

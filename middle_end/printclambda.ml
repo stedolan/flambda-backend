@@ -113,7 +113,7 @@ and lam ppf = function
   | Uvar id ->
       V.print ppf id
   | Uconst c -> uconstant ppf c
-  | Udirect_apply(f, largs, probe, kind, _) ->
+  | Udirect_apply(f, _, largs, probe, kind, _) ->
       let lams ppf largs =
         List.iter (fun l -> fprintf ppf "@ %a" lam l) largs in
       let pr ppf (probe : Lambda.probe) =
