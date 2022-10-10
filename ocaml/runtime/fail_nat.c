@@ -54,14 +54,10 @@ extern caml_generated_constant
 /* Exception raising */
 
 CAMLnoreturn_start
-extern void caml_raise_exception(caml_domain_state *state, value bucket)
+  extern void caml_raise_exception (caml_domain_state* state, value bucket)
 CAMLnoreturn_end;
 
-CAMLnoreturn_start
-void caml_raise_async_exception(value bucket)
-CAMLnoreturn_end;
-
-CAMLno_asan static void unwind_local_roots(char *exception_pointer)
+static void unwind_local_roots(char *exception_pointer)
 {
   while (Caml_state->local_roots != NULL &&
          (char *)Caml_state->local_roots < exception_pointer)
@@ -70,47 +66,35 @@ CAMLno_asan static void unwind_local_roots(char *exception_pointer)
   }
 }
 
-CAMLno_asan void caml_raise_async_exception(value v)
+void caml_raise(value v)
 {
-  Caml_state->exception_pointer = Caml_state->async_exception_pointer;
+  Unlock_exn();
+
+  CAMLassert(!Is_exception_result(v));
+
+  v = caml_process_pending_actions_with_root(v);
+
+  if (Caml_state->exception_pointer == NULL) caml_fatal_uncaught_exception(v);
+
+  unwind_local_roots(Caml_state->exception_pointer);
   caml_raise_exception(Caml_state, v);
 }
 
+
 /* Used by the stack overflow handler -> deactivate ASAN (see
    segv_handler in signals_nat.c). */
-CAMLno_asan
-void caml_raise(value exn)
+CAMLno_asan void caml_raise_async(value v)
 {
-  int turned_into_async_exn = 0;
-  exn = caml_prepare_for_raise(exn, &turned_into_async_exn);
-
-  if (turned_into_async_exn)
-  {
-    if (Caml_state->async_exception_pointer == NULL)
-      caml_fatal_uncaught_exception(exn);
-
-    unwind_local_roots(Caml_state->async_exception_pointer);
-    caml_raise_async_exception(exn);
-  }
-  else
-  {
-    if (Caml_state->exception_pointer == NULL)
-      caml_fatal_uncaught_exception(exn);
-
-    unwind_local_roots(Caml_state->exception_pointer);
-    caml_raise_exception(Caml_state, exn);
-  }
-}
-
-CAMLno_asan void caml_raise_async(value exn)
-{
-  exn = caml_prepare_for_raise(exn, NULL);
+  Unlock_exn();
+  CAMLassert(!Is_exception_result(v));
 
   if (Caml_state->async_exception_pointer == NULL)
-    caml_fatal_uncaught_exception(exn);
+    caml_fatal_uncaught_exception(v);
 
   unwind_local_roots(Caml_state->async_exception_pointer);
-  caml_raise_async_exception(exn);
+  Caml_state->exception_pointer = Caml_state->async_exception_pointer;
+  Caml_state->raising_async_exn = 1;
+  caml_raise_exception(Caml_state, v);
 }
 
 /* Used by the stack overflow handler -> deactivate ASAN (see
@@ -182,12 +166,6 @@ void caml_raise_out_of_memory(void)
   caml_raise_constant((value) caml_exn_Out_of_memory);
 }
 
-void caml_raise_out_of_memory_fatal(void)
-{
-  fprintf(stderr, "[ocaml] Out of memory\n");
-  abort();
-}
-
 /* Used by the stack overflow handler -> deactivate ASAN (see
    segv_handler in signals_nat.c). */
 CAMLno_asan
@@ -229,12 +207,10 @@ static const value * caml_array_bound_error_exn = NULL;
 
 void caml_array_bound_error(void)
 {
-  if (caml_array_bound_error_exn == NULL)
-  {
+  if (caml_array_bound_error_exn == NULL) {
     caml_array_bound_error_exn =
-        caml_named_value("Pervasives.array_bound_error");
-    if (caml_array_bound_error_exn == NULL)
-    {
+      caml_named_value("Pervasives.array_bound_error");
+    if (caml_array_bound_error_exn == NULL) {
       fprintf(stderr, "Fatal error: exception "
                       "Invalid_argument(\"index out of bounds\")\n");
       exit(2);
@@ -250,29 +226,4 @@ int caml_is_special_exception(value exn) {
   return exn == (value) caml_exn_Match_failure
     || exn == (value) caml_exn_Assert_failure
     || exn == (value) caml_exn_Undefined_recursive_module;
-}
-
-CAMLexport value caml_check_async_exn(value res, const char *msg)
-{
-  return caml_check_async_exn0(res, msg, (value) caml_exn_Stack_overflow);
-}
-
-CAMLprim value caml_with_async_exns(value body_callback)
-{
-  value exn;
-  value result = caml_callback_exn(body_callback, Val_unit);
-
-  if (!Is_exception_result(result))
-    return result;
-
-  exn = Extract_exception(result);
-
-  /* Irrespective as to whether the exception was asynchronous, it is raised as
-     a normal exception, without any processing of pending actions. */
-
-  if (Caml_state->exception_pointer == NULL)
-    caml_fatal_uncaught_exception(exn);
-
-  unwind_local_roots(Caml_state->exception_pointer);
-  caml_raise_exception(Caml_state, exn);
 }
