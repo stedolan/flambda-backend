@@ -72,6 +72,8 @@ void caml_raise(value v)
 
   CAMLassert(!Is_exception_result(v));
 
+  /* Run callbacks here, so that a signal handler that arrived during
+     a blocking call has a chance to interrupt the raising of EINTR */
   v = caml_process_pending_actions_with_root(v);
 
   if (Caml_state->exception_pointer == NULL) caml_fatal_uncaught_exception(v);
@@ -87,6 +89,10 @@ CAMLno_asan void caml_raise_async(value v)
 {
   Unlock_exn();
   CAMLassert(!Is_exception_result(v));
+
+  /* Do not run callbacks here: we are already raising an async exn,
+     so no need to check for another one, and avoiding polling here
+     removes the risk of recursion in caml_raise */
 
   if (Caml_state->async_exception_pointer == NULL)
     caml_fatal_uncaught_exception(v);
