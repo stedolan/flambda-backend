@@ -24,6 +24,19 @@
 #include "caml/memory.h"
 #include "caml/mlvalues.h"
 
+static value raise_if_exception(value res)
+{
+  if (Is_exception_result(res)) {
+    if (Caml_state->raising_async_exn) {
+      Caml_state->raising_async_exn = 0;
+      caml_raise_async(Extract_exception(res));
+    } else {
+      caml_raise(Extract_exception(res));
+    }
+  }
+  return res;
+}
+
 #ifndef NATIVE_CODE
 
 /* Bytecode callbacks */
@@ -117,20 +130,7 @@ CAMLexport value caml_callback3_exn(value closure,
 
 CAMLexport value caml_callbackN(value closure, int narg, value args[])
 {
-  value res;
-
-  res = caml_callbackN_exn0(closure, narg, args);
-  if (Is_exception_result(res)) {
-    value exn = Extract_exception(res);
-    if (Caml_state->raising_async_exn) {
-      Caml_state->raising_async_exn = 0;
-      caml_raise_async(exn);
-    } else {
-      caml_raise(exn);
-    }
-  }
-
-  return res;
+  return raise_if_exception(caml_callbackN_exn0(closure, narg, args));
 }
 
 CAMLexport value caml_callback(value closure, value arg1)
@@ -248,19 +248,6 @@ CAMLexport value caml_callbackN_exn(value closure, int narg, value args[])
 
 /* Functions that propagate all exceptions, with any asynchronous exceptions
    also being propagated asynchronously. */
-
-static value raise_if_exception(value res)
-{
-  if (Is_exception_result(res)) {
-    if (Caml_state->raising_async_exn) {
-      Caml_state->raising_async_exn = 0;
-      caml_raise_async(Extract_exception(res));
-    } else {
-      caml_raise(Extract_exception(res));
-    }
-  }
-  return res;
-}
 
 CAMLexport value caml_callback (value closure, value arg)
 {
