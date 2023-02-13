@@ -129,7 +129,8 @@ let import_crcs penv ~source crcs =
     | Some (unit, crc) ->
         add_import penv name;
         Consistbl.check crc_units name unit crc source
-  in Array.iter import_crc crcs
+  in
+  import_crc crcs.(0)
 
 let check_consistency penv ps =
   try import_crcs penv ~source:ps.ps_filename ps.ps_crcs
