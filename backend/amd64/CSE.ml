@@ -50,7 +50,7 @@ method! class_of_operation op =
   | Istackoffset _ | Iload _ | Istore _ | Ialloc _
   | Iintop _ | Iintop_imm _ | Iintop_atomic _
   | Iname_for_debugger _ | Iprobe _ | Iprobe_is_enabled _ | Iopaque
-  | Ibeginregion | Iendregion | Ipoll _
+  | Ibeginregion | Iendregion | Ipoll _ | Imodify
     -> super#class_of_operation op
 
 end

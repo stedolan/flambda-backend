@@ -171,6 +171,7 @@ let oper_result_type = function
       | Single | Double -> typ_float
       | _ -> typ_int
       end
+  | Cmodify -> typ_void
   | Calloc _ -> typ_val
   | Cstore (_c, _) -> typ_void
   | Cprefetch _ -> typ_void
@@ -451,7 +452,7 @@ method is_simple_expr = function
       | Cextcall { effects = No_effects; coeffects = No_coeffects; } ->
         List.for_all self#is_simple_expr args
         (* The following may have side effects *)
-      | Capply _ | Cextcall _ | Calloc _ | Cstore _
+      | Capply _ | Cextcall _ | Calloc _ | Cmodify | Cstore _
       | Craise _ | Ccheckbound | Catomic _
       | Cprobe _ | Cprobe_is_enabled _ | Copaque -> false
       | Cprefetch _ | Cbeginregion | Cendregion -> false (* avoid reordering *)
@@ -502,7 +503,7 @@ method effects_of exp =
       | Capply _ | Cprobe _ | Copaque -> EC.arbitrary
       | Calloc Alloc_heap -> EC.none
       | Calloc Alloc_local -> EC.coeffect_only Coeffect.Arbitrary
-      | Cstore _ -> EC.effect_only Effect.Arbitrary
+      | Cmodify | Cstore _ -> EC.effect_only Effect.Arbitrary
       | Cbeginregion | Cendregion -> EC.arbitrary
       | Cprefetch _ -> EC.arbitrary
       | Catomic _ -> EC.arbitrary
@@ -610,6 +611,7 @@ method select_operation op args _dbg =
         (Istore(chunk, addr, is_assign), [arg2; eloc])
         (* Inversion addr/datum in Istore *)
       end
+  | (Cmodify, _) -> Imodify, args
   | (Calloc mode, _) -> (Ialloc {bytes = 0; dbginfo = []; mode}), args
   | (Caddi, _) -> self#select_arith_comm Iadd args
   | (Csubi, _) -> self#select_arith Isub args

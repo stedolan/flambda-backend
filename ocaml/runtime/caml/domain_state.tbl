@@ -102,5 +102,9 @@ DOMAIN_STATE(void*, checking_pointer_pc)
 /* See major_gc.c */
 #endif
 
+DOMAIN_STATE(struct modify_log_entry*, modify_log)
+DOMAIN_STATE(uintnat, modify_log_index)
+/* See memory.c */
+
 DOMAIN_STATE(extra_params_area, extra_params)
 /* This member must occur last, because it is an array, not a scalar */

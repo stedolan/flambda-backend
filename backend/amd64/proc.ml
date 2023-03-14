@@ -333,6 +333,7 @@ let destroyed_at_oper = function
   | Iop(Iintop(Idiv | Imod)) | Iop(Iintop_imm((Idiv | Imod), _))
         -> [| rax; rdx |]
   | Iop(Istore(Single, _, _)) -> [| rxmm15 |]
+  | Iop(Imodify) -> [| r10; r11 |]
   | Iop(Ialloc _ | Ipoll _) -> destroyed_at_alloc_or_poll
   | Iop(Iintop(Imulh _ | Icomp _) | Iintop_imm((Icomp _), _))
         -> [| rax |]
@@ -474,6 +475,7 @@ let safe_register_pressure = function
   | Ispecific _ | Iname_for_debugger _
   | Iprobe _ | Iprobe_is_enabled _ | Iopaque
   | Ibeginregion | Iendregion
+  | Imodify
     -> if fp then 10 else 11
 
 let max_register_pressure =
@@ -488,6 +490,7 @@ let max_register_pressure =
       else consumes ~int:9 ~float:16
   | Iintop(Idiv | Imod) | Iintop_imm((Idiv | Imod), _) ->
     consumes ~int:2 ~float:0
+  | Imodify -> if fp then [| 10; 16 |] else [| 11; 16 |]
   | Ialloc _ | Ipoll _ ->
     consumes ~int:(1 + num_destroyed_by_plt_stub) ~float:0
   | Iintop(Icomp _) | Iintop_imm((Icomp _), _) ->
@@ -557,6 +560,7 @@ let operation_supported = function
   | Craise _
   | Ccheckbound
   | Cprobe _ | Cprobe_is_enabled _ | Copaque | Cbeginregion | Cendregion
+  | Cmodify
     -> true
 
 let trap_size_in_bytes = 16

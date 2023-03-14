@@ -868,19 +868,8 @@ let float_array_ref arr ofs dbg =
   box_float dbg Lambda.alloc_heap (unboxed_float_array_ref arr ofs dbg)
 
 let addr_array_set arr ofs newval dbg =
-  Cop
-    ( Cextcall
-        { func = "caml_modify";
-          ty = typ_void;
-          alloc = false;
-          builtin = false;
-          returns = true;
-          effects = Arbitrary_effects;
-          coeffects = Has_coeffects;
-          ty_args = []
-        },
-      [array_indexing log2_size_addr arr ofs dbg; newval],
-      dbg )
+  Cop(Cmodify,
+      [array_indexing log2_size_addr arr ofs dbg; newval], dbg)
 
 let addr_array_set_local arr ofs newval dbg =
   Cop
@@ -2962,20 +2951,10 @@ let assignment_kind (ptr : Lambda.immediate_or_pointer)
 let setfield n ptr init arg1 arg2 dbg =
   match assignment_kind ptr init with
   | Caml_modify ->
-    return_unit dbg
-      (Cop
-         ( Cextcall
-             { func = "caml_modify";
-               ty = typ_void;
-               alloc = false;
-               builtin = false;
-               returns = true;
-               effects = Arbitrary_effects;
-               coeffects = Has_coeffects;
-               ty_args = []
-             },
-           [field_address arg1 n dbg; arg2],
-           dbg ))
+      return_unit dbg
+        (Cop(Cmodify,
+             [field_address arg1 n dbg; arg2],
+             dbg))
   | Caml_modify_local ->
     return_unit dbg
       (Cop

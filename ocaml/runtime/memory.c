@@ -601,57 +601,132 @@ CAMLexport CAMLweakdef void caml_initialize (value *fp, value val)
   }
 }
 
-/* You must use [caml_modify] to change a field of an existing shared block,
-   unless you are sure the value being overwritten is not a shared block and
-   the value being written is not a young block. */
-/* [caml_modify] never calls the GC. */
-/* [caml_modify] can also be used to do assignment on data structures that are
-   in the minor heap instead of in the major heap.  In this case, it
-   is a bit slower than simple assignment.
-   In particular, you can use [caml_modify] when you don't know whether the
-   block being changed is in the minor heap or the major heap. */
-/* PR#6084 workaround: define it as a weak symbol */
+#define MODIFY_CACHE_BITS 10
+#define MODIFY_CACHE_SIZE (1 << MODIFY_CACHE_BITS)
+#define MODIFY_CACHE_SHIFT (8 * sizeof (uintnat) - MODIFY_CACHE_BITS)
+#define MODIFY_CACHE_HASH_FACTOR 11400714819323198485UL
+#define LOG_WORD_SIZE (sizeof (uintnat) / 4 + 1)
 
-CAMLexport CAMLweakdef void caml_modify (value *fp, value val)
+struct modify_cache_entry {
+  value *field_pointer;
+  int in_ref_table;
+};
+
+static struct modify_cache_entry modify_cache [MODIFY_CACHE_SIZE];
+
+static inline uintnat modify_hash (value *fp)
 {
+  return (((uintnat) fp /*>> LOG_WORD_SIZE*/)
+          * MODIFY_CACHE_HASH_FACTOR)
+         >> MODIFY_CACHE_SHIFT;
+}
+
+void caml_modify_batch (void)
+{
+
   /* The write barrier implemented by [caml_modify] checks for the
      following two conditions and takes appropriate action:
-     1- a pointer from the major heap to the minor heap is created
+     1- creation of a pointer from the major heap to the minor heap
         --> add [fp] to the remembered set
-     2- a pointer from the major heap to the major heap is overwritten,
+     2- overwriting of a pointer from the major heap to the major heap that
+        was already present at the start of the GC cycle,
         while the GC is in the marking phase
         --> call [caml_darken] on the overwritten pointer so that the
             major GC treats it as an additional root.
 
-     The logic implemented below is duplicated in caml_array_fill to
+     The logic implemented below is duplicated (without the cache)
+     in caml_array_fill to
      avoid repeated calls to caml_modify and repeated tests on the
      values.  Don't forget to update caml_array_fill if the logic
      below changes!
   */
-  value old;
 
-  if (Is_young((value)fp)) {
-    /* The modified object resides in the minor heap.
-       Conditions 1 and 2 cannot occur. */
-    *fp = val;
-  } else {
-    /* The modified object resides in the major heap. */
-    CAMLassert(Is_in_heap(fp));
-    old = *fp;
-    *fp = val;
-    if (Is_block(old)) {
-      /* If [old] is a pointer within the minor heap, we already
-         have a major->minor pointer and [fp] is already in the
-         remembered set.  Conditions 1 and 2 cannot occur. */
-      if (Is_young(old)) return;
-      /* Here, [old] can be a pointer within the major heap.
-         Check for condition 2. */
-      if (caml_gc_phase == Phase_mark) caml_darken(old, NULL);
+  intnat i, index;
+  value *fp;
+  value old, val;
+  uintnat h;
+  char *mode = getenv ("CAML_MODIFY_BATCH_STOP");
+  caml_domain_state *ds = Caml_state;
+  value y_start = (value) Caml_state->young_start;
+  value y_end = (value) Caml_state->young_end;
+#define L_is_young(v) ((v) > y_start && (v) < y_end)
+
+  CAML_EV_BEGIN(EV_MODIFY_BATCH);
+  index =
+    (intnat) (ds->modify_log_index / sizeof (struct modify_log_entry));
+//  fprintf (stderr, "batch size = %ld index=%ld\n", CAML_MODIFY_LOG_SIZE - index, index);
+//  fflush (stderr);
+  if (index == 0 && mode != NULL && !strcmp (mode, "before")){
+    fprintf (stderr, "stop before modify-batch\n");
+    fflush (stderr);
+    exit (0);
+  }
+  for (i = CAML_MODIFY_LOG_SIZE - 1; i >= index; i--){
+    fp = ds->modify_log[i].field_pointer;
+    if (L_is_young((value)fp)){
+      /* The modified object resides in the minor heap.
+         Conditions 1 and 2 cannot occur. */
+      continue;
+    } else {
+      /* The modified object resides in the major heap. */
+      CAMLassert(Is_in_heap(fp));
+      h = modify_hash (fp);
+      CAMLassert (fp != NULL);
+      if (modify_cache[h].field_pointer == fp){
+        CAML_EV_COUNTER (EV_C_CAML_MODIFY_CACHE_HIT, 1);
+#ifdef DEBUG
+        fprintf (stderr, "hit %04lx fp=%p\n", h, fp);
+#endif
+        /* Writing again to an already-modified field:
+           condition 2 cannot occur. */
+        if (!modify_cache[h].in_ref_table){
+          /* Check for condition 1. */
+          val = *fp;
+          if (Is_block(val) && L_is_young(val)) {
+            add_to_ref_table (ds->ref_table, fp);
+            modify_cache[h].in_ref_table = 1;
+          }
+        }
+      }else{
+        CAML_EV_COUNTER (EV_C_CAML_MODIFY_CACHE_MISS, 1);
+#ifdef DEBUG
+        CAMLassert (fp != NULL);
+        fprintf (stderr, "miss %04lx cache=%p fp=%p\n", h, modify_cache[h].field_pointer, fp);
+#endif
+        modify_cache[h].field_pointer = fp;
+        modify_cache[h].in_ref_table = 0;
+        old = ds->modify_log[i].old_value;
+        if (Is_block(old)) {
+          /* If [old] is a pointer into the minor heap:
+             - Condition 2 cannot occur.
+             - Condition 1 can only occur when overwriting a non-minor
+               pointer with a minor pointer. The batch entry for that
+               write will have added this field to [ref_table] so we
+               don't need to do it here.
+          */
+          if (L_is_young(old)){
+            continue;
+          }
+          /* Here, [old] can be a pointer within the major heap.
+             Check for condition 2. */
+          if (caml_gc_phase == Phase_mark) caml_darken(old, NULL);
+        }
+        /* Check for condition 1. */
+        val = *fp;
+        if (Is_block(val) && L_is_young(val)) {
+          add_to_ref_table (ds->ref_table, fp);
+          modify_cache[h].in_ref_table = 1;
+        }
+      }
     }
-    /* Check for condition 1. */
-    if (Is_block(val) && Is_young(val)) {
-      add_to_ref_table (Caml_state->ref_table, fp);
-    }
+  }
+  ds->modify_log_index =
+    CAML_MODIFY_LOG_SIZE * sizeof (struct modify_log_entry);
+  CAML_EV_END(EV_MODIFY_BATCH);
+  if (index == 0 && mode != NULL && !strcmp (mode, "after")){
+    fprintf (stderr, "stop after modify-batch\n");
+    fflush (stderr);
+    exit (0);
   }
 }
 
@@ -783,6 +858,67 @@ CAMLprim value caml_local_stack_offset(value blk)
 #else
   return Val_long(0);
 #endif
+}
+
+/* You must use [caml_modify] to change a field of an existing shared block,
+   unless you are sure the value being overwritten is not a shared block and
+   the value being written is not a young block. */
+/* [caml_modify] never calls the GC. */
+/* [caml_modify] can also be used to do assignment on data structures that are
+   in the minor heap instead of in the major heap.  In this case, it
+   is a bit slower than simple assignment.
+   In particular, you can use [caml_modify] when you don't know whether the
+   block being changed is in the minor heap or the major heap. */
+/* PR#6084 workaround: define it as a weak symbol */
+
+CAMLexport CAMLweakdef void caml_modify (value *fp, value val)
+{
+  uintnat i;
+
+  if (Caml_state->modify_log_index == 0){
+    caml_modify_batch ();
+  }
+  Caml_state->modify_log_index -= sizeof (struct modify_log_entry);
+  i = Caml_state->modify_log_index / sizeof (struct modify_log_entry);
+  Caml_state->modify_log[i].field_pointer = fp;
+  Caml_state->modify_log[i].old_value = *fp;
+  *fp = val;
+}
+
+void caml_modify_flush_cache (void)
+{
+  int i;
+#ifdef DEBUG
+  fprintf (stderr, "caml_modify_cache_flush\n");
+#endif
+  for (i = 0; i < MODIFY_CACHE_SIZE; i++){
+    modify_cache[i].field_pointer = NULL;
+  }
+}
+
+void caml_init_modify (void)
+{
+  Caml_state->modify_log =
+    caml_stat_alloc_noexc (CAML_MODIFY_LOG_SIZE
+                           * sizeof (struct modify_log_entry));
+  if(Caml_state->modify_log == NULL)
+    caml_fatal_error("not enough memory for the modify log");
+#if 0
+  #define Debug_tag(x) (INT64_LITERAL(0xD700D7D7D700D6D7u) \
+                      | ((uintnat) (x) << 16) \
+                      | ((uintnat) (x) << 48))
+  {
+    int i;
+    for (i = 0; i < CAML_MODIFY_LOG_SIZE; i++){
+      Caml_state->modify_log[i].field_pointer = (void *) Debug_tag(0x20);
+      Caml_state->modify_log[i].old_value = Debug_tag(0x21);
+      /* XXX FIXME move these constants to misc.h */
+    }
+  }
+#endif
+  Caml_state->modify_log_index =
+    CAML_MODIFY_LOG_SIZE * sizeof (struct modify_log_entry);
+  caml_modify_flush_cache ();
 }
 
 /* Global memory pool.

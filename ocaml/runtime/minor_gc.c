@@ -419,6 +419,7 @@ void caml_empty_minor_heap (void)
     prev_alloc_words = caml_allocated_words;
     Caml_state->in_minor_collection = 1;
     caml_gc_message (0x02, "<");
+    caml_modify_batch ();
     CAML_EV_BEGIN(EV_MINOR_LOCAL_ROOTS);
     caml_oldify_local_roots();
     CAML_EV_END(EV_MINOR_LOCAL_ROOTS);
@@ -479,6 +480,7 @@ void caml_empty_minor_heap (void)
     clear_table ((struct generic_table *) Caml_state->ref_table,
                  sizeof(value *),
                  "ref_table");
+    caml_modify_flush_cache ();
     clear_table ((struct generic_table *) Caml_state->ephe_ref_table,
                  sizeof(struct caml_ephe_ref_elt),
                  "ephe_ref_table");

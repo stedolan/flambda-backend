@@ -161,6 +161,10 @@ let pseudoregs_for_operation op arg res =
     let arg = Array.copy arg in
     arg.(len-1) <- res.(0);
     (arg, res)
+  (* For Imodify, the assembly stub (caml_modify_asm) needs the first
+     argument in rax. *)
+  | Imodify ->
+      ([| rax; arg.(1) |], res)
   (* Other instructions are regular *)
   | Iintop (Ipopcnt|Iclz _|Ictz _|Icomp _|Icheckbound)
   | Iintop_imm ((Imulh _|Idiv|Imod|Icomp _|Icheckbound

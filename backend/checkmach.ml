@@ -340,6 +340,7 @@ end = struct
          callbacks, but any allocations done therein don't count towards the
          calling function being "allocating". *)
       ()
+    | Imodify -> () (* FIXME *)
     | Iprobe { name; handler_code_sym } ->
       let desc = Printf.sprintf "probe %s handler %s" name handler_code_sym in
       check_call t handler_code_sym ~desc dbg

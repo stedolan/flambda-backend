@@ -63,6 +63,7 @@ type operation =
   | Istackoffset of int
   | Iload of Cmm.memory_chunk * Arch.addressing_mode * mutable_flag
   | Istore of Cmm.memory_chunk * Arch.addressing_mode * bool
+  | Imodify
   | Ialloc of { bytes : int; dbginfo : Debuginfo.alloc_dbginfo;
                 mode : Lambda.alloc_mode }
   | Iintop of integer_operation
@@ -185,12 +186,12 @@ let rec instr_iter f i =
             | Ifloatofint | Iintoffloat | Ivalueofint | Iintofvalue
             | Ispecific _ | Iname_for_debugger _ | Iprobe _ | Iprobe_is_enabled _
             | Iopaque
-            | Ibeginregion | Iendregion | Ipoll _) ->
+            | Ibeginregion | Iendregion | Ipoll _ | Imodify) ->
         instr_iter f i.next
 
 let operation_is_pure = function
   | Icall_ind | Icall_imm _ | Itailcall_ind | Itailcall_imm _
-  | Iextcall _ | Istackoffset _ | Istore _ | Ialloc _ | Ipoll _
+  | Iextcall _ | Istackoffset _ | Istore _ | Imodify | Ialloc _ | Ipoll _
   | Iintop(Icheckbound) | Iintop_imm(Icheckbound, _) | Iopaque
   (* Conservative to ensure valueofint/intofvalue are not eliminated before emit. *)
   | Ivalueofint | Iintofvalue | Iintop_atomic _ -> false
@@ -230,7 +231,7 @@ let operation_can_raise op =
   | Istackoffset _ | Istore _  | Iload (_, _, _) | Iname_for_debugger _
   | Itailcall_imm _ | Itailcall_ind
   | Iopaque | Ibeginregion | Iendregion
-  | Iprobe_is_enabled _ | Ialloc _ | Ipoll _
+  | Iprobe_is_enabled _ | Ialloc _ | Ipoll _ | Imodify
     -> false
 
 let free_conts_for_handlers fundecl =
