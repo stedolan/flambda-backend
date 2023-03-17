@@ -545,6 +545,13 @@ ENDFUNCTION(G(caml_call_local_realloc))
  */
 FUNCTION(G(caml_modify_asm))
 CFI_STARTPROC
+        cmpq    %r15, %rax
+        jb      1f              /* %r15 > %rax */
+        cmpq    Caml_state(young_end), %rax
+        jae     1f              /* young_end <= %rax */
+        ret
+
+1:      
         movq    Caml_state(modify_log_index), %r11
         test    %r11, %r11
         jnz     LBL(113)
