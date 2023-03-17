@@ -480,7 +480,6 @@ void caml_empty_minor_heap (void)
     clear_table ((struct generic_table *) Caml_state->ref_table,
                  sizeof(value *),
                  "ref_table");
-    caml_modify_flush_cache ();
     clear_table ((struct generic_table *) Caml_state->ephe_ref_table,
                  sizeof(struct caml_ephe_ref_elt),
                  "ephe_ref_table");

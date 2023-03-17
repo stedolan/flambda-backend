@@ -601,28 +601,10 @@ CAMLexport CAMLweakdef void caml_initialize (value *fp, value val)
   }
 }
 
-#define MODIFY_CACHE_BITS 10
-#define MODIFY_CACHE_SIZE (1 << MODIFY_CACHE_BITS)
-#define MODIFY_CACHE_SHIFT (8 * sizeof (uintnat) - MODIFY_CACHE_BITS)
-#define MODIFY_CACHE_HASH_FACTOR 11400714819323198485UL
-#define LOG_WORD_SIZE (sizeof (uintnat) / 4 + 1)
-
-static uintnat modify_cache [MODIFY_CACHE_SIZE];
-
-static uintnat cache_in_ref_table(value* fp) {
-  return ((uintnat)fp) | 1;
-}
-
-static uintnat cache_not_in_ref_table(value* fp) {
-  return (uintnat)fp;
-}
-
-static inline uintnat modify_hash (value *fp)
-{
-  return (((uintnat) fp /*>> LOG_WORD_SIZE*/)
-          * MODIFY_CACHE_HASH_FACTOR)
-         >> MODIFY_CACHE_SHIFT;
-}
+#define COUNTER1 Caml_state->eventlog_startup_timestamp
+#define COUNTER2 Caml_state->eventlog_startup_pid
+#define COUNTER3 Caml_state->eventlog_paused
+#define COUNTER4 Caml_state->eventlog_enabled
 
 void caml_modify_batch (void)
 {
@@ -647,7 +629,6 @@ void caml_modify_batch (void)
   intnat i, index;
   value *fp;
   value old, val;
-  uintnat h;
 #ifdef PERF
   char *mode = getenv ("CAML_MODIFY_BATCH_STOP");
 #endif
@@ -655,15 +636,21 @@ void caml_modify_batch (void)
   value y_start = (value) Caml_state->young_start;
   value y_end = (value) Caml_state->young_end;
   struct modify_log_entry* modify_log = Caml_state->modify_log;
-  uintnat* entry;
   int currently_marking = (caml_gc_phase == Phase_mark);
 #define L_is_young(v) ((v) > y_start && (v) < y_end)
+  value** ref_table_ptr;
+
+  while (ds->ref_table->limit - ds->ref_table->ptr < CAML_MODIFY_LOG_SIZE) {
+    int remaining_ref_table = ds->ref_table->limit - ds->ref_table->ptr;
+    ds->ref_table->ptr += remaining_ref_table;
+    caml_realloc_ref_table(ds->ref_table);
+    ds->ref_table->ptr -= remaining_ref_table;
+  }
+  ref_table_ptr = ds->ref_table->ptr;
 
   CAML_EV_BEGIN(EV_MODIFY_BATCH);
   index =
     (intnat) (ds->modify_log_index / sizeof (struct modify_log_entry));
-//  fprintf (stderr, "batch size = %ld index=%ld\n", CAML_MODIFY_LOG_SIZE - index, index);
-//  fflush (stderr);
 #ifdef PERF
   if (index == 0 && mode != NULL && !strcmp (mode, "before")){
     fprintf (stderr, "stop before modify-batch\n");
@@ -674,59 +661,48 @@ void caml_modify_batch (void)
   for (i = CAML_MODIFY_LOG_SIZE - 1; i >= index; i--){
     fp = modify_log[i].field_pointer;
     CAMLassert (!L_is_young((value)fp));
-    {
-      /* The modified object resides in the major heap. */
-      CAMLassert(Is_in_heap(fp));
-      h = modify_hash (fp);
-      CAMLassert (fp != NULL);
-      entry = &modify_cache[h];
-      if (*entry == cache_in_ref_table(fp)) {
+    /* The modified object resides in the major heap. */
+    CAMLassert(Is_in_heap(fp));
+    old = modify_log[i].old_value;
+    //int did_work = 0;
+    //COUNTER1 ++;
+    if (Is_block(old)) {
+      /* If [old] is a pointer into the minor heap:
+         - Condition 2 cannot occur.
+         - Condition 1 can only occur when overwriting a non-minor
+           pointer with a minor pointer. The batch entry for that
+           write will have added this field to [ref_table] so we
+           don't need to do it here.
+      */
+      if (L_is_young(old)){
         continue;
-      } else if (*entry == cache_not_in_ref_table(fp)) {
-        CAML_EV_COUNTER (EV_C_CAML_MODIFY_CACHE_HIT, 1);
-#ifdef DEBUG
-        fprintf (stderr, "hit %04lx fp=%p\n", h, fp);
-#endif
-        /* Writing again to an already-modified field:
-           condition 2 cannot occur. */
-          /* Check for condition 1. */
-        val = *fp;
-        if (Is_block(val) && L_is_young(val)) {
-          add_to_ref_table (ds->ref_table, fp);
-          *entry = cache_in_ref_table(fp);
+      }
+      /* Here, [old] can be a pointer within the major heap.
+         Check for condition 2. */
+      if (currently_marking) {
+        header_t hd = Hd_val(old);
+        if (Tag_val(hd) == Infix_tag) {
+          /* Infix_tag is always Caml_white */
+          CAMLassert(Is_white_hd(hd));
         }
-      } else {
-        CAML_EV_COUNTER (EV_C_CAML_MODIFY_CACHE_MISS, 1);
-#ifdef DEBUG
-        CAMLassert (fp != NULL);
-        fprintf (stderr, "miss %04lx cache=%p fp=%p\n", h, (void*)modify_cache[h], fp);
-#endif
-        *entry = cache_not_in_ref_table(fp);
-        old = modify_log[i].old_value;
-        if (Is_block(old)) {
-          /* If [old] is a pointer into the minor heap:
-             - Condition 2 cannot occur.
-             - Condition 1 can only occur when overwriting a non-minor
-               pointer with a minor pointer. The batch entry for that
-               write will have added this field to [ref_table] so we
-               don't need to do it here.
-          */
-          if (L_is_young(old)){
-            continue;
-          }
-          /* Here, [old] can be a pointer within the major heap.
-             Check for condition 2. */
-          if (currently_marking) caml_darken(old, NULL);
-        }
-        /* Check for condition 1. */
-        val = *fp;
-        if (Is_block(val) && L_is_young(val)) {
-          add_to_ref_table (ds->ref_table, fp);
-          *entry = cache_in_ref_table(fp);
+        if (Is_white_hd(hd)) {
+          //COUNTER2++;
+          caml_darken(old, NULL);
+          //did_work = 1;
         }
       }
     }
+    /* Check for condition 1. */
+    val = *fp;
+    if (Is_block(val) && L_is_young(val)) {
+      //COUNTER4 ++;
+      //if (ref_table_ptr >= ds->ref_table->limit) abort();
+      *ref_table_ptr++ = fp;
+      //did_work = 1;
+    }
+    //COUNTER3 += did_work;
   }
+  ds->ref_table->ptr = ref_table_ptr;
   ds->modify_log_index =
     CAML_MODIFY_LOG_SIZE * sizeof (struct modify_log_entry);
   CAML_EV_END(EV_MODIFY_BATCH);
@@ -896,17 +872,6 @@ CAMLexport CAMLweakdef void caml_modify (value *fp, value val)
   *fp = val;
 }
 
-void caml_modify_flush_cache (void)
-{
-  int i;
-#ifdef DEBUG
-  fprintf (stderr, "caml_modify_cache_flush\n");
-#endif
-  for (i = 0; i < MODIFY_CACHE_SIZE; i++){
-    modify_cache[i] = 0;
-  }
-}
-
 void caml_init_modify (void)
 {
   Caml_state->modify_log =
@@ -929,7 +894,6 @@ void caml_init_modify (void)
 #endif
   Caml_state->modify_log_index =
     CAML_MODIFY_LOG_SIZE * sizeof (struct modify_log_entry);
-  caml_modify_flush_cache ();
 }
 
 /* Global memory pool.

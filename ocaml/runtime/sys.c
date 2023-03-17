@@ -149,6 +149,18 @@ CAMLexport void caml_do_exit(int retcode)
     caml_gc_message(0x400,
                     "forced_major_collections: %"ARCH_INTNAT_PRINTF_FORMAT"d\n",
                     forcmajcoll);
+    caml_gc_message(0x400,
+                    "counter1: %"ARCH_INTNAT_PRINTF_FORMAT"d\n",
+                    Caml_state->eventlog_startup_timestamp);
+    caml_gc_message(0x400,
+                    "counter2: %"ARCH_INTNAT_PRINTF_FORMAT"d\n",
+                    Caml_state->eventlog_startup_pid);
+    caml_gc_message(0x400,
+                    "counter3: %"ARCH_INTNAT_PRINTF_FORMAT"d\n",
+                    Caml_state->eventlog_paused);
+    caml_gc_message(0x400,
+                    "counter4: %"ARCH_INTNAT_PRINTF_FORMAT"d\n",
+                    Caml_state->eventlog_enabled);
   }
 
 #ifndef NATIVE_CODE
