@@ -83,7 +83,7 @@ let primitive_descriptions pd1 pd2 =
 
 let value_descriptions ~loc env name
     (vd1 : Types.value_description)
-    (vd2 : Types.value_description) =
+    subst2 (vd2 : Types.value_description) =
   Builtin_attributes.check_alerts_inclusion
     ~def:vd1.val_loc
     ~use:vd2.val_loc
@@ -92,6 +92,7 @@ let value_descriptions ~loc env name
     name;
   match vd1.val_kind with
   | Val_prim p1 -> begin
+     let vd2 = Subst.value_description subst2 vd2 in
      match vd2.val_kind with
      | Val_prim p2 -> begin
          let ty1_global, _ = Ctype.instance_prim_mode p1 vd1.val_type in
@@ -100,7 +101,7 @@ let value_descriptions ~loc env name
            Option.iter Alloc_mode.make_global_exn mode2;
            ty2
          in
-         (try Ctype.moregeneral env true ty1_global ty2_global
+         (try Ctype.moregeneral env true ty1_global Subst.identity ty2_global
           with Ctype.Moregen err -> raise (Dont_match (Type err)));
          let ty1_local, _ = Ctype.instance_prim_mode p1 vd1.val_type in
          let ty2_local =
@@ -108,7 +109,7 @@ let value_descriptions ~loc env name
            Option.iter Alloc_mode.make_local_exn mode2;
            ty2
          in
-         (try Ctype.moregeneral env true ty1_local ty2_local
+         (try Ctype.moregeneral env true ty1_local Subst.identity ty2_local
           with Ctype.Moregen err -> raise (Dont_match (Type err)));
          match primitive_descriptions p1 p2 with
          | None -> Tcoerce_none
@@ -116,7 +117,7 @@ let value_descriptions ~loc env name
        end
      | _ ->
         let ty1, mode1 = Ctype.instance_prim_mode p1 vd1.val_type in
-        (try Ctype.moregeneral env true ty1 vd2.val_type
+        (try Ctype.moregeneral env true ty1 Subst.identity vd2.val_type
          with Ctype.Moregen err -> raise (Dont_match (Type err)));
         let pc =
           {pc_desc = p1; pc_type = vd2.Types.val_type; pc_poly_mode = mode1;
@@ -124,7 +125,7 @@ let value_descriptions ~loc env name
         Tcoerce_primitive pc
      end
   | _ ->
-     match Ctype.moregeneral env true vd1.val_type vd2.val_type with
+     match Ctype.moregeneral env true vd1.val_type subst2 vd2.val_type with
      | exception Ctype.Moregen err -> raise (Dont_match (Type err))
      | () -> begin
        match vd2.val_kind with

@@ -3824,6 +3824,57 @@ let moregen_alloc_mode v a1 a2 =
   | Ok () -> ()
   | Error () -> raise_unexplained_for Moregen
 
+let path_same_normalized env p1 p2 =
+  if Path.same p1 p2
+  then true
+  else begin
+    let p1 = Env.normalize_type_path None env p1 in
+    let p2 = Env.normalize_type_path None env p2 in
+    Path.same p1 p2
+  end
+
+exception Complicated_moregen
+let moregeneral_fast env patt subst subj =
+  let snap = snapshot () in
+  For_copy.with_scope (fun scope ->
+    (* Fixed upper limit of the number of nodes,
+       so that we don't diverge on equirecursive types *)
+    let maxnodes = ref 200 in
+    let rec mgen t1 t2 =
+      decr maxnodes;
+      if !maxnodes = 0 then raise_notrace Complicated_moregen;
+      match get_desc t1, get_desc t2 with
+      | Tsubst (ty, _), _ when eq_type ty t2 -> ()
+      | Tvar _, _ when get_level t1 = generic_level ->
+         For_copy.redirect_desc scope t1 (Tsubst (t2, None))
+      | Tarrow ((l1,a1,r1), t1, u1, _), Tarrow ((l2,a2,r2), t2, u2, _)
+           when l1 = l2 ->
+         if not (Result.is_ok (Alloc_mode.equate a1 a2)) then
+           raise_notrace Complicated_moregen;
+         if not (Result.is_ok (Alloc_mode.equate r1 r2)) then
+           raise_notrace Complicated_moregen;
+         mgen t1 t2;
+         mgen u1 u2
+      | Ttuple tl1, Ttuple tl2 ->
+         List.iter2 mgen tl1 tl2
+      | Tconstr (p1, tl1, _), Tconstr (p2, tl2, _) ->
+         (* FIXME: easy cases of alias expansion? *)
+         let p2 =
+           try Subst.type_path subst p2
+           with Subst.Not_path -> raise_notrace Complicated_moregen
+         in
+         if not (path_same_normalized env p1 p2) then
+           raise_notrace Complicated_moregen;
+         List.iter2 mgen tl1 tl2
+      | Tpoly (t1, []), Tpoly(t2, []) ->
+         mgen t1 t2
+      | _, _ ->
+         raise_notrace Complicated_moregen
+    in
+    match mgen patt subj with
+    | () -> true
+    | exception Complicated_moregen -> backtrack snap; false)
+
 let may_instantiate inst_nongen t1 =
   let level = get_level t1 in
   if inst_nongen then level <> generic_level - 1
@@ -4075,7 +4126,7 @@ and moregen_row inst_nongen variance type_pairs env row1 row2 =
    Usually, the subject is given by the user, and the pattern
    is unimportant.  So, no need to propagate abbreviations.
 *)
-let moregeneral env inst_nongen pat_sch subj_sch =
+let moregeneral_slow env inst_nongen pat_sch subj_sch =
   let old_level = !current_level in
   current_level := generic_level - 1;
   (*
@@ -4109,8 +4160,19 @@ let moregeneral env inst_nongen pat_sch subj_sch =
          raise (Moregen (expand_to_moregen_error env trace)))
     ~always:(fun () -> current_level := old_level)
 
+let debug_moregen = Sys.getenv_opt "MOREGEN_DEBUG" <> None
+let moregeneral env inst_nongen pat_sch subst subj_sch =
+  if moregeneral_fast env pat_sch subst subj_sch then ()
+  else begin
+    if debug_moregen then begin
+      Format.printf "moregen:@.  %a@. ~@.   %a@.  [%a]@." !Btype.print_raw pat_sch !Btype.print_raw subj_sch !Btype.print_raw (Subst.type_expr subst subj_sch)
+    end;
+    let subj_sch = Subst.type_expr subst subj_sch in
+    moregeneral_slow env inst_nongen pat_sch subj_sch
+  end
+
 let is_moregeneral env inst_nongen pat_sch subj_sch =
-  match moregeneral env inst_nongen pat_sch subj_sch with
+  match moregeneral env inst_nongen pat_sch Subst.identity subj_sch with
   | () -> true
   | exception Moregen _ -> false
 
