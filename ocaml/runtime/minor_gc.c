@@ -530,8 +530,14 @@ void caml_gc_dispatch (void)
     /* The minor heap is full, we must do a minor collection. */
     Caml_state->requested_minor_gc = 1;
   }else{
-    /* The minor heap is half-full, do a major GC slice. */
-    Caml_state->requested_major_slice = 1;
+    /* The minor heap is half-full, maybe do a major GC slice. */
+    caml_minors_before_next_major--;
+    if (caml_minors_before_next_major == 0) {
+      caml_minors_before_next_major = caml_minor_cycles_per_major_slice;
+      Caml_state->requested_major_slice = 1;
+    } else {
+      Caml_state->young_trigger = Caml_state->young_alloc_start;
+    }
   }
   if (caml_gc_phase == Phase_idle){
     /* The major GC needs an empty minor heap in order to start a new cycle.

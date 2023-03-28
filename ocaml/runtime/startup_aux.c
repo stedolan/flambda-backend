@@ -129,6 +129,7 @@ void caml_parse_ocamlrunparam(void)
       case 'v': scanmult (opt, &caml_verb_gc); break;
       case 'w': scanmult (opt, &caml_init_major_window); break;
       case 'W': scanmult (opt, &caml_runtime_warnings); break;
+      case 'P': scanmult (opt, &caml_minor_cycles_per_major_slice); break;
       case ',': continue;
       }
       while (*opt != '\0'){

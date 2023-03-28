@@ -81,6 +81,9 @@ extern int caml_major_ring_index;
 extern double caml_major_work_credit;
 extern double caml_gc_clock;
 
+extern uintnat caml_minor_cycles_per_major_slice;
+extern uintnat caml_minors_before_next_major;
+
 /* [caml_major_gc_hook] is called just between the end of the mark
    phase and the beginning of the sweep phase of the major GC.
 
