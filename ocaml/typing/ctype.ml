@@ -3824,14 +3824,62 @@ let moregen_alloc_mode v a1 a2 =
   | Ok () -> ()
   | Error () -> raise_unexplained_for Moregen
 
+let rec path_scope : Path.t -> int =
+  function
+  | Papply (f, _) -> path_scope f
+  | Pdot (p, _) -> path_scope p
+  | Pident id ->
+    if Ident.is_predef id then -1
+    else Ident.scope id
+
+let try_expand_path env p =
+  match Env.find_type_expansion p env with
+  | (params, body, _lv) ->
+    begin match get_desc body with
+    | Tconstr (p', args, _)
+        when args == params ||
+             List.equal eq_type args params ->
+        Some p'
+    | _ -> None
+    end
+  | exception Not_found ->
+    None
+let debug_moregen = Sys.getenv_opt "MOREGEN_DEBUG" <> None
+
+let rec path_same_expanded env p1 p2 =
+  if Path.same p1 p2 then true
+  else begin
+    let p1, p2 =
+      if path_scope p1 < path_scope p2
+      then p1, p2
+      else p2, p1
+    in
+    if debug_moregen then
+      Format.printf "MGEXP %a %a@." Path.print p1 Path.print p2;
+    match try_expand_path env p2 with
+    | Some p2 ->
+      path_same_expanded env p1 p2
+    | None ->
+      match try_expand_path env p1 with
+      | Some p1 ->
+        path_same_expanded env p1 p2
+      | None ->
+        if debug_moregen then begin match Env.find_type_expansion p2 env with
+        | exception Not_found -> Format.printf "MGEXP nf@."
+        | (_, body, lv) -> Format.printf "MGEXP %a %d@." !Btype.print_raw body lv
+        end;
+        false
+  end
+
 let path_same_normalized env p1 p2 =
   if Path.same p1 p2
   then true
   else begin
     let p1 = Env.normalize_type_path None env p1 in
     let p2 = Env.normalize_type_path None env p2 in
-    Path.same p1 p2
+    path_same_expanded env p1 p2
   end
+
 
 exception Complicated_moregen
 let moregeneral_fast env patt subst subj =
@@ -3863,8 +3911,10 @@ let moregeneral_fast env patt subst subj =
            try Subst.type_path subst p2
            with Subst.Not_path -> raise_notrace Complicated_moregen
          in
-         if not (path_same_normalized env p1 p2) then
+         if not (path_same_normalized env p1 p2) then begin
+           if debug_moregen then Format.printf "MOREGEN: %a (%a) %d != %a (%a) %d@." Path.print p1 Path.print (Env.normalize_type_path None env p1) (path_scope p1) Path.print p2 Path.print (Env.normalize_type_path None env p2) (path_scope p2);
            raise_notrace Complicated_moregen;
+         end;
          List.iter2 mgen tl1 tl2
       | Tpoly (t1, []), Tpoly(t2, []) ->
          mgen t1 t2
@@ -4160,7 +4210,6 @@ let moregeneral_slow env inst_nongen pat_sch subj_sch =
          raise (Moregen (expand_to_moregen_error env trace)))
     ~always:(fun () -> current_level := old_level)
 
-let debug_moregen = Sys.getenv_opt "MOREGEN_DEBUG" <> None
 let moregeneral env inst_nongen pat_sch subst subj_sch =
   if moregeneral_fast env pat_sch subst subj_sch then ()
   else begin
