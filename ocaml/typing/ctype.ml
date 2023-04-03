@@ -3882,13 +3882,14 @@ let path_same_normalized env p1 p2 =
 
 
 exception Complicated_moregen
+
 let moregeneral_fast env patt subst subj =
-  let snap = snapshot () in
   For_copy.with_scope (fun scope ->
+    let snap = snapshot () in
     (* Fixed upper limit of the number of nodes,
        so that we don't diverge on equirecursive types *)
     let maxnodes = ref 200 in
-    let rec mgen t1 t2 =
+    let rec mgen variance t1 t2 =
       decr maxnodes;
       if !maxnodes = 0 then raise_notrace Complicated_moregen;
       match get_desc t1, get_desc t2 with
@@ -3897,14 +3898,16 @@ let moregeneral_fast env patt subst subj =
          For_copy.redirect_desc scope t1 (Tsubst (t2, None))
       | Tarrow ((l1,a1,r1), t1, u1, _), Tarrow ((l2,a2,r2), t2, u2, _)
            when l1 = l2 ->
-         if not (Result.is_ok (Alloc_mode.equate a1 a2)) then
-           raise_notrace Complicated_moregen;
-         if not (Result.is_ok (Alloc_mode.equate r1 r2)) then
-           raise_notrace Complicated_moregen;
-         mgen t1 t2;
-         mgen u1 u2
+         begin match variance with
+         | None -> raise_notrace Complicated_moregen
+         | Some variance ->
+           moregen_alloc_mode (neg_variance variance) a1 a2;
+           moregen_alloc_mode variance r1 r2;
+           mgen (Some (neg_variance variance)) t1 t2;
+           mgen (Some variance) u1 u2
+         end
       | Ttuple tl1, Ttuple tl2 ->
-         List.iter2 mgen tl1 tl2
+         List.iter2 (mgen variance) tl1 tl2
       | Tconstr (p1, tl1, _), Tconstr (p2, tl2, _) ->
          (* FIXME: easy cases of alias expansion? *)
          let p2 =
@@ -3915,15 +3918,15 @@ let moregeneral_fast env patt subst subj =
            if debug_moregen then Format.printf "MOREGEN: %a (%a) %d != %a (%a) %d@." Path.print p1 Path.print (Env.normalize_type_path None env p1) (path_scope p1) Path.print p2 Path.print (Env.normalize_type_path None env p2) (path_scope p2);
            raise_notrace Complicated_moregen;
          end;
-         List.iter2 mgen tl1 tl2
+         List.iter2 (mgen None) tl1 tl2
       | Tpoly (t1, []), Tpoly(t2, []) ->
-         mgen t1 t2
+         mgen variance t1 t2
       | _, _ ->
          raise_notrace Complicated_moregen
     in
-    match mgen patt subj with
+    match mgen (Some Covariant) patt subj with
     | () -> true
-    | exception Complicated_moregen -> backtrack snap; false)
+    | exception (Complicated_moregen|Moregen_trace _) -> backtrack snap; false)
 
 let may_instantiate inst_nongen t1 =
   let level = get_level t1 in
