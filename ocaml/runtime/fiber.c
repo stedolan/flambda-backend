@@ -845,7 +845,8 @@ CAMLprim value caml_continuation_use_noexc (value cont)
 
   /* this forms a barrier between execution and any other domains
      that might be marking this continuation */
-  if (!Is_young(cont) ) caml_darken_cont(cont);
+  /* CR sdolan: check */
+  if (!Is_young(cont) && Caml_state->marking_started) caml_darken_cont(cont);
 
   /* at this stage the stack is assured to be marked */
   v = Field(cont, 0);

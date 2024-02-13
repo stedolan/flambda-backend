@@ -1053,6 +1053,7 @@ void caml_darken(void* state, value v, volatile value* ignored) {
   header_t hd;
   if (!Is_markable (v)) return; /* foreign stack, at least */
 
+  if (!Caml_state->marking_started) abort();
   hd = Hd_val(v);
   if (Tag_hd(hd) == Infix_tag) {
     v -= Infix_offset_hd(hd);
@@ -1187,6 +1188,33 @@ static intnat ephe_sweep (caml_domain_state* domain_state, intnat budget)
     }
   }
   return budget;
+}
+
+static void start_marking (caml_domain_state* domain)
+{
+  domain->marking_started = 1;
+  CAML_EV_BEGIN(EV_MAJOR_MARK_ROOTS);
+  caml_do_roots (&caml_darken, darken_scanning_flags, domain, domain, 0);
+  {
+    uintnat work_unstarted = WORK_UNSTARTED;
+    if(atomic_compare_exchange_strong(&domain_global_roots_started,
+                                      &work_unstarted,
+                                      WORK_STARTED)){
+        caml_scan_global_roots(&caml_darken, domain);
+    }
+  }
+  CAML_EV_END(EV_MAJOR_MARK_ROOTS);
+  caml_gc_log("Marking started, %ld entries on mark stack",
+              (long)domain->mark_stack->count);
+
+  if (domain->mark_stack->count == 0 &&
+      !caml_addrmap_iter_ok(&domain->mark_stack->compressed_stack,
+                            domain->mark_stack->compressed_stack_iter)
+      ) {
+    atomic_fetch_add_verify_ge0(&num_domains_to_mark, -1);
+    domain->marking_done = 1;
+  }
+
 }
 
 struct cycle_callback_params {
@@ -1345,29 +1373,11 @@ static void stw_cycle_all_domains(caml_domain_state* domain, void* args,
                   (uintnat)local_stats.large_blocks);
 
   domain->sweeping_done = 0;
-
-  /* Mark roots for new cycle */
+  domain->marking_started = 0;
   domain->marking_done = 0;
 
-  CAML_EV_BEGIN(EV_MAJOR_MARK_ROOTS);
-  caml_do_roots (&caml_darken, darken_scanning_flags, domain, domain, 0);
-  {
-    uintnat work_unstarted = WORK_UNSTARTED;
-    if(atomic_compare_exchange_strong(&domain_global_roots_started,
-                                      &work_unstarted,
-                                      WORK_STARTED)){
-        caml_scan_global_roots(&caml_darken, domain);
-    }
-  }
-  CAML_EV_END(EV_MAJOR_MARK_ROOTS);
-
-  if (domain->mark_stack->count == 0 &&
-      !caml_addrmap_iter_ok(&domain->mark_stack->compressed_stack,
-                            domain->mark_stack->compressed_stack_iter)
-      ) {
-    atomic_fetch_add_verify_ge0(&num_domains_to_mark, -1);
-    domain->marking_done = 1;
-  }
+  if (!caml_params->late_marking)
+    start_marking(domain);
 
   /* Ephemerons */
   // Adopt orphaned work from domains that were spawned and terminated in
@@ -1539,8 +1549,25 @@ static void major_collection_slice(intnat howmuch,
     if (log_events) CAML_EV_END(EV_MAJOR_SWEEP);
   }
 
+  if (domain_state->sweeping_done &&
+      !domain_state->marking_started &&
+      get_major_slice_work(mode) > 0 &&
+      mode != Slice_opportunistic) {
+    /* Need to ensure the minor heap is empty before we snapshot the roots,
+       because the minor heap may currently point to UNMARKED major blocks */
+    if (barrier_participants) {
+      caml_empty_minor_heap_no_major_slice_from_stw
+        (domain_state, (void*)0, participant_count, barrier_participants);
+    } else {
+      caml_empty_minor_heaps_once ();
+    }
+    start_marking(domain_state);
+  }
+
+
 mark_again:
-  if (!domain_state->marking_done &&
+  if (domain_state->marking_started &&
+      !domain_state->marking_done &&
       get_major_slice_work(mode) > 0) {
     if (log_events) CAML_EV_BEGIN(EV_MAJOR_MARK);
 
@@ -1555,7 +1582,7 @@ mark_again:
     if (log_events) CAML_EV_END(EV_MAJOR_MARK);
   }
 
-  if (mode != Slice_opportunistic) {
+  if (mode != Slice_opportunistic && domain_state->marking_started) {
     /* Finalisers */
     if (caml_gc_phase == Phase_mark_final &&
         get_major_slice_work(mode) > 0 &&
@@ -1808,6 +1835,9 @@ void caml_empty_mark_stack (void)
 
 void caml_finish_marking (void)
 {
+  if (!Caml_state->marking_started) {
+    start_marking(Caml_state);
+  }
   if (!Caml_state->marking_done) {
     CAML_EV_BEGIN(EV_MAJOR_FINISH_MARKING);
     caml_empty_mark_stack();
@@ -1931,6 +1961,7 @@ int caml_init_major_gc(caml_domain_state* d) {
 
   /* Fresh domains do not need to performing marking or sweeping. */
   d->sweeping_done = 1;
+  d->marking_started = 1;
   d->marking_done = 1;
   /* Finalisers. Fresh domains participate in updating finalisers. */
   d->final_info = caml_alloc_final_info ();
