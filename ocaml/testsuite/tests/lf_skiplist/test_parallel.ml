@@ -1,7 +1,8 @@
 (* TEST
  modules = "stubs.c";
- reason = "CR ocaml 5 domains: re-enable this test";
- skip;
+ runtime5;
+ { bytecode; }
+ { native; }
 *)
 
 external init_skiplist : unit -> unit = "init_skiplist"

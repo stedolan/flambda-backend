@@ -1,7 +1,8 @@
 (* TEST
- reason = "CR ocaml 5 domains: re-enable this test";
  modules = "intextaux_par.c";
- skip;
+ runtime5;
+ { bytecode; }
+ { native; }
 *)
 
 (* Test for output_value / input_value *)

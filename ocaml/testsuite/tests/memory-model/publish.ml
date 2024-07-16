@@ -1,8 +1,7 @@
 (* TEST
  modules = "opt.ml barrier.ml hist.ml shared.ml run.ml outcome.ml";
- reason = "CR ocaml 5 domains: re-enable this test";
- skip;
  not-bsd;
+ runtime5;
  {
    not-windows;
    bytecode;
