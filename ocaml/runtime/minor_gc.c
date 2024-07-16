@@ -749,16 +749,22 @@ void caml_do_opportunistic_major_slice
 /* Make sure the minor heap is empty by performing a minor collection
    if needed.
 */
-void caml_empty_minor_heap_setup(caml_domain_state* domain_unused) {
+void caml_empty_minor_heap_setup(caml_domain_state* domain_unused,
+                                 void* mark_requested) {
   atomic_store_release(&domains_finished_minor_gc, 0);
   /* Increment the total number of minor collections done in the program */
   atomic_fetch_add (&caml_minor_collections_count, 1);
+  /* Check whether the mark phase has been requested */
+  *((uintnat*)mark_requested) =
+    atomic_load_relaxed(&caml_gc_mark_phase_requested)
+    ? atomic_exchange(&caml_gc_mark_phase_requested, 0)
+    : 0;
 }
 
 /* must be called within a STW section */
 static void
 caml_stw_empty_minor_heap_no_major_slice(caml_domain_state* domain,
-                                         void* unused,
+                                         void* mark_requested_ptr,
                                          int participating_count,
                                          caml_domain_state** participating)
 {
@@ -769,6 +775,9 @@ caml_stw_empty_minor_heap_no_major_slice(caml_domain_state* domain,
   if (Caml_state->in_minor_collection)
     caml_fatal_error("Minor GC triggered recursively");
   Caml_state->in_minor_collection = 1;
+
+  /* mark_requested_ptr must be read before minor GC barrier */
+  uintnat mark_requested = *(uintnat*)mark_requested_ptr;
 
   if( participating[0] == Caml_state ) {
     atomic_fetch_add(&caml_minor_cycles_started, 1);
@@ -794,6 +803,10 @@ caml_stw_empty_minor_heap_no_major_slice(caml_domain_state* domain,
     }
     CAML_EV_END(EV_MINOR_LEAVE_BARRIER);
   }
+
+  /* while the minor heap is empty, allow the major GC to mark roots */
+  if (mark_requested)
+    caml_mark_roots_stw(participating_count, participating);
 
   CAML_EV_BEGIN(EV_MINOR_FINALIZED);
   caml_gc_log("finalizing dead minor custom blocks");
@@ -824,11 +837,12 @@ caml_stw_empty_minor_heap_no_major_slice(caml_domain_state* domain,
   Caml_state->in_minor_collection = 0;
 }
 
-static void caml_stw_empty_minor_heap (caml_domain_state* domain, void* unused,
+static void caml_stw_empty_minor_heap (caml_domain_state* domain,
+                                       void* mark_requested,
                                        int participating_count,
                                        caml_domain_state** participating)
 {
-  caml_stw_empty_minor_heap_no_major_slice(domain, unused,
+  caml_stw_empty_minor_heap_no_major_slice(domain, mark_requested,
                                            participating_count, participating);
 }
 
@@ -838,15 +852,16 @@ void caml_empty_minor_heap_no_major_slice_from_stw(caml_domain_state* domain,
                                              int participating_count,
                                              caml_domain_state** participating)
 {
+  static uintnat mark_requested; /* written by only one domain */
   barrier_status b = caml_global_barrier_begin();
   if( caml_global_barrier_is_final(b) ) {
-    caml_empty_minor_heap_setup(domain);
+    caml_empty_minor_heap_setup(domain, &mark_requested);
   }
   caml_global_barrier_end(b);
 
   /* if we are entering from within a major GC STW section then
      we do not schedule another major collection slice */
-  caml_stw_empty_minor_heap_no_major_slice(domain, (void*)0,
+  caml_stw_empty_minor_heap_no_major_slice(domain, &mark_requested,
                                            participating_count, participating);
 }
 
@@ -858,9 +873,11 @@ int caml_try_stw_empty_minor_heap_on_all_domains (void)
   #endif
 
   caml_gc_log("requesting stw empty_minor_heap");
+  uintnat mark_requested;
   return caml_try_run_on_all_domains_with_spin_work(
     1, /* synchronous */
-    &caml_stw_empty_minor_heap, 0, /* stw handler */
+    &caml_stw_empty_minor_heap, /* stw handler */
+    &mark_requested,
     &caml_empty_minor_heap_setup, /* leader setup */
     &caml_do_opportunistic_major_slice, 0 /* enter spin work */);
     /* leaves when done by default*/
