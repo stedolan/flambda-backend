@@ -246,9 +246,7 @@ typedef char char_os;
 
 #define CAMLassert(x) \
   (CAMLlikely(x) ? (void) 0 : caml_failed_assert ( #x , __OSFILE__, __LINE__))
-CAMLnoreturn_start
-CAMLextern void caml_failed_assert (char *, char_os *, int)
-CAMLnoreturn_end;
+CAMLextern void caml_failed_assert (char *, char_os *, int);
 #else
 #define CAMLassert(x) ((void) 0)
 #endif
