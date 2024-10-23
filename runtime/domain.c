@@ -380,11 +380,19 @@ int caml_send_interrupt(struct interruptor* target)
   return 1;
 }
 
+
+/* Minor heaps should be sufficiently aligned that they are eligible for hugepages.
+   On most architectures supporting hugepages, that's 2MB alignment.
+   It's tricky to determine this value, so we just pick 2MB as default and allow
+   it to be overriden by a GC tweak. */
+uintnat caml_minor_heap_align_bits = 21;
+
 asize_t caml_norm_minor_heap_size (intnat wsize)
 {
   asize_t bs;
   if (wsize < Minor_heap_min) wsize = Minor_heap_min;
-  bs = caml_mem_round_up_pages(Bsize_wsize (wsize));
+  bs = caml_mem_round_up_pages(Bsize_wsize (wsize),
+                               ((uintnat)1) << caml_minor_heap_align_bits);
 
   return Wsize_bsize(bs);
 }
@@ -480,15 +488,15 @@ static int allocate_minor_heap(asize_t wsize) {
 
   check_minor_heap();
 
-  wsize = caml_norm_minor_heap_size(wsize);
+  asize_t norm_wsize = caml_norm_minor_heap_size(wsize);
 
-  CAMLassert (wsize <= caml_minor_heap_max_wsz);
+  CAMLassert (norm_wsize <= caml_minor_heap_max_wsz);
 
   caml_gc_log ("trying to allocate minor heap: %"
                ARCH_SIZET_PRINTF_FORMAT "uk words", wsize / 1024);
 
   if (!caml_mem_commit(
-          (void*)domain_self->minor_heap_area_start, Bsize_wsize(wsize))) {
+          (void*)domain_self->minor_heap_area_start, Bsize_wsize(norm_wsize))) {
     return -1;
   }
 
@@ -496,7 +504,7 @@ static int allocate_minor_heap(asize_t wsize) {
   {
     uintnat* p = (uintnat*)domain_self->minor_heap_area_start;
     for (;
-      p < (uintnat*)(domain_self->minor_heap_area_start + Bsize_wsize(wsize));
+      p < (uintnat*)(domain_self->minor_heap_area_start + Bsize_wsize(norm_wsize));
       p++) {
       *p = Debug_free_minor;
     }
@@ -819,14 +827,16 @@ static void reserve_minor_heaps_from_stw_single(void) {
   uintnat minor_heap_reservation_bsize;
   uintnat minor_heap_max_bsz;
 
-  CAMLassert (caml_mem_round_up_pages(Bsize_wsize(caml_minor_heap_max_wsz))
+  CAMLassert (caml_mem_round_up_pages(Bsize_wsize(caml_minor_heap_max_wsz),
+                                      ((uintnat)1) << caml_minor_heap_align_bits)
           == Bsize_wsize(caml_minor_heap_max_wsz));
 
   minor_heap_max_bsz = (uintnat)Bsize_wsize(caml_minor_heap_max_wsz);
   minor_heap_reservation_bsize = minor_heap_max_bsz * Max_domains;
 
   /* reserve memory space for minor heaps */
-  heaps_base = caml_mem_map(minor_heap_reservation_bsize, 1 /* reserve_only */);
+  heaps_base = caml_mem_map(minor_heap_reservation_bsize, 1 /* reserve_only */,
+                            ((uintnat)1)<<caml_minor_heap_align_bits);
   if (heaps_base == NULL)
     caml_fatal_error("Not enough heap memory to reserve minor heaps");
 

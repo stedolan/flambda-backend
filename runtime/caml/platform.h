@@ -429,12 +429,17 @@ Caml_inline unsigned caml_plat_spin_step(unsigned spins,
 
 /* Memory management primitives (mmap) */
 
-uintnat caml_mem_round_up_pages(uintnat size);
+/* Round up a number to an even multiple of the page size or the given alignment,
+   whichever is higher */
+uintnat caml_mem_round_up_pages(uintnat size, uintnat alignment);
+
 /* The size given to caml_mem_map and caml_mem_commit must be a multiple of
    caml_plat_pagesize. The size given to caml_mem_unmap and caml_mem_decommit
    must match the size given to caml_mem_map/caml_mem_commit for mem.
+
+   The result will be a multiple of 'alignment', which must be zero or a power of 2.
 */
-void* caml_mem_map(uintnat size, int reserve_only);
+void* caml_mem_map(uintnat size, int reserve_only, uintnat alignment);
 void* caml_mem_commit(void* mem, uintnat size);
 void caml_mem_decommit(void* mem, uintnat size);
 void caml_mem_unmap(void* mem, uintnat size);

@@ -501,15 +501,31 @@ void caml_init_os_params(void)
 
 #ifndef __CYGWIN__
 
-void *caml_plat_mem_map(uintnat size, int reserve_only)
+void *caml_plat_mem_map(uintnat size, int reserve_only, uintnat alignment)
 {
   uintnat alloc_sz = size;
   void* mem;
+  int prot = reserve_only ? PROT_NONE : (PROT_READ | PROT_WRITE);
+  int flags = MAP_PRIVATE | MAP_ANONYMOUS;
+  CAMLassert(alignment == 0 || Is_power_of_2(alignment));
 
-  mem = mmap(0, alloc_sz, reserve_only ? PROT_NONE : (PROT_READ | PROT_WRITE),
-             MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-  if (mem == MAP_FAILED)
-    return 0;
+  if (alignment == 0 || alignment <= caml_plat_pagesize) {
+    mem = mmap(0, alloc_sz, prot, flags, -1, 0);
+    if (mem == MAP_FAILED)
+      return 0;
+  } else {
+    /* an allocation of size alloc_sz + alignment contains an aligned subregion */
+    mem = mmap(0, alloc_sz + alignment, prot, flags, -1, 0);
+    if (mem == MAP_FAILED)
+      return 0;
+
+    /* munmap is unlikely to fail, and there's not much we can do if it does,
+       so ignore any error codes */
+    char* aligned = (void*)(((uintnat)mem + alignment - 1) & ~(alignment - 1));
+    if (mem != aligned) munmap(mem, aligned - (char*)mem);
+    munmap(aligned + alloc_sz, ((char*)mem + alloc_sz + alignment) - (aligned + alloc_sz));
+    mem = aligned;
+  }
 
   return mem;
 }

@@ -388,16 +388,17 @@ static uintnat round_up(uintnat size, uintnat align) {
 intnat caml_plat_pagesize = 0;
 intnat caml_plat_mmap_alignment = 0;
 
-uintnat caml_mem_round_up_pages(uintnat size)
+uintnat caml_mem_round_up_pages(uintnat size, uintnat alignment)
 {
-  return round_up(size, caml_plat_pagesize);
+  if (alignment < caml_plat_pagesize) alignment = caml_plat_pagesize;
+  return round_up(size, alignment);
 }
 
 #define Is_page_aligned(size) ((size & (caml_plat_pagesize - 1)) == 0)
 
-void* caml_mem_map(uintnat size, int reserve_only)
+void* caml_mem_map(uintnat size, int reserve_only, uintnat alignment)
 {
-  void* mem = caml_plat_mem_map(size, reserve_only);
+  void* mem = caml_plat_mem_map(size, reserve_only, alignment);
 
   if (mem == 0) {
     caml_gc_message(0x1000, "mmap %" ARCH_INTNAT_PRINTF_FORMAT "d bytes failed",
