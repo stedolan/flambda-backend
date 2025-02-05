@@ -32,6 +32,9 @@ Caml_inline int caml_marking_started(void) {
 }
 extern atomic_uintnat caml_gc_mark_phase_requested;
 
+uintnat get_caml_percent_free (void);
+void set_caml_percent_free (uintnat);
+double get_caml_sweep_per_alloc (void);
 intnat caml_opportunistic_major_work_available (caml_domain_state*);
 void caml_opportunistic_major_collection_slice (intnat);
 /* auto-triggered slice from within the GC */

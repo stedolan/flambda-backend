@@ -16,6 +16,7 @@
 #define CAML_INTERNALS
 
 #include <stdbool.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -398,8 +399,10 @@ static pool* pool_global_adopt(struct caml_heap_state* local, sizeclass sz)
   caml_plat_unlock(&pool_freelist.lock);
 
   if( !r && adopted_pool ) {
-    Caml_state->major_work_done_between_slices +=
-      pool_sweep(local, &local->full_pools[sz], sz, 0);
+    intnat sweep_work = pool_sweep(local, &local->full_pools[sz], sz, 0);
+    if (sweep_work != -1){
+      Caml_state->sweep_work_done_between_slices += sweep_work;
+    }
     r = local->avail_pools[sz];
   }
   return r;
@@ -422,8 +425,11 @@ static pool* pool_find(struct caml_heap_state* local, sizeclass sz) {
 
   /* Otherwise, try to sweep until we find one */
   while (!local->avail_pools[sz] && local->unswept_avail_pools[sz]) {
-    Caml_state->major_work_done_between_slices +=
+    intnat sweep_work =
       pool_sweep(local, &local->unswept_avail_pools[sz], sz, 0);
+    if (sweep_work != -1){
+      Caml_state->sweep_work_done_between_slices += sweep_work;
+    }
   }
 
   r = local->avail_pools[sz];
@@ -524,7 +530,11 @@ value* caml_shared_try_alloc(struct caml_heap_state* local, mlsize_t wosize,
   return p;
 }
 
-/* Sweeping */
+/* Sweeping.
+   Return -1 when there is nothing left to sweep, otherwise return
+   the number of live words swept (which may be 0).
+   Note: this is in units of sweep words.
+*/
 
 /* If we encounter a GARBAGE block when sweeping or compacting, we
  * should (a) run a finalizer if required, and (b) fill it with debug
@@ -560,9 +570,9 @@ void clear_garbage(header_t *p,
 
 static intnat pool_sweep(struct caml_heap_state* local, pool** plist,
                          sizeclass sz, int release_to_global_pool) {
-  intnat work;
+  intnat work = 0;
   pool* a = *plist;
-  if (!a) return 0;
+  if (!a) return -1;
   *plist = a->next;
 
   {
@@ -571,11 +581,7 @@ static intnat pool_sweep(struct caml_heap_state* local, pool** plist,
     mlsize_t wh = wsize_sizeclass[sz];
     int all_used = 1;
 
-    /* conceptually, this is incremented by [wh] for every iteration
-       below, however we can hoist these increments knowing that [p ==
-       end] on exit from the loop (as asserted) */
-    work = end - p;
-    do {
+    while (p + wh <= end) {
       header_t hd = (header_t)atomic_load_relaxed((atomic_uintnat*)p);
       if (hd == 0) {
         /* already on freelist */
@@ -590,11 +596,12 @@ static intnat pool_sweep(struct caml_heap_state* local, pool** plist,
         all_used = 0;
         local->owner->swept_words += Whsize_hd(hd);
       } else {
+        work += wh;
         /* still live, the pool can't be released to the global freelist */
         release_to_global_pool = 0;
       }
       p += wh;
-    } while (p + wh <= end);
+    }
     CAMLassert(p == end);
 
     if (release_to_global_pool) {
@@ -606,8 +613,12 @@ static intnat pool_sweep(struct caml_heap_state* local, pool** plist,
     }
   }
 
+  /* Return the amount of GC budget consumed in units of words */
   return work;
 }
+
+/* Sweep one large block. Return 0 if the block is dead, otherwise
+   return the block's size. */
 
 static intnat large_alloc_sweep(struct caml_heap_state* local) {
   value* p;
@@ -633,12 +644,12 @@ static intnat large_alloc_sweep(struct caml_heap_state* local) {
       Whsize_hd(hd) + Wsize_bsize(LARGE_ALLOC_HEADER_SZ);
     local->stats.large_blocks--;
     free(a);
+    return 0;
   } else {
     a->next = local->swept_large;
     local->swept_large = a;
+    return Whsize_hd(hd);
   }
-
-  return Whsize_hd(hd);
 }
 
 static void verify_swept(struct caml_heap_state*);
@@ -650,17 +661,17 @@ intnat caml_sweep(struct caml_heap_state* local, intnat work) {
     intnat full_sweep_work = 0;
     intnat avail_sweep_work =
       pool_sweep(local, &local->unswept_avail_pools[sz], sz, 1);
-    work -= avail_sweep_work;
+    if (avail_sweep_work != -1) work -= avail_sweep_work;
 
     if (work > 0) {
       full_sweep_work = pool_sweep(local,
                                    &local->unswept_full_pools[sz],
                                    sz, 1);
 
-      work -= full_sweep_work;
+      if (full_sweep_work != -1) work -= full_sweep_work;
     }
 
-    if(full_sweep_work+avail_sweep_work == 0) {
+    if(full_sweep_work == -1 && avail_sweep_work == -1) {
       local->next_to_sweep++;
     }
   }
@@ -734,6 +745,11 @@ static void adopt_pool_stats_with_lock(
 static void adopt_all_pool_stats_with_lock(struct caml_heap_state *adopter) {
   caml_accum_heap_stats(&adopter->stats, &pool_freelist.stats);
   memset(&pool_freelist.stats, 0, sizeof(pool_freelist.stats));
+}
+
+void caml_add_dependent_bytes (struct caml_heap_state *local, intnat n)
+{
+  local->stats.dependent_bytes += n;
 }
 
 void caml_collect_heap_stats_sample(
