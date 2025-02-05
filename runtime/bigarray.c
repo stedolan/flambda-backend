@@ -25,6 +25,7 @@
 #include "caml/intext.h"
 #include "caml/hash.h"
 #include "caml/memory.h"
+#include "caml/memprof.h"
 #include "caml/mlvalues.h"
 #include "caml/signals.h"
 #include "caml/atomic_refcount.h"

@@ -238,12 +238,36 @@ CAMLexport CAMLweakdef void caml_modify (volatile value *fp, value val)
 */
 CAMLexport void caml_alloc_dependent_memory (value v, mlsize_t nbytes)
 {
-  /* No-op for now */
+  if (nbytes == 0) return;
+  CAMLassert (Is_block (v));
+  if (Is_young (v)){
+    Caml_state->stat_minor_dependent_bytes += nbytes;
+    add_to_dependent_table (&Caml_state->minor_tables->dependent, v, nbytes);
+    Caml_state->minor_dependent_bsz += nbytes;
+    if (Caml_state->minor_dependent_bsz >
+          Bsize_wsize (Caml_state->minor_heap_wsz)
+          / 100 * caml_custom_minor_ratio){
+      caml_request_minor_gc ();
+    }
+  }else{
+    caml_add_dependent_bytes (Caml_state->shared_heap, nbytes);
+    Caml_state->allocated_dependent_bytes += nbytes;
+    if (Caml_state->allocated_dependent_bytes
+        >= Bsize_wsize (Caml_state->minor_heap_wsz) / 5){
+      CAML_EV_COUNTER (EV_C_REQUEST_MAJOR_ALLOC_SHR, 1);
+      caml_request_major_slice(1);
+    }
+  }
 }
 
 CAMLexport void caml_free_dependent_memory (value v, mlsize_t nbytes)
 {
-  /* No-op for now */
+  CAMLassert (Is_block (v));
+  if (Is_young (v)){
+    Caml_state->minor_dependent_bsz -= nbytes;
+  }else{
+    caml_add_dependent_bytes (Caml_state->shared_heap, -nbytes);
+  }
 }
 
 /* Use this function to tell the major GC to speed up when you use
