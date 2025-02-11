@@ -603,6 +603,7 @@ static intnat pool_sweep(struct caml_heap_state* local, pool** plist,
         a->next_obj = (value*)p;
         all_used = 0;
         local->owner->swept_words += Whsize_hd(hd);
+        work += wh;
       } else {
         work += wh;
         /* still live, the pool can't be released to the global freelist */
@@ -652,7 +653,7 @@ static intnat large_alloc_sweep(struct caml_heap_state* local) {
       Whsize_hd(hd) + Wsize_bsize(LARGE_ALLOC_HEADER_SZ);
     local->stats.large_blocks--;
     free(a);
-    return 0;
+    return Whsize_hd(hd);
   } else {
     a->next = local->swept_large;
     local->swept_large = a;
