@@ -47,6 +47,8 @@ struct global_heap_state caml_global_heap_state = {
   0 << HEADER_COLOR_SHIFT,
   1 << HEADER_COLOR_SHIFT,
   2 << HEADER_COLOR_SHIFT,
+
+  0 << HEADER_COLOR_SHIFT /*FIXME*/
 };
 
 typedef struct pool {
@@ -510,7 +512,7 @@ static void* large_allocate(struct caml_heap_state* local, mlsize_t sz) {
   return (char*)a + LARGE_ALLOC_HEADER_SZ;
 }
 
-value* caml_shared_try_alloc(struct caml_heap_state* local, mlsize_t wosize,
+static Caml_noinline value* caml_shared_try_alloc_other(struct caml_heap_state* local, mlsize_t wosize,
                              tag_t tag, reserved_t reserved)
 {
   mlsize_t whsize = Whsize_wosize(wosize);
@@ -536,7 +538,8 @@ value* caml_shared_try_alloc(struct caml_heap_state* local, mlsize_t wosize,
     p = large_allocate(local, Bsize_wsize(whsize));
     if (!p) return 0;
   }
-  colour = caml_allocation_status();
+  colour = caml_global_heap_state.allocation;
+  CAMLassert(colour == caml_allocation_status());
   Hd_hp (p) = Make_header_with_reserved(wosize, tag, colour, reserved);
   /* Annotating a release barrier on `p` because TSan does not see the
    * happens-before relationship established by address dependencies
@@ -553,6 +556,32 @@ value* caml_shared_try_alloc(struct caml_heap_state* local, mlsize_t wosize,
 #endif
   return p;
 }
+
+value* caml_shared_try_alloc(struct caml_heap_state* local, mlsize_t wosize, tag_t tag, reserved_t reserved)
+{
+  mlsize_t whsize = Whsize_wosize(wosize);
+  if (whsize > SIZECLASS_MAX) goto slowpath;
+  sizeclass sz = sizeclass_wsize[whsize];
+  pool* r = local->avail_pools[sz];
+  if (r == NULL) goto slowpath;
+  value* p = r->next_obj;
+  if (!p) goto slowpath;
+  value* next = (value*)p[1];
+  if (!next) goto slowpath;
+
+  r->next_obj = next;
+  struct heap_stats* s = &local->stats;
+  s->pool_live_blocks++;
+  s->pool_live_words += whsize;
+  s->pool_frag_words += wsize_sizeclass[sz] - whsize;
+  uintnat colour = caml_global_heap_state.allocation;
+  Hd_hp(p) = Make_header_with_reserved (wosize, tag, colour, reserved);
+  return p;
+
+ slowpath:
+  return caml_shared_try_alloc_other(local, wosize, tag, reserved);
+}
+
 
 /* Sweeping */
 
@@ -601,22 +630,26 @@ static intnat pool_sweep(struct caml_heap_state* local, pool** plist,
     header_t* end = POOL_END(a);
     mlsize_t wh = wsize_sizeclass[sz];
     int all_used = 1;
+    value* next_obj = a->next_obj;
+    uintnat swept_words = 0;
     CAMLassert(a->owner == local->owner);
+    status GARBAGE = caml_global_heap_state.GARBAGE;
 
     while (p + wh <= end) {
+      caml_prefetch(((char*)p) + 4096);
       header_t hd = (header_t)atomic_load_relaxed((atomic_uintnat*)p);
       if (hd == 0) {
         /* already on freelist */
         all_used = 0;
-      } else if (Has_status_hd(hd, caml_global_heap_state.GARBAGE)) {
+      } else if (Has_status_hd(hd, GARBAGE)) {
         clear_garbage(p, hd, wh, local);
         /* add to freelist */
         atomic_store_relaxed((atomic_uintnat*)p, 0);
-        p[1] = (value)a->next_obj;
+        p[1] = (value)next_obj;
         CAMLassert(Is_block((value)p));
-        a->next_obj = (value*)p;
+        next_obj = (value*)p;
         all_used = 0;
-        local->owner->swept_words += Whsize_hd(hd);
+        swept_words += Whsize_hd(hd);
         work += wh;
       } else {
         /* still live, the pool can't be released to the global freelist */
@@ -626,6 +659,8 @@ static intnat pool_sweep(struct caml_heap_state* local, pool** plist,
       p += wh;
     }
     CAMLassert(p == end);
+    a->next_obj = next_obj;
+    local->owner->swept_words += swept_words;
 
     if (release_to_global_pool) {
       pool_release(local, a, sz);

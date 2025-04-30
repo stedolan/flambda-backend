@@ -889,7 +889,7 @@ static void update_major_slice_work(intnat howmuch,
   }
 }
 
-#define Chunk_size 0x4000
+#define Chunk_size 0x4000000
 
 typedef enum {
   Slice_uninterruptible,
@@ -1536,6 +1536,7 @@ void caml_mark_roots_stw (int participant_count, caml_domain_state** barrier_par
 
   Caml_global_barrier_if_final(participant_count) {
     caml_gc_phase = Phase_sweep_and_mark_main;
+    caml_global_heap_state.allocation = caml_global_heap_state.MARKED;
     atomic_store_relaxed(&global_roots_scanned, WORK_UNSTARTED);
     /* Adopt orphaned work from domains that were spawned and
        terminated in the previous cycle. Do this in the barrier,
@@ -1699,6 +1700,7 @@ static void cycle_major_heap_from_stw_single(
   atomic_store_release(&num_domains_to_mark, num_domains_in_stw);
 
   caml_gc_phase = Phase_sweep_main;
+  caml_global_heap_state.allocation = caml_global_heap_state.UNMARKED;
   atomic_store(&caml_gc_mark_phase_requested, 0);
   atomic_store(&ephe_cycle_info.num_domains_todo, num_domains_in_stw);
   atomic_store(&ephe_cycle_info.ephe_cycle, 1);

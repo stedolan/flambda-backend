@@ -65,6 +65,7 @@ void caml_shared_unpin(value v);
 typedef uintnat status;
 struct global_heap_state {
   status MARKED, UNMARKED, GARBAGE;
+  status allocation; /* MARKED when caml_marking_started(), UNMARKED otherwise */
 };
 extern struct global_heap_state caml_global_heap_state;
 
