@@ -374,6 +374,7 @@ static value make_array_gen(value len, value init, int local)
              && Tag_val(init) == Double_tag) {
     mlsize_t wsize;
     double d;
+    caml_failwith("float array banned");
     d = Double_val(init);
     if (size > Max_unboxed_float_array_wosize) caml_invalid_argument("Array.make");
     wsize = size * Double_wosize;
@@ -577,6 +578,7 @@ CAMLprim value caml_makearray_dynamic_scannable_unboxed_product(
 CAMLprim value caml_array_create_float(value len)
 {
 #ifdef FLAT_FLOAT_ARRAY
+  caml_failwith("float array banned");
   return caml_floatarray_create (len);
 #else
   /* A signaling NaN, statically allocated */
@@ -805,6 +807,7 @@ static value uniform_array_gen(value init, int local)
         || Tag_val(v) != Double_tag) {
       CAMLreturn (init);
     } else {
+      caml_failwith("float array banned");
       wsize = size * Double_wosize;
       if (local) {
         res = caml_alloc_local(wsize, Double_array_tag);
@@ -1152,6 +1155,7 @@ static value caml_array_gather(intnat num_arrays,
   }
 #ifdef FLAT_FLOAT_ARRAY
   else if (isfloat) {
+    caml_failwith("float array banned");
     /* This is an array of floats.  We can use memcpy directly. */
     if (size > Max_unboxed_float_array_wosize) caml_invalid_argument("Array.concat");
     wsize = size * Double_wosize;
