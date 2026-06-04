@@ -209,5 +209,14 @@ DOMAIN_STATE(struct caml_exception_context*, external_raise_async)
 DOMAIN_STATE(struct memprof_domain_s *, memprof)
 DOMAIN_STATE(value *, memprof_young_trigger)
 
+/* Tick profiling */
+
+DOMAIN_STATE(uintnat, profile_last_tick)
+DOMAIN_STATE(value, profile_current)
+DOMAIN_STATE(backtrace_slot*, profile_backtrace_buf)
+DOMAIN_STATE(uintnat, profile_backtrace_len)
+DOMAIN_STATE(value, profile_backtrace_val)
+DOMAIN_STATE(intnat, profile_inside_callback)
+
 DOMAIN_STATE(extra_params_area, extra_params)
 /* This member must occur last, because it is an array, not a scalar */

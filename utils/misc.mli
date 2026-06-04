@@ -12,6 +12,8 @@
 (*   special exception on linking described in the file LICENSE.          *)
 (*                                                                        *)
 (**************************************************************************)
+type logger = { log_val: 'a . 'a -> unit }
+val hack_log_type : logger ref
 
 (** Miscellaneous useful types and functions
 

@@ -14,6 +14,8 @@
 (**************************************************************************)
 
 (* Errors *)
+type logger = { log_val: 'a . 'a -> unit }
+let hack_log_type = ref { log_val = ignore }
 
 exception Fatal_error
 

@@ -836,6 +836,7 @@ module Solver_mono (H : Hint) (C : Lattices_mono) = struct
     in
     let vlower = Option.value vlower ~default:VarMap.empty in
     let var = { upper; upper_hint; lower; lower_hint; vlower; id } in
+    (!Misc.hack_log_type).log_val var;
     vars := id + 1, Var var :: l;
     var
 

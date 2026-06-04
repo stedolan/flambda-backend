@@ -255,6 +255,11 @@ CAMLexport void caml_leave_blocking_section(void)
   if (caml_check_pending_signals())
     caml_set_action_pending(Caml_state);
 
+  if (Caml_state->requested_tick && Caml_state->profile_current != Val_unit && !Caml_state->profile_inside_callback && atomic_exchange_explicit(&Caml_state->requested_tick, false, memory_order_acquire)) {
+    extern value process_profile_tick(void);
+    process_profile_tick();
+  }
+
   errno = saved_errno;
 }
 

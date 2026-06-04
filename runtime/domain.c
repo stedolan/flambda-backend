@@ -776,6 +776,8 @@ static void domain_create(uintnat initial_minor_heap_wsize,
   /* This call may fail, but fatally so we don't need an error path */
   domain_root_register(&domain_state->dls_state, Atom(0) /* Empty array */);
   domain_root_register(&domain_state->tls_state, Atom(0) /* Empty array */);
+  domain_root_register(&domain_state->profile_current, Val_unit);
+  domain_root_register(&domain_state->profile_backtrace_val, Atom(0) /* Empty array */);
 
   // Must happen after taking the domain lock
   caml_enable_stack_caches(domain_state->stack_caches);
@@ -2237,12 +2239,72 @@ static void tick_thread_wake(void) {}
 
 #endif
 
+static __thread const value* global_profile_state;
+enum { PROFILE_STATE_INTERVAL_NS, PROFILE_STATE_BT_LEN, PROFILE_STATE_CALLBACK };
+value process_profile_tick()
+{
+  if (global_profile_state == NULL)
+    global_profile_state = caml_named_value("profile_state");
+  if (global_profile_state == NULL)
+    return Val_unit;
+  value profile_state = Op_atomic_val(*global_profile_state)[0];
+  if (profile_state == Val_unit)
+    return Val_unit;
+
+  CAMLparam1(profile_state);
+  uint64_t now = caml_time_counter();
+  intnat samples;
+  intnat bt_len = Long_val(Field(profile_state, PROFILE_STATE_BT_LEN));
+  if (Caml_state->profile_current != profile_state) {
+    Caml_state->profile_current = profile_state;
+    Caml_state->profile_last_tick = now;
+    if (Wosize_val(Caml_state->profile_backtrace_val) < bt_len)
+      Caml_state->profile_backtrace_val = caml_alloc(bt_len, 0);
+    samples = 1;
+  } else {
+    uint64_t last_tick = Caml_state->profile_last_tick;
+    uint64_t interval =
+      (uint64_t)Long_val(Field(profile_state, PROFILE_STATE_INTERVAL_NS));
+    samples = 0;
+    while (last_tick < now) {
+      last_tick += interval;
+      samples++;
+    }
+    Caml_state->profile_last_tick = last_tick;
+  }
+  if (samples == 0) CAMLreturn (Val_unit);
+
+  size_t frames =
+    caml_get_callstack(bt_len,
+                       &Caml_state->profile_backtrace_buf,
+                       &Caml_state->profile_backtrace_len,
+                       -1);
+  backtrace_slot* bt_buf = Caml_state->profile_backtrace_buf;
+  value bt_val = Caml_state->profile_backtrace_val;
+  for (size_t i = 0; i < frames; i++) {
+    Field(bt_val, i) = Val_backtrace_slot(bt_buf[i]);
+  }
+  value cb = Field(profile_state, PROFILE_STATE_CALLBACK);
+  Caml_state->profile_inside_callback++;
+  value res = caml_callback3_exn(cb, bt_val, Val_int(frames), Val_int(samples));
+  Caml_state->profile_inside_callback--;
+  if (Is_exception_result(res))
+    CAMLreturn (res);
+  
+  CAMLreturn (Val_unit);
+}
+
 value caml_process_tick_exn(void)
 {
   CAMLparam0();
   CAMLlocal1(res);
   if (atomic_exchange_explicit(&Caml_state->requested_tick, false,
                                memory_order_acquire)) {
+    if (Caml_state->profile_inside_callback) {
+      /* Drop the tick to avoid context switching during a profiling callback */
+      CAMLreturn (Val_unit);
+    }
+    process_profile_tick();
     caml_domain_tick_hook();
 
     res = caml_tick_fiber_exn(Caml_state->current_stack);

@@ -27,7 +27,65 @@ let () =
 
 let default_sampling_rate = 1e-6
 
+module Prof = struct
+type profile_state =
+  | Profile_disabled
+  | Profile_enabled of 
+      { interval_ns: int;
+        bt_len: int;
+        callback: (bt:Printexc.raw_backtrace_entry array -> bt_len:int -> samples:int -> unit) }
+
+let global_profile_state = Atomic.make Profile_disabled
+
+let () = Callback.register "profile_state" global_profile_state
+
+external track_explicit : 'a -> int -> unit = "caml_memprof_track_explicit"
+let () =
+  Misc.hack_log_type := {log_val=(fun a ->
+    if Random.int 100 = 0 then track_explicit a 1)};
+  ()
+
+let enable filename =
+  let interval_ns = 1000_000 in
+  let context = None and sample_rate = 1. in
+  let fd = Unix.openfile filename Unix.[O_CREAT;O_WRONLY;O_TRUNC] 0o600 in
+  let info : Trace.Info.t =
+    { sample_rate = sample_rate;
+      word_size = Sys.word_size;
+      executable_name = Sys.executable_name;
+      host_name = Unix.gethostname ();
+      ocaml_runtime_params = Sys.runtime_parameters ();
+      pid = getpid64 ();
+      start_time = Trace.Timestamp.now ();
+      context;
+    } in
+  let trace = Trace.Writer.create fd ~getpid:getpid64 info in
+  let callback ~bt ~bt_len ~samples =
+(*
+    Printf.printf "%d\n%!" samples;
+    let t : Printexc.raw_backtrace = Array.sub bt 0 bt_len |> Obj.magic in
+    Printf.printf "BT: %d %d %d\n%!" (Array.length (Obj.magic t)) samples (Hashtbl.hash t);
+    Printexc.print_raw_backtrace stdout t;
+*)
+
+    let bt = Array.sub bt 0 bt_len |> Obj.magic in
+    Trace.Writer.put_alloc_with_raw_backtrace trace (Trace.Timestamp.now ()) ~length:1 ~nsamples:samples ~source:Major ~callstack:(Obj.magic bt) |> ignore
+(*
+    let t : Printexc.raw_backtrace = Array.sub bt 0 bt_len |> Obj.magic in
+    Printf.printf "BT: %d %d %d\n%!" (Array.length (Obj.magic t)) samples (Hashtbl.hash t);
+    Printexc.print_raw_backtrace stdout t;
+    flush stdout*)
+  in
+  at_exit (fun () -> Trace.Writer.flush trace);
+  let prof = Profile_enabled { interval_ns; bt_len = 1000; callback } in
+  Atomic.set global_profile_state prof;
+  let _tick = Domain.Tick.acquire ~interval_usec:(interval_ns / 1000) in
+  ()
+end
+  
+
 let trace_if_requested ?context ?sampling_rate () =
+  Sys.getenv_opt "PROFILE" |> Option.iter Prof.enable;
   match Sys.getenv_opt "MEMTRACE" with
   | None | Some "" -> ()
   | Some filename ->

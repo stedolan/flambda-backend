@@ -19,7 +19,6 @@ open Asttypes
 open Types
 
 (**** Sets, maps and hashtables of types ****)
-
 module TypeSet : sig
   include Set.S with type elt = transient_expr
   val add: type_expr -> t -> t

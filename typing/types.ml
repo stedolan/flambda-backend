@@ -1334,9 +1334,9 @@ let not_marked_node mark t =
   | Hash {visited} -> not (TransientTypeHash.mem visited (repr t))
 
 (* transient type_expr *)
-
 module Transient_expr = struct
-  let create desc ~level ~scope ~id = {desc; level; scope; id}
+  let create desc ~level ~scope ~id =
+    {desc; level; scope; id}
   let set_desc ty d = ty.desc <- d
   let set_stub_desc ty d =
     (match ty.desc with

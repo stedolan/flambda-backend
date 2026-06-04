@@ -22,6 +22,7 @@ let command cmdline =
     prerr_newline()
   end;
   let res = Sys.command cmdline in
+  Sys.poll_actions ();
   if res = 127 then raise (Sys_error cmdline);
   res
 

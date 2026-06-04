@@ -2440,6 +2440,20 @@ CAMLprim value caml_memprof_enlist_all_domains(value config)
   CAMLreturn (Val_unit);
 }
 
+CAMLprim value caml_memprof_track_explicit(value block, value samples_v)
+{
+  memprof_domain_t domain = Caml_state->memprof;
+  intnat samples = Int_val(samples_v);
+  CAMLassert(domain);
+  value config = domain_sampling(domain);
+  if (config != CONFIG_NONE) {
+    /* FIXME: Infix_tag, Externals, Static blocks, Immediate */
+    maybe_track_block(domain, config, block,
+                      samples, samples, CAML_MEMPROF_SRC_NORMAL);
+  }
+  return Val_unit;
+}
+
 CAMLprim value caml_memprof_stop(value unit)
 {
   memprof_domain_t domain = Caml_state->memprof;
