@@ -81,8 +81,17 @@ module Make (Backend : Optcomp_intf.Backend) : S = struct
       Library (file_name, infos)
     else raise (Linkenv.Error (Not_an_object_file file_name))
 
+  type link_type =
+    | Unit of { object_file_name: string; unit: unit_link_info }
+    | Library of { object_file_name: string; units: unit_link_info list }
+    | Empty_library
+
+  type link_file =
+    { file_name: string;
+      link_type: link_type }
+
   let scan_file linkenv ~shared genfns file
-      (full_paths, objfiles, tolink, cached_genfns_imports) =
+      (files, cached_genfns_imports) =
     match read_file file with
     | Unit (file_name, info, crc) ->
       (* This is a cmx file. It must be linked in any case. *)
@@ -132,10 +141,9 @@ module Make (Backend : Optcomp_intf.Backend) : S = struct
         && not !Clflags.uses_metaprogramming
       then
         raise (Linkenv.Error (Requires_metaprogramming_without_flag file_name));
-      ( file_name :: full_paths,
-        object_file_name :: objfiles,
-        unit :: tolink,
-        cached_genfns_imports )
+      { file_name;
+        link_type = Unit { object_file_name; unit } } :: files,
+      cached_genfns_imports
     | Library (file_name, infos) ->
       (* This is an archive file. Each unit contained in it will be linked in
          only if needed. *)
