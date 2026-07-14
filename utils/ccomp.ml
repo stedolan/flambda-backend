@@ -156,8 +156,11 @@ let create_archive archive file_list =
                                (quote_files ~response_files:true file_list))
     | _ ->
         assert(String.length Config.ar > 0);
-        command(Printf.sprintf "%s rc %s %s"
-                Config.ar quoted_archive
+        let ar_actions =
+          if Sys.getenv_opt "NO_THIN" = None then "rcT" else "rc"
+        in
+        command(Printf.sprintf "%s %s %s %s"
+                Config.ar ar_actions quoted_archive
                 (quote_files ~response_files:Config.ar_supports_response_files
                   file_list))
 

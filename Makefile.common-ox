@@ -34,7 +34,7 @@ define dune_boot_context
 endef
 
 ifneq ($(origin BUILD_OCAMLPARAM), undefined)
-ENV_VARS := (env-vars ("OCAMLPARAM" "$(BUILD_OCAMLPARAM)"))
+ENV_VARS := (env-vars ("OCAMLPARAM" "$(BUILD_OCAMLPARAM)") ("NO_THIN" "1"))
 else
 ENV_VARS :=
 endif
