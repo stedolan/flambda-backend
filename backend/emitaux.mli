@@ -33,7 +33,7 @@ val emit_debug_info_gen :
   ?discriminator:int ->
   Debuginfo.t ->
   (file_num:int -> file_name:string -> unit) ->
-  (file_num:int -> line:int -> col:int -> ?discriminator:int -> unit -> unit) ->
+  (file_num:int -> line:int -> col:int option -> ?discriminator:int -> unit -> unit) ->
   unit
 
 type frame_debuginfo =

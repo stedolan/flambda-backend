@@ -365,10 +365,14 @@ let file_pos_nums = (ref [] : (string * int) list ref)
 (* Number of files *)
 let file_pos_num_cnt = ref 1
 
+(* The last debug line location emitted *)
+let last_pos = ref None
+
 (* Reset debug state at beginning of asm file *)
 let reset_debug_info () =
   file_pos_nums := [];
-  file_pos_num_cnt := 1
+  file_pos_num_cnt := 1;
+  last_pos := None
 
 let with_snapshot ~f =
   let saved_file_pos_nums = !file_pos_nums in
@@ -407,7 +411,11 @@ let emit_debug_info_gen ?discriminator dbg file_emitter loc_emitter =
       then
         (* PR#6243 *)
         let file_num = get_file_num ~file_emitter file_name in
-        loc_emitter ~file_num ~line ~col ?discriminator ()
+        let col = if !Dwarf_flags.restrict_to_upstream_dwarf then None else Some col in
+        let pos = (file_num, line, col, discriminator) in
+        if not (Stdlib.(=) !last_pos (Some pos)) then
+          (last_pos := Some pos;
+           loc_emitter ~file_num ~line ~col ?discriminator ())
 
 let binary_backend_available = ref false
 
