@@ -255,7 +255,7 @@ module Directive = struct
     | Loc of
         { file_num : int;
           line : int;
-          col : int;
+          col : int option;
           discriminator : int option
         }
     | New_label of label_or_symbol * thing_after_label
@@ -451,7 +451,9 @@ module Directive = struct
       (* If we don't set the optional column field, debug_line program gets the
          column value from the previous .loc directive. *)
       let print_col buf col =
-        if col >= 0 then bprintf buf "\t%d" col else bprintf buf "\t0"
+        match col with
+        | Some col when col >= 0 -> bprintf buf "\t%d" col
+        | _ -> bprintf buf "\t0"
       in
       let print_discriminator buf dis =
         match dis with
@@ -978,7 +980,7 @@ let debug_header ~get_file_num =
      error "line table parameters mismatch") by making sure such sections are
      never empty. *)
   let file_num = get_file_num "none" in
-  loc ~file_num ~line:1 ~col:1 ();
+  loc ~file_num ~line:1 ~col:(Some 0) ();
   switch_to_section Asm_section.Text
 
 let file ~file_num ~file_name = file ~file_num ~file_name ()

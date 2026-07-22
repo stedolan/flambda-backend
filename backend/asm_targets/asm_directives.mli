@@ -127,7 +127,7 @@ val file : file_num:int option -> file_name:string -> unit
 
 (** Mark the source location of the current assembly position. *)
 val loc :
-  file_num:int -> line:int -> col:int -> ?discriminator:int -> unit -> unit
+  file_num:int -> line:int -> col:int option -> ?discriminator:int -> unit -> unit
 
 (** Emit a blank line. *)
 val new_line : unit -> unit
@@ -449,7 +449,7 @@ module Directive : sig
     | Loc of
         { file_num : int;
           line : int;
-          col : int;
+          col : int option;
           discriminator : int option
         }
     | New_label of label_or_symbol * thing_after_label
