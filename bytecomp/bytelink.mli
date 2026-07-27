@@ -26,6 +26,8 @@ val reset : unit -> unit
 
 val check_consistency: filepath -> Cmo_format.compilation_unit_descr -> unit
 
+val thin_archive_member_filename: Cmo_format.compilation_unit_descr -> string
+
 val linkdeps_unit :
   Linkdeps.t -> filename:string -> Cmo_format.compilation_unit_descr -> unit
 

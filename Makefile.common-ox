@@ -54,6 +54,7 @@ define dune_runtime_stdlib_context
     (PATH ("$(CURDIR)/_build/_bootinstall/bin" :standard))
     (OCAMLLIB ("$(CURDIR)/_build/_bootinstall/lib/ocaml")))
   (env (_
+    (env-vars ("NO_THIN" "1"))
     (flags (:standard -directory stdlib -warn-error +A -alert -unsafe_multidomain))
     $(ENV_VARS)))))
 endef
@@ -67,6 +68,7 @@ define dune_main_context
     (PATH ("$(CURDIR)/_build/_bootinstall/bin" :standard))
     (OCAMLLIB ("$(CURDIR)/_build/runtime_stdlib_install/lib/ocaml_runtime_stdlib")))
   (env (_
+    (env-vars ("NO_THIN" "1"))
     (flags (:standard -directory compiler-distro -warn-error +A -alert -unsafe_multidomain))
     ; We never want to build the compiler itself with AddressSanitizer enabled.
     (ocamlopt_flags (:standard $(main_ocamlopt_optimization_flags) -fno-asan))

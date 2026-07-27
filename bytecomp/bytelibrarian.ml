@@ -70,7 +70,12 @@ let copy_object_file oc name =
       seek_in ic compunit_pos;
       let compunit = (input_value ic : compilation_unit_descr) in
       Bytelink.check_consistency file_name compunit;
-      copy_compunit ic oc compunit;
+      if !Clflags.thin_library &&
+         String.equal (Filename.basename file_name)
+           (Bytelink.thin_archive_member_filename compunit) then
+        compunit.cu_pos <- -compunit.cu_pos
+      else
+        copy_compunit ic oc compunit;
       close_in ic;
       [name,compunit]
     end else

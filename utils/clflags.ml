@@ -213,6 +213,7 @@ let dump_linear = ref false             (* -dlinear *)
 let keep_startup_file = ref false       (* -dstartup *)
 let debug_ocaml = ref false             (* -debug-ocaml *)
 let llvm_backend = ref false            (* -llvm-backend *)
+let thin_library = ref (Sys.getenv_opt "NO_THIN" = None)            (* -thin-library *)
 let ikinds = ref true                   (* -no-ikinds *)
 let ikinds_debug = ref false            (* -ikinds-debug *)
 let default_timings_precision  = 3
