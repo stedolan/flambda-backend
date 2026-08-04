@@ -6626,6 +6626,99 @@ and moregen_row inst_nongen variance type_pairs env row1 row2 =
     (* Undo [link_type] if we failed *)
     set_type_desc rm1 md1; raise exn
 
+let use_moregen_fast = Sys.getenv_opt "MOREGEN_FAST" <> None
+let moregen_fast_attempts = ref 0 and moregen_fast_true = ref 0 and moregen_fast_vars = ref 0
+let () = if use_moregen_fast then at_exit (fun () ->
+  Printf.eprintf "moregens: %d/%d - %.0f%% fast, %.0f%% vars\n%!" (!moregen_fast_vars + !moregen_fast_true) !moregen_fast_attempts (100. *. float_of_int !moregen_fast_true /. float_of_int !moregen_fast_attempts) (100. *. float_of_int !moregen_fast_vars /. float_of_int !moregen_fast_attempts))
+
+exception Moregen_fast
+let moregen_fast inst_nongen env t1 t2 =
+  incr moregen_fast_attempts;
+  let vars = ref [] in
+  let rec try_expand_path p =
+    match Env.find_type_expansion p env with
+    | exception Not_found ->
+       Env.normalize_type_path None env p, None
+    | params, body, _level ->
+       match get_desc body with
+       | Tconstr (p', tl, _) when List.equal eq_type params tl ->
+          try_expand_path p'
+       | _ ->
+          Env.normalize_type_path None env p, Some (params, body)
+  in
+  let rec moregen_list ~f l1 l2 =
+    match l1, l2 with
+    | [], [] -> ()
+    | t1 :: l1, t2 :: l2 ->
+       f t1 t2; moregen_list ~f l1 l2
+    | _ -> raise_notrace Moregen_fast
+  in
+  let[@ocaml.warning "-27"] rec moregen variance t1 t2 =
+    if eq_type t1 t2 then () else
+    match get_desc t1, get_desc t2 with
+    | Tvar _, _ when inst_nongen || get_level t1 = generic_level ->
+       vars := (t1, t2) :: !vars
+    | Tarrow ((l1, a1, r1), t1, u1, _),
+      Tarrow ((l2, a2, r2), t2, u2, _)
+         when (l1 = l2 || (!Clflags.classic && equivalent_with_nolabels l1 l2)) ->
+       moregen (neg_variance variance) t1 t2;
+       moregen variance u1 u2;
+       ignore (a1,r1,a2,r2);
+       (* Format.eprintf "%a@." (Format_doc.compat (Mode.Alloc.print ()))  r1; *)
+       (* Format.eprintf "%a@." (Format_doc.compat (Mode.Alloc.print ()))  r2; *)
+       (* FIXME moregen_alloc_mode *)
+    | Ttuple tl1, Ttuple tl2
+    | Tunboxed_tuple tl1, Tunboxed_tuple tl2 ->
+       moregen_list tl1 tl2 ~f:(fun (l1, t1) (l2, t2) ->
+         if not (Option.equal String.equal l1 l2) then raise_notrace Moregen_fast;
+         moregen variance t1 t2)
+    | Tconstr (p1, tl1, _), Tconstr (p2, tl2, _) when Path.same p1 p2 ->
+       moregen_list tl1 tl2 ~f:(moregen Invariant)
+    | Tconstr (p1, tl1, _), Tconstr (p2, tl2, _) ->
+       let p1, exp1 = try_expand_path p1 in
+       let p2, exp2 = try_expand_path p2 in
+       if Path.same p1 p2 then moregen_list tl1 tl2 ~f:(moregen Invariant) else begin
+         match (tl1, exp1), (tl2, exp2) with
+         (* Expand zero-argument types (requires no unification / substitution) *)
+         | ([], Some ([], exp1)), ([], Some ([], exp2)) -> moregen variance exp1 exp2
+         | ([], Some ([], exp1)), _ -> moregen variance exp1 t2
+         | _, ([], Some ([], exp2)) -> moregen variance t1 exp2
+         | _ -> raise_notrace Moregen_fast
+       end
+    | Tpackage {pack_path=p1; pack_cstrs=fl1}, Tpackage {pack_path=p2; pack_cstrs=fl2} when eq_package_path env p1 p2 ->
+       moregen_list fl1 fl2 ~f:(fun (l1, t1) (l2, t2) ->
+         if l1 <> l2 then raise_notrace Moregen_fast;
+         moregen Invariant t1 t2)
+
+    | Tvariant row1, Tvariant row2 ->
+       let Row {fields = fields1; more = rm1; closed = closed1} = row_repr row1 in
+       let Row {fields = fields2; more = rm2; closed = closed2} = row_repr row2 in
+       let moregen_field f1 f2 =
+         match row_field_repr f1, row_field_repr f2 with
+         | Rpresent None, Rpresent None -> true
+         | Rpresent (Some t1), Rpresent (Some t2) -> moregen variance t1 t2; true
+         | Rabsent, Rabsent -> true
+         | _ -> false
+       in
+       let b =
+         Bool.equal closed1 closed2 &&
+         List.equal (fun (l1, f1) (l2, f2) -> String.equal l1 l2 && moregen_field f1 f2) fields1 fields2
+       in
+       if not b then raise_notrace Moregen_fast;
+       moregen variance rm1 rm2
+    | Tnil, Tnil -> ()
+
+    | Tpoly (t1, []), Tpoly (t2, []) ->
+       moregen variance t1 t2
+    | _ ->
+       raise_notrace Moregen_fast
+  in
+  match moregen Covariant t1 t2 with
+  | exception Moregen_fast ->
+     Format.eprintf "Moregeneral:@.  %a@.  %a@." !Btype.print_raw t1 !Btype.print_raw t2;
+     false
+  | () ->
+     if !vars = [] then (incr moregen_fast_true; true) else (incr moregen_fast_vars; false)
 (*
    Non-generic variable can be instantiated only if [inst_nongen] is
    true. So, [inst_nongen] should be set to false if the subject might
@@ -6634,6 +6727,7 @@ and moregen_row inst_nongen variance type_pairs env row1 row2 =
    Usually, the subject is given by the user, and the pattern
    is unimportant.  So, no need to propagate abbreviations.
 *)
+
 let moregeneral env inst_nongen pat_sort_vars subj_sort_vars pat_sch subj_sch =
   (* Moregen splits the generic level into two finer levels:
      [generic_level] and [subject_level = generic_level - 1].
@@ -6647,6 +6741,9 @@ let moregeneral env inst_nongen pat_sort_vars subj_sort_vars pat_sch subj_sch =
      as nodes at level [subject_level] are never unified with nodes of
      the original types, but that would be rather ad hoc.
  *)
+  (* FIXME: sort vars?? *)
+(*  Format.eprintf "svs: %d %d@." (List.length pat_sort_vars) (List.length subj_sort_vars);*)
+  if use_moregen_fast && moregen_fast inst_nongen env pat_sch subj_sch then List.map (fun _ -> None) subj_sort_vars else
   with_level ~level:(subject_level - 1) begin fun () ->
     match with_local_level_generalize begin fun () ->
       assert (!current_level = subject_level);
