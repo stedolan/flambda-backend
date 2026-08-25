@@ -284,6 +284,9 @@ val dump_dir : string option ref
 val keyword_edition: string option ref
 val parse_keyword_edition: string -> (int*int) option * string list
 
+val continue_on_type_error: bool ref
+val zap_mliless_modality_to_id: bool ref
+
 (* Support for flags that can also be set from an environment variable *)
 type 'a env_reader = {
   parse : string -> 'a option;

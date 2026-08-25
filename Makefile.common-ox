@@ -90,7 +90,8 @@ boot_targets = \
   $(boot_ocamlmklib) \
   $(boot_ocamldep) \
   $(boot_ocamlobjinfo) \
-  ocamltest/ocamltest.native
+  ocamltest/ocamltest.native \
+  oxcaml/testsuite/tools/oxpect.exe
 
 boot-compiler: _build/_bootinstall
 	$(dune) build $(ws_boot) $(coverage_dune_flags) @merlin-support $(boot_targets)
