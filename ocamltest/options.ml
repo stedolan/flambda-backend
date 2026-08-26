@@ -69,6 +69,11 @@ let compact = ref false
 let add_to_list r x =
   r := !r @ [x]
 
+let set_or_ignore f opt x =
+  match f x with
+  | None -> ()
+  | Some y -> opt := Some y
+
 let commandline_options =
 [
   ("-e", Arg.Set log_to_stderr, " Log to stderr instead of a file.");
@@ -100,7 +105,7 @@ let commandline_options =
    " If translating, preserve char offsets in the output.");
   ("-color",
    Arg.Symbol (["auto"; "always"; "never"],
-     (Misc.set_or_ignore Clflags.color_reader.parse Clflags.color)),
+     (set_or_ignore Clflags.color_reader.parse Clflags.color)),
    Printf.sprintf
      "  Enable or disable colors in compiler messages\n\
      \    The following settings are supported:\n\
