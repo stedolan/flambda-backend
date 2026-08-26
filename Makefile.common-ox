@@ -50,7 +50,6 @@ boot_targets = \
   $(boot_ocamlc) \
   $(boot_ocamlopt) \
   $(boot_ocamlmklib) \
-  $(boot_ocamldep) \
   $(boot_ocamlobjinfo) \
   ocamltest/ocamltest.native
 
@@ -154,14 +153,15 @@ _build/_bootinstall: Makefile.config Makefile.common-ox $(dune_config_targets)
 
 # _build/_bootinstall: a minimal install directory for the boot compiler,
 # which is placed on PATH for subsequent builds
+# We use ocamlc as ocamldep also (see driver/maindriver.ml), saving a link step
 	rm -rf _build/_bootinstall
 	mkdir -p _build/_bootinstall/{bin,lib/ocaml}
 	cp $^ _build/_bootinstall/lib/ocaml
 	ln -sf ../../default/runtime/ocamlrun _build/_bootinstall/bin/ocamlrun
 	ln -sf ../../default/$(boot_ocamlopt) _build/_bootinstall/bin/ocamlopt.opt
 	ln -sf ../../default/$(boot_ocamlc) _build/_bootinstall/bin/ocamlc.opt
+	ln -sf ../../default/$(boot_ocamlc) _build/_bootinstall/bin/ocamldep.opt
 	ln -sf ../../default/$(boot_ocamlmklib) _build/_bootinstall/bin/ocamlmklib.opt
-	ln -sf ../../default/$(boot_ocamldep) _build/_bootinstall/bin/ocamldep.opt
 	ln -sf ../../default/$(boot_ocamlobjinfo) _build/_bootinstall/bin/ocamlobjinfo.opt
 	ln -sf "`$(opam_exec) which ocamllex`" _build/_bootinstall/bin/ocamllex.opt
 	for prog in ocamlopt ocamlc ocamllex ocamldep ocamlmklib; do \
