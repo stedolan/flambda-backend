@@ -794,7 +794,56 @@ module Make (Target : Cfg_selectgen_target_intf.S) = struct
         Misc.fatal_error
           "emit_expr did not return any registers in [emit_stores]"
     in
-    List.iter for_one_arg args
+    let as_simple_load (arg : Cmm.expression) =
+      match[@ocaml.warning "-4"] arg with
+      | Cop
+          ( Cload
+              { memory_chunk = Word_int | Word_val;
+                mutability = _;
+                is_atomic = false
+              },
+            [addr],
+            _dbg ) -> (
+        match[@ocaml.warning "-4"] addr with
+        | Cvar v -> Some (v, 0)
+        | Cop ((Caddi | Cadda), [Cvar v; Cconst_int (n, _)], _dbg) -> Some (v, n)
+        | _ -> None)
+      | _ -> None
+    in
+    let min_sequence_length = 5 in
+    let rec process_args = function
+      | ((Some (v, ofs), tried, _) as arg) :: rest as orig_args when not !tried
+        ->
+        let skip, sequential, rest =
+          collect_sequential ~skip:None ~acc:[arg] (v, ofs) rest
+        in
+        if List.length sequential > min_sequence_length
+        then begin
+          (* emit copy loop sub cfg *)
+          FIXME;
+          process_args (Option.to_list skip @ rest)
+        end
+        else begin
+          (* Don't reconsider these items on next iteration *)
+          List.iter (fun (_, tried, _) -> tried := true) sequential;
+          process_args orig_args
+        end
+      | (_, _, arg) :: rest ->
+        for_one_arg arg;
+        process_args rest
+      | [] -> ()
+    and collect_sequential ~skip ~acc (var, ofs) = function
+      | ((Some (var', ofs'), _, _) as arg) :: rest
+        when Ident.same var var' && ofs' = ofs + Arch.size_addr ->
+        collect_sequential ~skip ~acc:(arg :: acc) (var', ofs') rest
+      | ((_, _, expr) as curr) :: rest
+        when Option.is_none skip && SU.size_expr env expr = Arch.size_addr ->
+        collect_sequential ~skip:(Some curr) ~acc
+          (var, ofs + Arch.size_addr)
+          rest
+      | rest -> skip, List.rev acc, rest
+    in
+    process_args (List.map (fun a -> as_simple_load a, ref false, a) args)
 
   (* Emit an expression.
 
