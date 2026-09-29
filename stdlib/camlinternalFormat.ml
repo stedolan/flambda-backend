@@ -2964,6 +2964,7 @@ let fmt_ebb_of_string ?legacy_behavior str =
     | _ -> assert false in
     flag, kind
 
+
   (* Raise [Failure] with a friendly error message about incompatible options.*)
   and incompatible_flag : type a . int -> int -> char -> string -> a =
     fun pct_ind str_ind symb option ->
@@ -2996,3 +2997,4 @@ let format_of_string_format str (Format (fmt', str')) =
   with Type_mismatch ->
     failwith_message
       "bad input: format type mismatch between %S and %S" str str'
+
