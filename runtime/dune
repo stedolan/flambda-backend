@@ -12,6 +12,9 @@
 ;*                                                                        *
 ;**************************************************************************
 
+(subdir build
+  (dynamic_include ../../stdlib/dune_rules/runtime.dune))
+
 (copy_files# caml/*.h)
 
 (rule

@@ -1,0 +1,22 @@
+(rule
+ (targets stdlib_module_names.txt stdlib_file_names.txt)
+ (deps (:makefile ../StdlibModules))
+ (action (run make -f %{makefile} %{targets})))
+
+(executable
+ (name gen)
+ (modules gen)
+ (modes native))
+
+(rule
+ (target stdlib_module_deps.txt)
+ (deps (:stdlib (glob_files ../*.ml) (glob_files ../*.mli)))
+ (action (with-stdout-to %{target} (chdir .. (system "%{dep:../../tools/ocamldep.exe} -one-line -as-map std_exit.ml std_exit.mli $(cat %{dep:stdlib_file_names.txt})")))))
+
+(rule
+ (targets stdlib.dune runtime.dune)
+ (action
+  (run
+   %{dep:gen.exe}
+   %{dep:stdlib_module_names.txt}
+   %{dep:stdlib_module_deps.txt})))

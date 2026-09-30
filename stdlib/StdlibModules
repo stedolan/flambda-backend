@@ -136,3 +136,9 @@ PREFIX_MODULE = \
 
 STDLIB_MODULES = $(strip \
   $(foreach name, $(STDLIB_MODULE_BASENAMES), $(call PREFIX_MODULE, $(name))))
+
+stdlib_module_names.txt:
+	@echo $(STDLIB_MODULE_BASENAMES) > $@
+
+stdlib_file_names.txt:
+	@echo $(STDLIB_MODULE_BASENAMES:=.ml) $(STDLIB_MODULE_BASENAMES:=.mli) > $@
