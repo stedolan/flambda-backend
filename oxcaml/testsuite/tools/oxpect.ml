@@ -217,15 +217,14 @@ let instrument (ss : Parsetree.structure) =
   let ss = go 0 ss in
   File.of_phrases (List.rev !phrases) misc_exps, ss
 
-let run filename =
+let run ~stdlib ~runtime filename =
   Clflags.native_code := true;
   Clflags.continue_on_type_error := true;
   Clflags.zap_mliless_modality_to_id := true;
   Clflags.locations := false;
   Clflags.unique_ids := false;
   Clflags.no_std_include := true;
-  (* FIXME *)
-  Clflags.include_dirs := [{Clflags.path="/home/stephen/jswork/oxpect/_build/runtime_stdlib_install/lib/ocaml_runtime_stdlib";cmx_guaranteed=true}];
+  Clflags.include_dirs := [{Clflags.path=stdlib;cmx_guaranteed=true};{Clflags.path=runtime;cmx_guaranteed=true}];
   let file = ref (File.empty ()) in
   Compiler_hooks.register Parse_tree_impl (fun ss ->
     let new_file, ss = instrument ss in
@@ -370,5 +369,5 @@ let run filename =
 
 let () =
   match Sys.argv with
-  | [| _; filename |] -> run filename
+  | [| _; filename; stdlib; runtime |] -> run ~stdlib:(Filename.dirname stdlib) ~runtime:(Filename.dirname runtime) filename
   | _ -> failwith "FIXME arg parsing"
