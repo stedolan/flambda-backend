@@ -352,7 +352,6 @@ end
 module History = struct
   (* For sort variables that are topmost on the jkind lattice. *)
   type concrete_creation_reason =
-    | Merlin
     | Match
     | Extension_constructor_declaration of int
     | Extension_label_declaration of Ident.t
@@ -381,6 +380,7 @@ module History = struct
     | Structure_item
     | Signature_item
     | Layout_poly
+    | Typing_recovery
 
   (* For sort variables that are in the "legacy" position
      on the jkind lattice, defaulting exactly to [value]. *)
