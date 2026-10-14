@@ -182,7 +182,7 @@ let simplify_direct_tuple_application ~simplify_expr dacc apply
   simplify_expr dacc expr ~down_to_up
 
 let rebuild_non_inlined_direct_full_application apply ~use_id ~exn_cont_use_id
-    ~result_arity ~coming_from_indirect ~callee's_code_metadata:_ uacc
+    ~result_arity ~coming_from_indirect ~callee's_code_metadata uacc
     ~after_rebuild =
   let uacc =
     if coming_from_indirect
@@ -205,9 +205,10 @@ let rebuild_non_inlined_direct_full_application apply ~use_id ~exn_cont_use_id
    *     Simple.is_symbol callee
    *     && not (Code_metadata.is_my_closure_used callee's_code_metadata)
    * in *)
+  let is_cold = Code_metadata.cold callee's_code_metadata in
   let apply = if erase_callee then Apply.erase_callee apply else apply in
   let uacc, expr =
-    EB.rewrite_fixed_arity_apply uacc ~use_id result_arity apply
+    EB.rewrite_fixed_arity_apply uacc ~use_id ~is_cold result_arity apply
   in
   after_rebuild expr uacc
 
@@ -260,6 +261,7 @@ let simplify_direct_full_application ~simplify_expr ~rebuild_expr dacc apply
   in
   match inlined with
   | Inline (dacc, inlined) ->
+    let is_cold = Code_metadata.cold callee's_code_metadata in
     let down_to_up dacc simplified_body =
       let simplified_body =
         if coming_from_indirect
@@ -271,6 +273,9 @@ let simplify_direct_full_application ~simplify_expr ~rebuild_expr dacc apply
       in
       let simplified_body =
         SE.notify_removed ~operation:Removed_operations.call simplified_body
+      in
+      let simplified_body =
+        if is_cold then SE.mark_as_cold simplified_body else simplified_body
       in
       down_to_up dacc simplified_body
     in
@@ -296,10 +301,16 @@ let simplify_direct_full_application ~simplify_expr ~rebuild_expr dacc apply
         | Never_returns, (Unknown | Bottom | Ok _) | Return _, Bottom ->
           dacc, None, Apply.Result_continuation.Never_returns
         | Return apply_return_continuation, Unknown ->
+          let env_at_use = DA.denv dacc in
+          let env_at_use =
+            if Code_metadata.cold callee's_code_metadata
+            then DE.mark_as_cold env_at_use
+            else env_at_use
+          in
           let dacc, use_id =
             DA.record_continuation_use dacc apply_return_continuation
               (Non_inlinable { escaping = true })
-              ~env_at_use:(DA.denv dacc)
+              ~env_at_use
               ~arg_types:
                 (T.unknown_types_from_arity result_arity
                    ~alloc_mode:
@@ -376,18 +387,30 @@ let simplify_direct_full_application ~simplify_expr ~rebuild_expr dacc apply
                   result_arity results
               in
               let dacc = DA.with_denv dacc denv in
+              let env_at_use = DA.denv dacc in
+              let env_at_use =
+                if Code_metadata.cold callee's_code_metadata
+                then DE.mark_as_cold env_at_use
+                else env_at_use
+              in
               let dacc, use_id =
                 DA.record_continuation_use dacc apply_return_continuation
                   (Non_inlinable { escaping = true })
-                  ~env_at_use:(DA.denv dacc) ~arg_types
+                  ~env_at_use ~arg_types
               in
               dacc, Some use_id, result_continuation)
+      in
+      let env_at_use = DA.denv dacc in
+      let env_at_use =
+        if Code_metadata.cold callee's_code_metadata
+        then DE.mark_as_cold env_at_use
+        else env_at_use
       in
       let dacc, exn_cont_use_id =
         DA.record_continuation_use dacc
           (Exn_continuation.exn_handler (Apply.exn_continuation apply))
           (Non_inlinable { escaping = true })
-          ~env_at_use:(DA.denv dacc)
+          ~env_at_use
           ~arg_types:
             (T.unknown_types_from_arity
                (Exn_continuation.arity (Apply.exn_continuation apply))
@@ -874,7 +897,8 @@ let rebuild_function_call_where_callee's_type_unavailable apply ~use_id
          Unused_because_function_unknown)
   in
   let uacc, expr =
-    EB.rewrite_fixed_arity_apply uacc ~use_id (Apply.return_arity apply) apply
+    EB.rewrite_fixed_arity_apply uacc ~use_id ~is_cold:false
+      (Apply.return_arity apply) apply
   in
   after_rebuild expr uacc
 
@@ -1326,7 +1350,8 @@ let rebuild_non_ocaml_function_call apply ~use_id ~exn_cont_use_id uacc
       apply
   in
   let uacc, expr =
-    EB.rewrite_fixed_arity_apply uacc ~use_id (Apply.return_arity apply) apply
+    EB.rewrite_fixed_arity_apply uacc ~use_id ~is_cold:false
+      (Apply.return_arity apply) apply
   in
   after_rebuild expr uacc
 
