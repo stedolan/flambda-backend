@@ -212,9 +212,9 @@ val use_domains : unit -> unit
     other than the initial one. It prevents the use of a custom locking
     scheme, such as the one used by pyocaml. *)
 
-(** Thread-local storage. Like {!Domain.DLS}, but stores a distinct value
-    for each thread. Domains can contain multiple threads, so [TLS] should be
-    preferred in nearly all cases. *)
+(** Thread-local storage. Like {!Domain.DLS}, but stores a distinct value for
+    every preemptible fiber. Preemptable fibers are the fundamental unit of
+    preemptive concurrency, so [TLS] should be nearly always preferred. *)
 module TLS : sig @@ portable
 
    type 'a key : value mod portable contended
