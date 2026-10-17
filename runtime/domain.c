@@ -2510,13 +2510,24 @@ CAMLprim value caml_enable_tick_thread(value v_enable)
    If argument is 0, the current domain no longer wants ticks */
 CAMLprim intnat caml_domain_set_tick_interval_usec(intnat interval_usec)
 {
-  atomic_store_relaxed(&domain_self->tick_interval_usec, interval_usec);
+  /* We can do this test-and-set non-atomically, because:
+      - this is the only function that can modify this value
+      - we hold the domain lock, so we know no other threads are calling this function
+  */
+  bool changed = atomic_load_relaxed(&domain_self->tick_interval_usec)
+                 != (uintnat)interval_usec;
+  if (changed) {
+    atomic_store_relaxed(&domain_self->tick_interval_usec, interval_usec);
+  }
+
   if (interval_usec != 0) {
     caml_start_tick_thread();
   }
-  /* NOTE: We don't worry too much about spurious wakes here, since we assume
-     changing the tick interval is uncommon */
-  tick_thread_wake();
+
+  /* Only wake the tick thread if the interval actually changed. */
+  if (changed) {
+    tick_thread_wake();
+  }
 
   return 0;
 }
