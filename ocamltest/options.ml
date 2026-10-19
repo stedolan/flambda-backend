@@ -61,6 +61,8 @@ let list_tests = ref []
 
 let find_tests = ref []
 
+let list_all_tests = ref []
+
 let show_timings = ref false
 
 let run_ocamlrunparam = ref ""
@@ -68,7 +70,7 @@ let run_ocamlrunparam = ref ""
 let translate = ref false
 let style = ref Translate.Plain
 let compact = ref false
-
+let dune = ref false
 
 let add_to_list r x =
   r := !r @ [x]
@@ -94,6 +96,8 @@ let commandline_options =
    " List tests in given directory.");
   ("-find-tests", Arg.String (add_to_list find_tests),
    " Find tests in given directory (recursive).");
+  ("-list-all-tests", Arg.String (add_to_list list_all_tests),
+   " Find tests recursively in a given directory");
   ("-keep-test-dir-on-success", Arg.Set keep_test_dir_on_success,
    " Keep the test directory (with the generated test artefacts) on success.");
   ("-run-ocamlrunparam", Arg.Set_string run_ocamlrunparam,
@@ -106,6 +110,8 @@ let commandline_options =
    " If translating, preserve line numbers in the output.");
   ("-keep-chars", Arg.Unit (fun () -> style := Translate.Chars),
    " If translating, preserve char offsets in the output.");
+  ("-dune", Arg.Unit (fun () -> dune := true),
+   " Generate dune files instead of running tests")
 ]
 
 let files_to_test = ref []
@@ -123,9 +129,11 @@ let default_timeout = !default_timeout
 let find_test_dirs = !find_test_dirs
 let list_tests = !list_tests
 let find_tests = !find_tests
+let list_all_tests = !list_all_tests
 let keep_test_dir_on_success = !keep_test_dir_on_success
 let show_timings = !show_timings
 let run_ocamlrunparam = !run_ocamlrunparam
 let translate = !translate
 let style = !style
 let compact = !compact
+let dune = !dune

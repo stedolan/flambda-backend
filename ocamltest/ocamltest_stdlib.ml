@@ -109,6 +109,8 @@ module Sys = struct
       Sys.remove path
 
   let rm_rf path =
+    Printf.eprintf "  REMOVING %s\n%!" path;
+    if false then begin
     let rec erase path =
       (* Sys.file_exists will return false for dangling symlinks *)
       if Sys.file_exists path then
@@ -131,6 +133,7 @@ module Sys = struct
         (* path could be a dangling symlink *)
         try Sys.remove path
         with Sys_error _ -> ()
+    end
 
   let rec make_directory dir =
     if not (Sys.file_exists dir) then begin

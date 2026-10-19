@@ -34,8 +34,6 @@ val default_tests : unit -> t list
 
 val lookup : string -> t option
 
-val run : out_channel -> Environments.t -> t -> Result.t * Environments.t
-
 val test_of_action : Actions.t -> t
 
 module TestSet : Set.S with type elt = t

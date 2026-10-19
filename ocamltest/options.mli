@@ -30,6 +30,7 @@ val find_test_dirs : string list
 val list_tests : string list
 
 val find_tests : string list
+val list_all_tests : string list
 
 val keep_test_dir_on_success : bool
 
@@ -40,3 +41,5 @@ val run_ocamlrunparam : string
 val translate : bool
 val style : Translate.style
 val compact : bool
+
+val dune : bool

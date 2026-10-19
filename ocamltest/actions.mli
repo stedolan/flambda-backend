@@ -15,7 +15,33 @@
 
 (* Definition of actions, basic blocks for tests *)
 
-type code = out_channel -> Environments.t -> Result.t * Environments.t
+type task_item =
+  | Chdir of string
+  | Check_file_exists of { filename: string; reason: string }
+  | Check_file_absent of { filename: string }
+  | Copy_file of { src: string; dst: string }
+  | Setup_build_env of
+      { source_dir: string;
+        build_dir: string;
+        files: string list;
+        subdirs: string list }
+  | Run_cmd of
+      { settings: Run_command.settings;
+        message: string;
+        exits: int list }
+  | Compare_files of
+      { kind_of_output: string;
+        files: Filecompare.files;
+        tool: Filecompare.tool;
+        promote: bool }
+
+type task =
+  | Static of Result.t
+  | Task of task_item list
+
+val seq : task list -> task
+
+type code = out_channel -> Environments.t -> task * Environments.t
 
 type t
 
@@ -42,7 +68,7 @@ val set_hook : string -> code -> unit
 val clear_hook : string -> unit
 val clear_all_hooks : unit -> unit
 
-val run : out_channel -> Environments.t -> t -> Result.t * Environments.t
+val run : out_channel -> Environments.t -> t -> task * Environments.t
 
 val does_something : t -> bool
 

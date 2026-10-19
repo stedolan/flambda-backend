@@ -415,7 +415,7 @@
 
 (executable
  (name main_native)
- (modes native)
+ (modes native byte)
  (flags
   (:standard -strict-sequence -w +67 -bin-annot -safe-string -strict-formats))
  (libraries ocamlbytecomp ocamlfrontend)

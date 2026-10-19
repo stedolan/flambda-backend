@@ -171,7 +171,11 @@ let run_test_tree log add_msg behavior env summ ast =
         | Run ->
           begin try
             let testenv = List.fold_left apply_modifiers env mods in
-            let (result, newenv) = Tests.run log testenv test in
+            Printf.fprintf log "Running test %s with %d actions\n%!"
+              test.test_name
+              (List.length test.test_actions);
+            let (result, newenv) =
+              Actions_runner.run log testenv test.test_actions in
             let msg = Result.string_of_result result in
             let sub_behavior =
               if Result.is_pass result then Run else Skip_all in
@@ -234,6 +238,69 @@ let run_test_tree log add_msg behavior env summ ast =
     run_statements behavior env summ stmts [] subs ~branches ~must_do_something
   in run_tree behavior env summ ast ~branches:[] ~must_do_something:true
 
+
+let print_test_tasks ~log env (Ast (stmts, subs)) =
+  let exception Exit of Result.t in
+  let rec gen acc env stmts subs =
+    match stmts, subs with
+    | [], [] ->
+       (* assert does_something; *)
+       acc
+    | [], (Ast (stmts', subs') :: subs) ->
+       let acc = gen_skippable acc env stmts' subs' in
+       gen acc env [] subs
+    | stmt :: stmts, subs ->
+       match stmt with
+       | Environment_statement s ->
+          begin match interpret_environment_statement env s with
+          | env -> gen acc env stmts subs
+  (*        | exception e ->
+             asdf *)
+          end
+       | Test (_, name, mods) ->
+          (* FIXME exn handling *)
+          let name = { name with node = Environments.expand env name.node } in
+          let test = lookup_test name in
+          let env = List.fold_left apply_modifiers env mods in
+          let gen_actions (acc, env) act =
+            match Actions.run log env act with
+            | Static r, env ->
+               if not (Result.is_pass r) then raise (Exit r);
+               acc, env
+            | Task task, env -> task :: acc, env
+          in
+          let acc, env = List.fold_left gen_actions (acc, env) test.test_actions in
+          gen acc env stmts subs
+       | Split [] ->
+          acc
+       | Split (alt :: rest) ->
+          let acc = gen_skippable acc env (alt @ stmts) subs in
+          gen acc env (Split rest :: stmts) subs
+  and gen_skippable acc env stmts subs =
+    try gen acc env stmts subs
+    with Exit r when Result.is_skip r -> acc
+  in
+  match gen [] env stmts subs with
+  | acc ->
+     let tasks = List.concat (List.rev acc) in
+     Actions_runner.print_task_items env tasks;
+     Pass
+  | exception (Exit r) when Result.is_pass r -> Pass
+  | exception (Exit r) when Result.is_skip r -> Skip
+  | exception (Exit _) -> Fail
+(* FIXME exns handling *)
+
+(*
+let gen_test_tree ~log env (Ast (stmts, subs)) =
+  let rec gen_tree acc env stmts subs ~must_do_something =
+    match stmts with
+    | [] ->
+       a
+  in
+  gen_tree [] env ast ~must_do_something:true
+*)
+
+
 let get_test_source_directory test_dirname =
   if (Filename.is_relative test_dirname) then
     Sys.with_chdir test_dirname Sys.getcwd
@@ -258,6 +325,7 @@ let extract_rootenv (Ast (stmts, subs)) =
   (env, Ast (stmts, subs))
 
 let test_file test_filename =
+  let generate_only = Options.dune in
   let start = if Options.show_timings then Unix.gettimeofday () else 0.0 in
   let skip_test = List.mem test_filename !tests_to_skip in
   let tsl_ast = tsl_parse_file_safe test_filename in
@@ -288,9 +356,11 @@ let test_file test_filename =
   let test_build_directory_prefix =
     get_test_build_directory_prefix test_directory in
   let clean_test_build_directory () =
+    if not generate_only then begin
     try
       Sys.rm_rf test_build_directory_prefix
     with Sys_error _ -> ()
+    end
   in
   clean_test_build_directory ();
   Sys.make_directory test_build_directory_prefix;
@@ -352,8 +422,12 @@ let test_file test_filename =
        in
        let rootenv = Environments.initialize Environments.Post log rootenv in
        let summary =
-         run_test_tree log add_msg initial_status rootenv initial_summary
-           tsl_ast
+         if generate_only then
+           if initial_status = Skip_all then initial_summary
+           else print_test_tasks ~log rootenv tsl_ast
+         else
+           run_test_tree log add_msg initial_status rootenv initial_summary
+             tsl_ast
        in
        let common_prefix = " ... testing '" ^ test_basename ^ "'" in
        let msgs = List.rev !msgs in
@@ -450,6 +524,11 @@ let () =
 let () =
   let failed = ref false in
   let work_done = ref false in
+  let list_all_tests dir =
+    find_test_dirs dir |> List.iter (fun dir ->
+      list_tests dir |> List.iter (fun test ->
+        print_endline (Filename.concat dir test)))
+  in
   let list_tests dir =
     match list_tests dir with
     | [] -> failed := true
@@ -461,6 +540,7 @@ let () =
   List.iter (doit find_test_dirs) Options.find_test_dirs;
   List.iter (doit list_tests) Options.list_tests;
   List.iter (doit find_tests) Options.find_tests;
+  List.iter (doit list_all_tests) Options.list_all_tests;
   let do_file =
     if Options.translate then
       Translate.file ~style:Options.style ~compact:Options.compact

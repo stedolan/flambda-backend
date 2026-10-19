@@ -57,35 +57,6 @@ let test_of_action action =
   test_description = Actions.description action;
 }
 
-let run_actions log testenv actions =
-  let total = List.length actions in
-  let rec run_actions_aux action_number env = function
-    | [] -> (Result.pass, env)
-    | action::remaining_actions ->
-      begin
-        Printf.fprintf log "\nRunning action %d/%d (%s)\n%!"
-          action_number total (Actions.name action);
-        let (result, env') = Actions.run log env action in
-        Printf.fprintf log "Action %d/%d (%s) %s\n%!"
-          action_number total (Actions.name action)
-          (Result.string_of_result result);
-        if Result.is_pass result
-        then (
-          (* Avoid clobbering [Predicate true] results *)
-          match remaining_actions with
-          | [] -> result, env'
-          | _::_ -> run_actions_aux (action_number+1) env' remaining_actions
-        )
-        else (result, env')
-      end in
-  run_actions_aux 1 testenv actions
-
-let run log env test =
-  Printf.fprintf log "Running test %s with %d actions\n%!"
-    test.test_name
-    (List.length test.test_actions);
-  run_actions log env test.test_actions
-
 module TestSet = Set.Make
 (struct
   type nonrec t = t
