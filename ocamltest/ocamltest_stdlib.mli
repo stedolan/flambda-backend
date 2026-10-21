@@ -43,6 +43,7 @@ module String : sig
   include module type of Stdlib.String
   module Set : Set.S with type elt = string
   val words : string -> string list
+  val remove_prefix : prefix:string -> string -> string option
 end
 
 module Sys : sig
@@ -72,4 +73,9 @@ end
 
 module Unix : sig
   include module type of Ocamltest_unix
+end
+
+module Sexp : sig
+  type t = A of string | S of t list
+  val pp : Format.formatter -> t -> unit
 end

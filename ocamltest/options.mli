@@ -33,6 +33,7 @@ val find_tests : string list
 val list_all_tests : string list
 
 val keep_test_dir_on_success : bool
+val exit_0_on_failure : bool
 
 val show_timings : bool
 
@@ -43,3 +44,7 @@ val style : Translate.style
 val compact : bool
 
 val dune : bool
+val no_ocamlsrcdir : bool
+val no_diff : bool
+
+val file_override : string -> string option

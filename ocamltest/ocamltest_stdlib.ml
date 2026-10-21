@@ -95,6 +95,12 @@ module String = struct
           | _ as c -> f quote (w ^ (string_of_char c)) ws j
       end in
     if l=0 then [] else f None "" [] 0
+
+  let remove_prefix ~prefix s =
+    if starts_with ~prefix s then
+      let plen = String.length prefix in
+      Some (String.sub s plen (String.length s - plen))
+    else None
 end
 
 module Sys = struct
@@ -109,8 +115,6 @@ module Sys = struct
       Sys.remove path
 
   let rm_rf path =
-    Printf.eprintf "  REMOVING %s\n%!" path;
-    if false then begin
     let rec erase path =
       (* Sys.file_exists will return false for dangling symlinks *)
       if Sys.file_exists path then
@@ -133,7 +137,6 @@ module Sys = struct
         (* path could be a dangling symlink *)
         try Sys.remove path
         with Sys_error _ -> ()
-    end
 
   let rec make_directory dir =
     if not (Sys.file_exists dir) then begin
@@ -239,4 +242,25 @@ module Seq = struct
     | Nil, Nil -> true
     | Cons(e1, s1), Cons(e2, s2) -> e1 = e2 && equal s1 s2
     | _, _ -> false
+end
+
+module Sexp = struct
+  type t = A of string | S of t list
+
+  let unquoted s =
+    s |> String.for_all (function
+      | 'a'..'z' | 'A'..'Z' | '0'..'9' | '-' | '_' | '.' | '=' | '?' | '/' -> true
+      | _ -> false)
+  
+  let rec pp ppf =
+    let open Format in
+    function
+    | A s when unquoted s ->
+       fprintf ppf "%s" s
+    | A s ->
+       fprintf ppf "%S" s
+    | S items ->
+       fprintf ppf "@[<hv>(%a)@]"
+         (Format.pp_print_list ~pp_sep:(fun ppf () -> fprintf ppf "@;<1 1>") pp)
+         items
 end

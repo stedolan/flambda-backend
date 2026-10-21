@@ -52,6 +52,8 @@ let cflags = make ("cflags",
 
 let caml_ld_library_path_name = "CAML_LD_LIBRARY_PATH"
 
+let startup_cwd = Sys.getcwd ()
+
 let export_caml_ld_library_path value =
   let current_value = Sys.safe_getenv caml_ld_library_path_name in
   let local_value =
@@ -60,6 +62,16 @@ let export_caml_ld_library_path value =
     if local_value="" then current_value else
     if current_value="" then local_value else
     String.concat Filename.path_sep [local_value; current_value] in
+  let new_value =
+    (* Under dune, CAML_LD_LIBRARY_PATH may contain relative paths.
+       They are relative to the startup directory, but we may have
+       chdir'd since. *)
+    let paths = String.split_on_char ':' new_value in
+    let paths = paths |> List.map (fun p ->
+      if Filename.is_relative p then Filename.concat startup_cwd p else p)
+    in
+    String.concat ":" paths
+  in
   new_value
 
 let caml_ld_library_path =
@@ -202,6 +214,8 @@ let ocamlrunparam =
 
 let ocamlsrcdir = make ("ocamlsrcdir",
   "Where OCaml sources are")
+let ocamlsrcdir_runtime = make ("ocamlsrcdir_runtime",
+  "OCaml runtime path")
 
 let ocamldebug_flags = make ("ocamldebug_flags",
   "Flags for ocamldebug")

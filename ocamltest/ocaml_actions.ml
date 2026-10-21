@@ -1203,8 +1203,10 @@ let config_variables _log env =
     Ocaml_variables.ocamlopt_default_flags,
       Ocamltest_config.ocamlopt_default_flags;
     Ocaml_variables.ocamlrunparam, Sys.safe_getenv "OCAMLRUNPARAM";
-    Ocaml_variables.ocamlsrcdir, Ocaml_directories.srcdir;
-    Ocaml_variables.os_type, Sys.os_type
+    Ocaml_variables.ocamlsrcdir, Ocaml_directories.srcdir_path [];
+    Ocaml_variables.ocamlsrcdir_runtime, Ocaml_directories.runtime;
+    Ocaml_variables.os_type, Sys.os_type;
+    Ocaml_variables.caml_ld_library_path, ""
   ] env
 
 let flat_float_array = Actions.make

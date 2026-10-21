@@ -1,0 +1,7275 @@
+(subdir
+ tests/afl-instrumentation
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/afl-instrumentation)))))
+(subdir
+ ./run/afl-instrumentation
+ (dynamic_include ../../tests/afl-instrumentation/rules.dune))
+
+(subdir
+ tests/arch-power
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/arch-power)))))
+(subdir ./run/arch-power (dynamic_include ../../tests/arch-power/rules.dune))
+
+(subdir
+ tests/array-functions
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/array-functions)))))
+(subdir
+ ./run/array-functions
+ (dynamic_include ../../tests/array-functions/rules.dune))
+
+(subdir
+ tests/asmcomp
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/asmcomp)))))
+(subdir ./run/asmcomp (dynamic_include ../../tests/asmcomp/rules.dune))
+
+(subdir
+ tests/asmgen
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/asmgen)))))
+(subdir ./run/asmgen (dynamic_include ../../tests/asmgen/rules.dune))
+
+(subdir
+ tests/ast-invariants
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/ast-invariants)))))
+(subdir
+ ./run/ast-invariants
+ (dynamic_include ../../tests/ast-invariants/rules.dune))
+
+(subdir
+ tests/async-exns
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/async-exns)))))
+(subdir ./run/async-exns (dynamic_include ../../tests/async-exns/rules.dune))
+
+(subdir
+ tests/atomic-locs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/atomic-locs)))))
+(subdir
+ ./run/atomic-locs
+ (dynamic_include ../../tests/atomic-locs/rules.dune))
+
+(subdir
+ tests/backtrace
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/backtrace)))))
+(subdir ./run/backtrace (dynamic_include ../../tests/backtrace/rules.dune))
+
+(subdir
+ tests/backtrace-multifiles
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/backtrace-multifiles)))))
+(subdir
+ ./run/backtrace-multifiles
+ (dynamic_include ../../tests/backtrace-multifiles/rules.dune))
+
+(subdir
+ tests/badly-ordered-deps
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/badly-ordered-deps)))))
+(subdir
+ ./run/badly-ordered-deps
+ (dynamic_include ../../tests/badly-ordered-deps/rules.dune))
+
+(subdir
+ tests/basic
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/basic)))))
+(subdir ./run/basic (dynamic_include ../../tests/basic/rules.dune))
+
+(subdir
+ tests/basic-float
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/basic-float)))))
+(subdir
+ ./run/basic-float
+ (dynamic_include ../../tests/basic-float/rules.dune))
+
+(subdir
+ tests/basic-io
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/basic-io)))))
+(subdir ./run/basic-io (dynamic_include ../../tests/basic-io/rules.dune))
+
+(subdir
+ tests/basic-io-2
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/basic-io-2)))))
+(subdir ./run/basic-io-2 (dynamic_include ../../tests/basic-io-2/rules.dune))
+
+(subdir
+ tests/basic-manyargs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/basic-manyargs)))))
+(subdir
+ ./run/basic-manyargs
+ (dynamic_include ../../tests/basic-manyargs/rules.dune))
+
+(subdir
+ tests/basic-modules
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/basic-modules)))))
+(subdir
+ ./run/basic-modules
+ (dynamic_include ../../tests/basic-modules/rules.dune))
+
+(subdir
+ tests/basic-more
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/basic-more)))))
+(subdir ./run/basic-more (dynamic_include ../../tests/basic-more/rules.dune))
+
+(subdir
+ tests/basic-multdef
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/basic-multdef)))))
+(subdir
+ ./run/basic-multdef
+ (dynamic_include ../../tests/basic-multdef/rules.dune))
+
+(subdir
+ tests/basic-private
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/basic-private)))))
+(subdir
+ ./run/basic-private
+ (dynamic_include ../../tests/basic-private/rules.dune))
+
+(subdir
+ tests/binary-emitter
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/binary-emitter)))))
+(subdir
+ ./run/binary-emitter
+ (dynamic_include ../../tests/binary-emitter/rules.dune))
+
+(subdir
+ tests/branch-relaxation
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/branch-relaxation)))))
+(subdir
+ ./run/branch-relaxation
+ (dynamic_include ../../tests/branch-relaxation/rules.dune))
+
+(subdir
+ tests/c-api
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/c-api)))))
+(subdir ./run/c-api (dynamic_include ../../tests/c-api/rules.dune))
+
+(subdir
+ tests/callback
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/callback)))))
+(subdir ./run/callback (dynamic_include ../../tests/callback/rules.dune))
+
+(subdir
+ tests/cmi-stamp-normalization
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/cmi-stamp-normalization)))))
+(subdir
+ ./run/cmi-stamp-normalization
+ (dynamic_include ../../tests/cmi-stamp-normalization/rules.dune))
+
+(subdir
+ tests/codegen
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/codegen)))))
+(subdir ./run/codegen (dynamic_include ../../tests/codegen/rules.dune))
+
+(subdir
+ tests/compaction
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/compaction)))))
+(subdir ./run/compaction (dynamic_include ../../tests/compaction/rules.dune))
+
+(subdir
+ tests/compiler-libs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/compiler-libs)))))
+(subdir
+ ./run/compiler-libs
+ (dynamic_include ../../tests/compiler-libs/rules.dune))
+
+(subdir
+ tests/comprehensions
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/comprehensions)))))
+(subdir
+ ./run/comprehensions
+ (dynamic_include ../../tests/comprehensions/rules.dune))
+
+(subdir
+ tests/dash-Ix
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/dash-Ix)))))
+(subdir ./run/dash-Ix (dynamic_include ../../tests/dash-Ix/rules.dune))
+
+(subdir
+ tests/effect-syntax
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/effect-syntax)))))
+(subdir
+ ./run/effect-syntax
+ (dynamic_include ../../tests/effect-syntax/rules.dune))
+
+(subdir
+ tests/effects
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/effects)))))
+(subdir ./run/effects (dynamic_include ../../tests/effects/rules.dune))
+
+(subdir
+ tests/effects-safe
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/effects-safe)))))
+(subdir
+ ./run/effects-safe
+ (dynamic_include ../../tests/effects-safe/rules.dune))
+
+(subdir
+ tests/effects/preemption
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/effects/preemption)))))
+(subdir
+ ./run/effects/preemption
+ (dynamic_include ../../../tests/effects/preemption/rules.dune))
+
+(subdir
+ tests/effects/tls
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/effects/tls)))))
+(subdir
+ ./run/effects/tls
+ (dynamic_include ../../../tests/effects/tls/rules.dune))
+
+(subdir
+ tests/embedded
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/embedded)))))
+(subdir ./run/embedded (dynamic_include ../../tests/embedded/rules.dune))
+
+(subdir
+ tests/ephe-c-api
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/ephe-c-api)))))
+(subdir ./run/ephe-c-api (dynamic_include ../../tests/ephe-c-api/rules.dune))
+
+(subdir
+ tests/exception-extra-args
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/exception-extra-args)))))
+(subdir
+ ./run/exception-extra-args
+ (dynamic_include ../../tests/exception-extra-args/rules.dune))
+
+(subdir
+ tests/exotic-syntax
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/exotic-syntax)))))
+(subdir
+ ./run/exotic-syntax
+ (dynamic_include ../../tests/exotic-syntax/rules.dune))
+
+(subdir
+ tests/extension-constructor
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/extension-constructor)))))
+(subdir
+ ./run/extension-constructor
+ (dynamic_include ../../tests/extension-constructor/rules.dune))
+
+(subdir
+ tests/external
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/external)))))
+(subdir ./run/external (dynamic_include ../../tests/external/rules.dune))
+
+(subdir
+ tests/flambda
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/flambda)))))
+(subdir ./run/flambda (dynamic_include ../../tests/flambda/rules.dune))
+
+(subdir
+ tests/flambda2
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/flambda2)))))
+(subdir ./run/flambda2 (dynamic_include ../../tests/flambda2/rules.dune))
+
+(subdir
+ tests/flambda2/examples
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/flambda2/examples)))))
+(subdir
+ ./run/flambda2/examples
+ (dynamic_include ../../../tests/flambda2/examples/rules.dune))
+
+(subdir
+ tests/flambda2/examples/unknown
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/flambda2/examples/unknown)))))
+(subdir
+ ./run/flambda2/examples/unknown
+ (dynamic_include ../../../../tests/flambda2/examples/unknown/rules.dune))
+
+(subdir
+ tests/flambda2/examples/wrong
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/flambda2/examples/wrong)))))
+(subdir
+ ./run/flambda2/examples/wrong
+ (dynamic_include ../../../../tests/flambda2/examples/wrong/rules.dune))
+
+(subdir
+ tests/flambda2/rec_info_alias
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/flambda2/rec_info_alias)))))
+(subdir
+ ./run/flambda2/rec_info_alias
+ (dynamic_include ../../../tests/flambda2/rec_info_alias/rules.dune))
+
+(subdir
+ tests/flambda2/simplify
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/flambda2/simplify)))))
+(subdir
+ ./run/flambda2/simplify
+ (dynamic_include ../../../tests/flambda2/simplify/rules.dune))
+
+(subdir
+ tests/flambda2/simplify/inlining_arguments_meet
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/flambda2/simplify/inlining_arguments_meet)))))
+(subdir
+ ./run/flambda2/simplify/inlining_arguments_meet
+ (dynamic_include
+  ../../../../tests/flambda2/simplify/inlining_arguments_meet/rules.dune))
+
+(subdir
+ tests/flambda2/symbol_projections
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/flambda2/symbol_projections)))))
+(subdir
+ ./run/flambda2/symbol_projections
+ (dynamic_include ../../../tests/flambda2/symbol_projections/rules.dune))
+
+(subdir
+ tests/float-unboxing
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/float-unboxing)))))
+(subdir
+ ./run/float-unboxing
+ (dynamic_include ../../tests/float-unboxing/rules.dune))
+
+(subdir
+ tests/fma
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/fma)))))
+(subdir ./run/fma (dynamic_include ../../tests/fma/rules.dune))
+
+(subdir
+ tests/formats-transition
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/formats-transition)))))
+(subdir
+ ./run/formats-transition
+ (dynamic_include ../../tests/formats-transition/rules.dune))
+
+(subdir
+ tests/formatting
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/formatting)))))
+(subdir ./run/formatting (dynamic_include ../../tests/formatting/rules.dune))
+
+(subdir
+ tests/frame-pointers
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/frame-pointers)))))
+(subdir
+ ./run/frame-pointers
+ (dynamic_include ../../tests/frame-pointers/rules.dune))
+
+(subdir
+ tests/functors
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/functors)))))
+(subdir ./run/functors (dynamic_include ../../tests/functors/rules.dune))
+
+(subdir
+ tests/gc-rates
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/gc-rates)))))
+(subdir ./run/gc-rates (dynamic_include ../../tests/gc-rates/rules.dune))
+
+(subdir
+ tests/gc-roots
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/gc-roots)))))
+(subdir ./run/gc-roots (dynamic_include ../../tests/gc-roots/rules.dune))
+
+(subdir
+ tests/generalized-open
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/generalized-open)))))
+(subdir
+ ./run/generalized-open
+ (dynamic_include ../../tests/generalized-open/rules.dune))
+
+(subdir
+ tests/generated-parse-errors
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/generated-parse-errors)))))
+(subdir
+ ./run/generated-parse-errors
+ (dynamic_include ../../tests/generated-parse-errors/rules.dune))
+
+(subdir
+ tests/heap_extent
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/heap_extent)))))
+(subdir
+ ./run/heap_extent
+ (dynamic_include ../../tests/heap_extent/rules.dune))
+
+(subdir
+ tests/hidden_includes
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/hidden_includes)))))
+(subdir
+ ./run/hidden_includes
+ (dynamic_include ../../tests/hidden_includes/rules.dune))
+
+(subdir
+ tests/implicit-types
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/implicit-types)))))
+(subdir
+ ./run/implicit-types
+ (dynamic_include ../../tests/implicit-types/rules.dune))
+
+(subdir
+ tests/int64-unboxing
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/int64-unboxing)))))
+(subdir
+ ./run/int64-unboxing
+ (dynamic_include ../../tests/int64-unboxing/rules.dune))
+
+(subdir
+ tests/language-extensions
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/language-extensions)))))
+(subdir
+ ./run/language-extensions
+ (dynamic_include ../../tests/language-extensions/rules.dune))
+
+(subdir
+ tests/layout_poly
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/layout_poly)))))
+(subdir
+ ./run/layout_poly
+ (dynamic_include ../../tests/layout_poly/rules.dune))
+
+(subdir
+ tests/layout_poly/cross_module_static
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/layout_poly/cross_module_static)))))
+(subdir
+ ./run/layout_poly/cross_module_static
+ (dynamic_include ../../../tests/layout_poly/cross_module_static/rules.dune))
+
+(subdir
+ tests/layout_poly/transitive_deps
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/layout_poly/transitive_deps)))))
+(subdir
+ ./run/layout_poly/transitive_deps
+ (dynamic_include ../../../tests/layout_poly/transitive_deps/rules.dune))
+
+(subdir
+ tests/lazy
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lazy)))))
+(subdir ./run/lazy (dynamic_include ../../tests/lazy/rules.dune))
+
+(subdir
+ tests/let-syntax
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/let-syntax)))))
+(subdir ./run/let-syntax (dynamic_include ../../tests/let-syntax/rules.dune))
+
+(subdir
+ tests/letrec-check
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/letrec-check)))))
+(subdir
+ ./run/letrec-check
+ (dynamic_include ../../tests/letrec-check/rules.dune))
+
+(subdir
+ tests/letrec-compilation
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/letrec-compilation)))))
+(subdir
+ ./run/letrec-compilation
+ (dynamic_include ../../tests/letrec-compilation/rules.dune))
+
+(subdir
+ tests/lexing
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lexing)))))
+(subdir ./run/lexing (dynamic_include ../../tests/lexing/rules.dune))
+
+(subdir
+ tests/lf_skiplist
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lf_skiplist)))))
+(subdir
+ ./run/lf_skiplist
+ (dynamic_include ../../tests/lf_skiplist/rules.dune))
+
+(subdir
+ tests/lib-arg
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-arg)))))
+(subdir ./run/lib-arg (dynamic_include ../../tests/lib-arg/rules.dune))
+
+(subdir
+ tests/lib-array
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-array)))))
+(subdir ./run/lib-array (dynamic_include ../../tests/lib-array/rules.dune))
+
+(subdir
+ tests/lib-atomic
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-atomic)))))
+(subdir ./run/lib-atomic (dynamic_include ../../tests/lib-atomic/rules.dune))
+
+(subdir
+ tests/lib-bigarray
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-bigarray)))))
+(subdir
+ ./run/lib-bigarray
+ (dynamic_include ../../tests/lib-bigarray/rules.dune))
+
+(subdir
+ tests/lib-bigarray-2
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-bigarray-2)))))
+(subdir
+ ./run/lib-bigarray-2
+ (dynamic_include ../../tests/lib-bigarray-2/rules.dune))
+
+(subdir
+ tests/lib-bigarray-file
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-bigarray-file)))))
+(subdir
+ ./run/lib-bigarray-file
+ (dynamic_include ../../tests/lib-bigarray-file/rules.dune))
+
+(subdir
+ tests/lib-bool
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-bool)))))
+(subdir ./run/lib-bool (dynamic_include ../../tests/lib-bool/rules.dune))
+
+(subdir
+ tests/lib-buffer
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-buffer)))))
+(subdir ./run/lib-buffer (dynamic_include ../../tests/lib-buffer/rules.dune))
+
+(subdir
+ tests/lib-bytes
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-bytes)))))
+(subdir ./run/lib-bytes (dynamic_include ../../tests/lib-bytes/rules.dune))
+
+(subdir
+ tests/lib-bytes-utf
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-bytes-utf)))))
+(subdir
+ ./run/lib-bytes-utf
+ (dynamic_include ../../tests/lib-bytes-utf/rules.dune))
+
+(subdir
+ tests/lib-channels
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-channels)))))
+(subdir
+ ./run/lib-channels
+ (dynamic_include ../../tests/lib-channels/rules.dune))
+
+(subdir
+ tests/lib-char
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-char)))))
+(subdir ./run/lib-char (dynamic_include ../../tests/lib-char/rules.dune))
+
+(subdir
+ tests/lib-digest
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-digest)))))
+(subdir ./run/lib-digest (dynamic_include ../../tests/lib-digest/rules.dune))
+
+(subdir
+ tests/lib-domain
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-domain)))))
+(subdir ./run/lib-domain (dynamic_include ../../tests/lib-domain/rules.dune))
+
+(subdir
+ tests/lib-dynarray
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynarray)))))
+(subdir
+ ./run/lib-dynarray
+ (dynamic_include ../../tests/lib-dynarray/rules.dune))
+
+(subdir
+ tests/lib-dynlink-bytecode
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-bytecode)))))
+(subdir
+ ./run/lib-dynlink-bytecode
+ (dynamic_include ../../tests/lib-dynlink-bytecode/rules.dune))
+
+(subdir
+ tests/lib-dynlink-csharp
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-csharp)))))
+(subdir
+ ./run/lib-dynlink-csharp
+ (dynamic_include ../../tests/lib-dynlink-csharp/rules.dune))
+
+(subdir
+ tests/lib-dynlink-domains
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-domains)))))
+(subdir
+ ./run/lib-dynlink-domains
+ (dynamic_include ../../tests/lib-dynlink-domains/rules.dune))
+
+(subdir
+ tests/lib-dynlink-init-info
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-init-info)))))
+(subdir
+ ./run/lib-dynlink-init-info
+ (dynamic_include ../../tests/lib-dynlink-init-info/rules.dune))
+
+(subdir
+ tests/lib-dynlink-initializers
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-initializers)))))
+(subdir
+ ./run/lib-dynlink-initializers
+ (dynamic_include ../../tests/lib-dynlink-initializers/rules.dune))
+
+(subdir
+ tests/lib-dynlink-native
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-native)))))
+(subdir
+ ./run/lib-dynlink-native
+ (dynamic_include ../../tests/lib-dynlink-native/rules.dune))
+
+(subdir
+ tests/lib-dynlink-packed
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-packed)))))
+(subdir
+ ./run/lib-dynlink-packed
+ (dynamic_include ../../tests/lib-dynlink-packed/rules.dune))
+
+(subdir
+ tests/lib-dynlink-pr4229
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-pr4229)))))
+(subdir
+ ./run/lib-dynlink-pr4229
+ (dynamic_include ../../tests/lib-dynlink-pr4229/rules.dune))
+
+(subdir
+ tests/lib-dynlink-pr4839
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-pr4839)))))
+(subdir
+ ./run/lib-dynlink-pr4839
+ (dynamic_include ../../tests/lib-dynlink-pr4839/rules.dune))
+
+(subdir
+ tests/lib-dynlink-pr6950
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-pr6950)))))
+(subdir
+ ./run/lib-dynlink-pr6950
+ (dynamic_include ../../tests/lib-dynlink-pr6950/rules.dune))
+
+(subdir
+ tests/lib-dynlink-pr9209
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-pr9209)))))
+(subdir
+ ./run/lib-dynlink-pr9209
+ (dynamic_include ../../tests/lib-dynlink-pr9209/rules.dune))
+
+(subdir
+ tests/lib-dynlink-private
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-dynlink-private)))))
+(subdir
+ ./run/lib-dynlink-private
+ (dynamic_include ../../tests/lib-dynlink-private/rules.dune))
+
+(subdir
+ tests/lib-either
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-either)))))
+(subdir ./run/lib-either (dynamic_include ../../tests/lib-either/rules.dune))
+
+(subdir
+ tests/lib-extensions
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-extensions)))))
+(subdir
+ ./run/lib-extensions
+ (dynamic_include ../../tests/lib-extensions/rules.dune))
+
+(subdir
+ tests/lib-filename
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-filename)))))
+(subdir
+ ./run/lib-filename
+ (dynamic_include ../../tests/lib-filename/rules.dune))
+
+(subdir
+ tests/lib-float
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-float)))))
+(subdir ./run/lib-float (dynamic_include ../../tests/lib-float/rules.dune))
+
+(subdir
+ tests/lib-floatarray
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-floatarray)))))
+(subdir
+ ./run/lib-floatarray
+ (dynamic_include ../../tests/lib-floatarray/rules.dune))
+
+(subdir
+ tests/lib-format
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-format)))))
+(subdir ./run/lib-format (dynamic_include ../../tests/lib-format/rules.dune))
+
+(subdir
+ tests/lib-fun
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-fun)))))
+(subdir ./run/lib-fun (dynamic_include ../../tests/lib-fun/rules.dune))
+
+(subdir
+ tests/lib-hashtbl
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-hashtbl)))))
+(subdir
+ ./run/lib-hashtbl
+ (dynamic_include ../../tests/lib-hashtbl/rules.dune))
+
+(subdir
+ tests/lib-int
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-int)))))
+(subdir ./run/lib-int (dynamic_include ../../tests/lib-int/rules.dune))
+
+(subdir
+ tests/lib-int64
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-int64)))))
+(subdir ./run/lib-int64 (dynamic_include ../../tests/lib-int64/rules.dune))
+
+(subdir
+ tests/lib-internalformat
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-internalformat)))))
+(subdir
+ ./run/lib-internalformat
+ (dynamic_include ../../tests/lib-internalformat/rules.dune))
+
+(subdir
+ tests/lib-lazy
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-lazy)))))
+(subdir ./run/lib-lazy (dynamic_include ../../tests/lib-lazy/rules.dune))
+
+(subdir
+ tests/lib-list
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-list)))))
+(subdir ./run/lib-list (dynamic_include ../../tests/lib-list/rules.dune))
+
+(subdir
+ tests/lib-marshal
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-marshal)))))
+(subdir
+ ./run/lib-marshal
+ (dynamic_include ../../tests/lib-marshal/rules.dune))
+
+(subdir
+ tests/lib-obj
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-obj)))))
+(subdir ./run/lib-obj (dynamic_include ../../tests/lib-obj/rules.dune))
+
+(subdir
+ tests/lib-option
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-option)))))
+(subdir ./run/lib-option (dynamic_include ../../tests/lib-option/rules.dune))
+
+(subdir
+ tests/lib-pair
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-pair)))))
+(subdir ./run/lib-pair (dynamic_include ../../tests/lib-pair/rules.dune))
+
+(subdir
+ tests/lib-pqueue
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-pqueue)))))
+(subdir ./run/lib-pqueue (dynamic_include ../../tests/lib-pqueue/rules.dune))
+
+(subdir
+ tests/lib-printf
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-printf)))))
+(subdir ./run/lib-printf (dynamic_include ../../tests/lib-printf/rules.dune))
+
+(subdir
+ tests/lib-queue
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-queue)))))
+(subdir ./run/lib-queue (dynamic_include ../../tests/lib-queue/rules.dune))
+
+(subdir
+ tests/lib-random
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-random)))))
+(subdir ./run/lib-random (dynamic_include ../../tests/lib-random/rules.dune))
+
+(subdir
+ tests/lib-result
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-result)))))
+(subdir ./run/lib-result (dynamic_include ../../tests/lib-result/rules.dune))
+
+(subdir
+ tests/lib-runtime-events
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-runtime-events)))))
+(subdir
+ ./run/lib-runtime-events
+ (dynamic_include ../../tests/lib-runtime-events/rules.dune))
+
+(subdir
+ tests/lib-scanf
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-scanf)))))
+(subdir ./run/lib-scanf (dynamic_include ../../tests/lib-scanf/rules.dune))
+
+(subdir
+ tests/lib-scanf-2
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-scanf-2)))))
+(subdir
+ ./run/lib-scanf-2
+ (dynamic_include ../../tests/lib-scanf-2/rules.dune))
+
+(subdir
+ tests/lib-seq
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-seq)))))
+(subdir ./run/lib-seq (dynamic_include ../../tests/lib-seq/rules.dune))
+
+(subdir
+ tests/lib-set
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-set)))))
+(subdir ./run/lib-set (dynamic_include ../../tests/lib-set/rules.dune))
+
+(subdir
+ tests/lib-smallint
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-smallint)))))
+(subdir
+ ./run/lib-smallint
+ (dynamic_include ../../tests/lib-smallint/rules.dune))
+
+(subdir
+ tests/lib-stack
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-stack)))))
+(subdir ./run/lib-stack (dynamic_include ../../tests/lib-stack/rules.dune))
+
+(subdir
+ tests/lib-stdlabels
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-stdlabels)))))
+(subdir
+ ./run/lib-stdlabels
+ (dynamic_include ../../tests/lib-stdlabels/rules.dune))
+
+(subdir
+ tests/lib-str
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-str)))))
+(subdir ./run/lib-str (dynamic_include ../../tests/lib-str/rules.dune))
+
+(subdir
+ tests/lib-string
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-string)))))
+(subdir ./run/lib-string (dynamic_include ../../tests/lib-string/rules.dune))
+
+(subdir
+ tests/lib-sync
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-sync)))))
+(subdir ./run/lib-sync (dynamic_include ../../tests/lib-sync/rules.dune))
+
+(subdir
+ tests/lib-sys
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-sys)))))
+(subdir ./run/lib-sys (dynamic_include ../../tests/lib-sys/rules.dune))
+
+(subdir
+ tests/lib-systhreads
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-systhreads)))))
+(subdir
+ ./run/lib-systhreads
+ (dynamic_include ../../tests/lib-systhreads/rules.dune))
+
+(subdir
+ tests/lib-threads
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-threads)))))
+(subdir
+ ./run/lib-threads
+ (dynamic_include ../../tests/lib-threads/rules.dune))
+
+(subdir
+ tests/lib-uchar
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/lib-uchar)))))
+(subdir ./run/lib-uchar (dynamic_include ../../tests/lib-uchar/rules.dune))
+
+(subdir
+ tests/lib-unix/common
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/common)))))
+(subdir
+ ./run/lib-unix/common
+ (dynamic_include ../../../tests/lib-unix/common/rules.dune))
+
+(subdir
+ tests/lib-unix/isatty
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/isatty)))))
+(subdir
+ ./run/lib-unix/isatty
+ (dynamic_include ../../../tests/lib-unix/isatty/rules.dune))
+
+(subdir
+ tests/lib-unix/kill
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/kill)))))
+(subdir
+ ./run/lib-unix/kill
+ (dynamic_include ../../../tests/lib-unix/kill/rules.dune))
+
+(subdir
+ tests/lib-unix/realpath
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/realpath)))))
+(subdir
+ ./run/lib-unix/realpath
+ (dynamic_include ../../../tests/lib-unix/realpath/rules.dune))
+
+(subdir
+ tests/lib-unix/unix-execvpe
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/unix-execvpe)))))
+(subdir
+ ./run/lib-unix/unix-execvpe
+ (dynamic_include ../../../tests/lib-unix/unix-execvpe/rules.dune))
+
+(subdir
+ tests/lib-unix/unix-socket
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/unix-socket)))))
+(subdir
+ ./run/lib-unix/unix-socket
+ (dynamic_include ../../../tests/lib-unix/unix-socket/rules.dune))
+
+(subdir
+ tests/lib-unix/win-channel-of
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/win-channel-of)))))
+(subdir
+ ./run/lib-unix/win-channel-of
+ (dynamic_include ../../../tests/lib-unix/win-channel-of/rules.dune))
+
+(subdir
+ tests/lib-unix/win-createprocess
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/win-createprocess)))))
+(subdir
+ ./run/lib-unix/win-createprocess
+ (dynamic_include ../../../tests/lib-unix/win-createprocess/rules.dune))
+
+(subdir
+ tests/lib-unix/win-env
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/win-env)))))
+(subdir
+ ./run/lib-unix/win-env
+ (dynamic_include ../../../tests/lib-unix/win-env/rules.dune))
+
+(subdir
+ tests/lib-unix/win-socketpair
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/win-socketpair)))))
+(subdir
+ ./run/lib-unix/win-socketpair
+ (dynamic_include ../../../tests/lib-unix/win-socketpair/rules.dune))
+
+(subdir
+ tests/lib-unix/win-stat
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/win-stat)))))
+(subdir
+ ./run/lib-unix/win-stat
+ (dynamic_include ../../../tests/lib-unix/win-stat/rules.dune))
+
+(subdir
+ tests/lib-unix/win-symlink
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/lib-unix/win-symlink)))))
+(subdir
+ ./run/lib-unix/win-symlink
+ (dynamic_include ../../../tests/lib-unix/win-symlink/rules.dune))
+
+(subdir
+ tests/link-order
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/link-order)))))
+(subdir ./run/link-order (dynamic_include ../../tests/link-order/rules.dune))
+
+(subdir
+ tests/link-test
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/link-test)))))
+(subdir ./run/link-test (dynamic_include ../../tests/link-test/rules.dune))
+
+(subdir
+ tests/load_path
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/load_path)))))
+(subdir ./run/load_path (dynamic_include ../../tests/load_path/rules.dune))
+
+(subdir
+ tests/local-functions
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/local-functions)))))
+(subdir
+ ./run/local-functions
+ (dynamic_include ../../tests/local-functions/rules.dune))
+
+(subdir
+ tests/locale
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/locale)))))
+(subdir ./run/locale (dynamic_include ../../tests/locale/rules.dune))
+
+(subdir
+ tests/manifests
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/manifests)))))
+(subdir ./run/manifests (dynamic_include ../../tests/manifests/rules.dune))
+
+(subdir
+ tests/manifests-link
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/manifests-link)))))
+(subdir
+ ./run/manifests-link
+ (dynamic_include ../../tests/manifests-link/rules.dune))
+
+(subdir
+ tests/manual-intf-c
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/manual-intf-c)))))
+(subdir
+ ./run/manual-intf-c
+ (dynamic_include ../../tests/manual-intf-c/rules.dune))
+
+(subdir
+ tests/manual-module-init
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/manual-module-init)))))
+(subdir
+ ./run/manual-module-init
+ (dynamic_include ../../tests/manual-module-init/rules.dune))
+
+(subdir
+ tests/manual-module-init-cycle
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/manual-module-init-cycle)))))
+(subdir
+ ./run/manual-module-init-cycle
+ (dynamic_include ../../tests/manual-module-init-cycle/rules.dune))
+
+(subdir
+ tests/manual-module-init-sticky-failure
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/manual-module-init-sticky-failure)))))
+(subdir
+ ./run/manual-module-init-sticky-failure
+ (dynamic_include ../../tests/manual-module-init-sticky-failure/rules.dune))
+
+(subdir
+ tests/match-exception
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/match-exception)))))
+(subdir
+ ./run/match-exception
+ (dynamic_include ../../tests/match-exception/rules.dune))
+
+(subdir
+ tests/match-exception-warnings
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/match-exception-warnings)))))
+(subdir
+ ./run/match-exception-warnings
+ (dynamic_include ../../tests/match-exception-warnings/rules.dune))
+
+(subdir
+ tests/match-side-effects
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/match-side-effects)))))
+(subdir
+ ./run/match-side-effects
+ (dynamic_include ../../tests/match-side-effects/rules.dune))
+
+(subdir
+ tests/memory-model
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/memory-model)))))
+(subdir
+ ./run/memory-model
+ (dynamic_include ../../tests/memory-model/rules.dune))
+
+(subdir
+ tests/messages
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/messages)))))
+(subdir ./run/messages (dynamic_include ../../tests/messages/rules.dune))
+
+(subdir
+ tests/messages/locations
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/messages/locations)))))
+(subdir
+ ./run/messages/locations
+ (dynamic_include ../../../tests/messages/locations/rules.dune))
+
+(subdir
+ tests/misc
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/misc)))))
+(subdir ./run/misc (dynamic_include ../../tests/misc/rules.dune))
+
+(subdir
+ tests/misc-kb
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/misc-kb)))))
+(subdir ./run/misc-kb (dynamic_include ../../tests/misc-kb/rules.dune))
+
+(subdir
+ tests/misc-unsafe
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/misc-unsafe)))))
+(subdir
+ ./run/misc-unsafe
+ (dynamic_include ../../tests/misc-unsafe/rules.dune))
+
+(subdir
+ tests/mixed-blocks
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/mixed-blocks)))))
+(subdir
+ ./run/mixed-blocks
+ (dynamic_include ../../tests/mixed-blocks/rules.dune))
+
+(subdir
+ tests/mixed-modules
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/mixed-modules)))))
+(subdir
+ ./run/mixed-modules
+ (dynamic_include ../../tests/mixed-modules/rules.dune))
+
+(subdir
+ tests/mixed-modules/multi-file
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/mixed-modules/multi-file)))))
+(subdir
+ ./run/mixed-modules/multi-file
+ (dynamic_include ../../../tests/mixed-modules/multi-file/rules.dune))
+
+(subdir
+ tests/native-cfi-stepping
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/native-cfi-stepping)))))
+(subdir
+ ./run/native-cfi-stepping
+ (dynamic_include ../../tests/native-cfi-stepping/rules.dune))
+
+(subdir
+ tests/native-debugger
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/native-debugger)))))
+(subdir
+ ./run/native-debugger
+ (dynamic_include ../../tests/native-debugger/rules.dune))
+
+(subdir
+ tests/nested-mixed-records
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/nested-mixed-records)))))
+(subdir
+ ./run/nested-mixed-records
+ (dynamic_include ../../tests/nested-mixed-records/rules.dune))
+
+(subdir
+ tests/no-alias-deps
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/no-alias-deps)))))
+(subdir
+ ./run/no-alias-deps
+ (dynamic_include ../../tests/no-alias-deps/rules.dune))
+
+(subdir
+ tests/opaque
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/opaque)))))
+(subdir ./run/opaque (dynamic_include ../../tests/opaque/rules.dune))
+
+(subdir
+ tests/output-complete-obj
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/output-complete-obj)))))
+(subdir
+ ./run/output-complete-obj
+ (dynamic_include ../../tests/output-complete-obj/rules.dune))
+
+(subdir
+ tests/packs/basic
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/packs/basic)))))
+(subdir
+ ./run/packs/basic
+ (dynamic_include ../../../tests/packs/basic/rules.dune))
+
+(subdir
+ tests/packs/flambda2_export_info
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/packs/flambda2_export_info)))))
+(subdir
+ ./run/packs/flambda2_export_info
+ (dynamic_include ../../../tests/packs/flambda2_export_info/rules.dune))
+
+(subdir
+ tests/packs/inconsistent
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/packs/inconsistent)))))
+(subdir
+ ./run/packs/inconsistent
+ (dynamic_include ../../../tests/packs/inconsistent/rules.dune))
+
+(subdir
+ tests/parallel
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/parallel)))))
+(subdir ./run/parallel (dynamic_include ../../tests/parallel/rules.dune))
+
+(subdir
+ tests/parse-errors
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/parse-errors)))))
+(subdir
+ ./run/parse-errors
+ (dynamic_include ../../tests/parse-errors/rules.dune))
+
+(subdir
+ tests/parsetree
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/parsetree)))))
+(subdir ./run/parsetree (dynamic_include ../../tests/parsetree/rules.dune))
+
+(subdir
+ tests/parsing
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/parsing)))))
+(subdir ./run/parsing (dynamic_include ../../tests/parsing/rules.dune))
+
+(subdir
+ tests/peek_and_poke
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/peek_and_poke)))))
+(subdir
+ ./run/peek_and_poke
+ (dynamic_include ../../tests/peek_and_poke/rules.dune))
+
+(subdir
+ tests/polling
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/polling)))))
+(subdir ./run/polling (dynamic_include ../../tests/polling/rules.dune))
+
+(subdir
+ tests/ppx-attributes
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/ppx-attributes)))))
+(subdir
+ ./run/ppx-attributes
+ (dynamic_include ../../tests/ppx-attributes/rules.dune))
+
+(subdir
+ tests/ppx-contexts
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/ppx-contexts)))))
+(subdir
+ ./run/ppx-contexts
+ (dynamic_include ../../tests/ppx-contexts/rules.dune))
+
+(subdir
+ tests/ppx-empty-cases
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/ppx-empty-cases)))))
+(subdir
+ ./run/ppx-empty-cases
+ (dynamic_include ../../tests/ppx-empty-cases/rules.dune))
+
+(subdir
+ tests/ppx-error-message
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/ppx-error-message)))))
+(subdir
+ ./run/ppx-error-message
+ (dynamic_include ../../tests/ppx-error-message/rules.dune))
+
+(subdir
+ tests/prim-bigstring
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/prim-bigstring)))))
+(subdir
+ ./run/prim-bigstring
+ (dynamic_include ../../tests/prim-bigstring/rules.dune))
+
+(subdir
+ tests/prim-bswap
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/prim-bswap)))))
+(subdir ./run/prim-bswap (dynamic_include ../../tests/prim-bswap/rules.dune))
+
+(subdir
+ tests/prim-revapply
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/prim-revapply)))))
+(subdir
+ ./run/prim-revapply
+ (dynamic_include ../../tests/prim-revapply/rules.dune))
+
+(subdir
+ tests/printing-types
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/printing-types)))))
+(subdir
+ ./run/printing-types
+ (dynamic_include ../../tests/printing-types/rules.dune))
+
+(subdir
+ tests/profile/counters/language_extensions
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/profile/counters/language_extensions)))))
+(subdir
+ ./run/profile/counters/language_extensions
+ (dynamic_include
+  ../../../../tests/profile/counters/language_extensions/rules.dune))
+
+(subdir
+ tests/quotation
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/quotation)))))
+(subdir ./run/quotation (dynamic_include ../../tests/quotation/rules.dune))
+
+(subdir
+ tests/quotation/eval
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/quotation/eval)))))
+(subdir
+ ./run/quotation/eval
+ (dynamic_include ../../../tests/quotation/eval/rules.dune))
+
+(subdir
+ tests/quotation/eval/current_unit
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/quotation/eval/current_unit)))))
+(subdir
+ ./run/quotation/eval/current_unit
+ (dynamic_include ../../../../tests/quotation/eval/current_unit/rules.dune))
+
+(subdir
+ tests/quotation/flags
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/quotation/flags)))))
+(subdir
+ ./run/quotation/flags
+ (dynamic_include ../../../tests/quotation/flags/rules.dune))
+
+(subdir
+ tests/quotation/linker
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/quotation/linker)))))
+(subdir
+ ./run/quotation/linker
+ (dynamic_include ../../../tests/quotation/linker/rules.dune))
+
+(subdir
+ tests/quotation/typing
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/quotation/typing)))))
+(subdir
+ ./run/quotation/typing
+ (dynamic_include ../../../tests/quotation/typing/rules.dune))
+
+(subdir
+ tests/quotation/typing/eval
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/quotation/typing/eval)))))
+(subdir
+ ./run/quotation/typing/eval
+ (dynamic_include ../../../../tests/quotation/typing/eval/rules.dune))
+
+(subdir
+ tests/quotation/typing/inspection
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/quotation/typing/inspection)))))
+(subdir
+ ./run/quotation/typing/inspection
+ (dynamic_include ../../../../tests/quotation/typing/inspection/rules.dune))
+
+(subdir
+ tests/quotation/typing/quotes_splices
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/quotation/typing/quotes_splices)))))
+(subdir
+ ./run/quotation/typing/quotes_splices
+ (dynamic_include
+  ../../../../tests/quotation/typing/quotes_splices/rules.dune))
+
+(subdir
+ tests/raise-counts
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/raise-counts)))))
+(subdir
+ ./run/raise-counts
+ (dynamic_include ../../tests/raise-counts/rules.dune))
+
+(subdir
+ tests/reaper
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/reaper)))))
+(subdir ./run/reaper (dynamic_include ../../tests/reaper/rules.dune))
+
+(subdir
+ tests/records-and-block-indices
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/records-and-block-indices)))))
+(subdir
+ ./run/records-and-block-indices
+ (dynamic_include ../../tests/records-and-block-indices/rules.dune))
+
+(subdir
+ tests/regression/bigarray_index_truncation
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/bigarray_index_truncation)))))
+(subdir
+ ./run/regression/bigarray_index_truncation
+ (dynamic_include
+  ../../../tests/regression/bigarray_index_truncation/rules.dune))
+
+(subdir
+ tests/regression/gpr1623
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/gpr1623)))))
+(subdir
+ ./run/regression/gpr1623
+ (dynamic_include ../../../tests/regression/gpr1623/rules.dune))
+
+(subdir
+ tests/regression/large-bigarray-pacing
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/large-bigarray-pacing)))))
+(subdir
+ ./run/regression/large-bigarray-pacing
+ (dynamic_include ../../../tests/regression/large-bigarray-pacing/rules.dune))
+
+(subdir
+ tests/regression/missing_set_of_closures
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/missing_set_of_closures)))))
+(subdir
+ ./run/regression/missing_set_of_closures
+ (dynamic_include
+  ../../../tests/regression/missing_set_of_closures/rules.dune))
+
+(subdir
+ tests/regression/name_eq_peephole
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/name_eq_peephole)))))
+(subdir
+ ./run/regression/name_eq_peephole
+ (dynamic_include ../../../tests/regression/name_eq_peephole/rules.dune))
+
+(subdir
+ tests/regression/polyvariant_arg_layout
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/polyvariant_arg_layout)))))
+(subdir
+ ./run/regression/polyvariant_arg_layout
+ (dynamic_include
+  ../../../tests/regression/polyvariant_arg_layout/rules.dune))
+
+(subdir
+ tests/regression/pr10611
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr10611)))))
+(subdir
+ ./run/regression/pr10611
+ (dynamic_include ../../../tests/regression/pr10611/rules.dune))
+
+(subdir
+ tests/regression/pr11865
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr11865)))))
+(subdir
+ ./run/regression/pr11865
+ (dynamic_include ../../../tests/regression/pr11865/rules.dune))
+
+(subdir
+ tests/regression/pr11887
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr11887)))))
+(subdir
+ ./run/regression/pr11887
+ (dynamic_include ../../../tests/regression/pr11887/rules.dune))
+
+(subdir
+ tests/regression/pr1580
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr1580)))))
+(subdir
+ ./run/regression/pr1580
+ (dynamic_include ../../../tests/regression/pr1580/rules.dune))
+
+(subdir
+ tests/regression/pr2098
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr2098)))))
+(subdir
+ ./run/regression/pr2098
+ (dynamic_include ../../../tests/regression/pr2098/rules.dune))
+
+(subdir
+ tests/regression/pr3612
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr3612)))))
+(subdir
+ ./run/regression/pr3612
+ (dynamic_include ../../../tests/regression/pr3612/rules.dune))
+
+(subdir
+ tests/regression/pr5233
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr5233)))))
+(subdir
+ ./run/regression/pr5233
+ (dynamic_include ../../../tests/regression/pr5233/rules.dune))
+
+(subdir
+ tests/regression/pr5757
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr5757)))))
+(subdir
+ ./run/regression/pr5757
+ (dynamic_include ../../../tests/regression/pr5757/rules.dune))
+
+(subdir
+ tests/regression/pr6024
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr6024)))))
+(subdir
+ ./run/regression/pr6024
+ (dynamic_include ../../../tests/regression/pr6024/rules.dune))
+
+(subdir
+ tests/regression/pr7042
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr7042)))))
+(subdir
+ ./run/regression/pr7042
+ (dynamic_include ../../../tests/regression/pr7042/rules.dune))
+
+(subdir
+ tests/regression/pr7426
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr7426)))))
+(subdir
+ ./run/regression/pr7426
+ (dynamic_include ../../../tests/regression/pr7426/rules.dune))
+
+(subdir
+ tests/regression/pr7718
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr7718)))))
+(subdir
+ ./run/regression/pr7718
+ (dynamic_include ../../../tests/regression/pr7718/rules.dune))
+
+(subdir
+ tests/regression/pr7798
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr7798)))))
+(subdir
+ ./run/regression/pr7798
+ (dynamic_include ../../../tests/regression/pr7798/rules.dune))
+
+(subdir
+ tests/regression/pr7920
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr7920)))))
+(subdir
+ ./run/regression/pr7920
+ (dynamic_include ../../../tests/regression/pr7920/rules.dune))
+
+(subdir
+ tests/regression/pr8769
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr8769)))))
+(subdir
+ ./run/regression/pr8769
+ (dynamic_include ../../../tests/regression/pr8769/rules.dune))
+
+(subdir
+ tests/regression/pr9028
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr9028)))))
+(subdir
+ ./run/regression/pr9028
+ (dynamic_include ../../../tests/regression/pr9028/rules.dune))
+
+(subdir
+ tests/regression/pr9292
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr9292)))))
+(subdir
+ ./run/regression/pr9292
+ (dynamic_include ../../../tests/regression/pr9292/rules.dune))
+
+(subdir
+ tests/regression/pr9326
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr9326)))))
+(subdir
+ ./run/regression/pr9326
+ (dynamic_include ../../../tests/regression/pr9326/rules.dune))
+
+(subdir
+ tests/regression/pr9443
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr9443)))))
+(subdir
+ ./run/regression/pr9443
+ (dynamic_include ../../../tests/regression/pr9443/rules.dune))
+
+(subdir
+ tests/regression/pr9853
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/pr9853)))))
+(subdir
+ ./run/regression/pr9853
+ (dynamic_include ../../../tests/regression/pr9853/rules.dune))
+
+(subdir
+ tests/regression/tailcall-optional-args
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/regression/tailcall-optional-args)))))
+(subdir
+ ./run/regression/tailcall-optional-args
+ (dynamic_include
+  ../../../tests/regression/tailcall-optional-args/rules.dune))
+
+(subdir
+ tests/reinterpret-casts
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/reinterpret-casts)))))
+(subdir
+ ./run/reinterpret-casts
+ (dynamic_include ../../tests/reinterpret-casts/rules.dune))
+
+(subdir
+ tests/reproducibility
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/reproducibility)))))
+(subdir
+ ./run/reproducibility
+ (dynamic_include ../../tests/reproducibility/rules.dune))
+
+(subdir
+ tests/required-external
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/required-external)))))
+(subdir
+ ./run/required-external
+ (dynamic_include ../../tests/required-external/rules.dune))
+
+(subdir
+ tests/runtime-C-exceptions
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/runtime-C-exceptions)))))
+(subdir
+ ./run/runtime-C-exceptions
+ (dynamic_include ../../tests/runtime-C-exceptions/rules.dune))
+
+(subdir
+ tests/runtime-errors
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/runtime-errors)))))
+(subdir
+ ./run/runtime-errors
+ (dynamic_include ../../tests/runtime-errors/rules.dune))
+
+(subdir
+ tests/runtime-objects
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/runtime-objects)))))
+(subdir
+ ./run/runtime-objects
+ (dynamic_include ../../tests/runtime-objects/rules.dune))
+
+(subdir
+ tests/self-contained-toplevel
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/self-contained-toplevel)))))
+(subdir
+ ./run/self-contained-toplevel
+ (dynamic_include ../../tests/self-contained-toplevel/rules.dune))
+
+(subdir
+ tests/shadow_include
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/shadow_include)))))
+(subdir
+ ./run/shadow_include
+ (dynamic_include ../../tests/shadow_include/rules.dune))
+
+(subdir
+ tests/shape-index
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/shape-index)))))
+(subdir
+ ./run/shape-index
+ (dynamic_include ../../tests/shape-index/rules.dune))
+
+(subdir
+ tests/shapes
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/shapes)))))
+(subdir ./run/shapes (dynamic_include ../../tests/shapes/rules.dune))
+
+(subdir
+ tests/slambda
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/slambda)))))
+(subdir ./run/slambda (dynamic_include ../../tests/slambda/rules.dune))
+
+(subdir
+ tests/statmemprof
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/statmemprof)))))
+(subdir
+ ./run/statmemprof
+ (dynamic_include ../../tests/statmemprof/rules.dune))
+
+(subdir
+ tests/syntactic-arity
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/syntactic-arity)))))
+(subdir
+ ./run/syntactic-arity
+ (dynamic_include ../../tests/syntactic-arity/rules.dune))
+
+(subdir
+ tests/tail-call-many-returns
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tail-call-many-returns)))))
+(subdir
+ ./run/tail-call-many-returns
+ (dynamic_include ../../tests/tail-call-many-returns/rules.dune))
+
+(subdir
+ tests/templates/basic
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/templates/basic)))))
+(subdir
+ ./run/templates/basic
+ (dynamic_include ../../../tests/templates/basic/rules.dune))
+
+(subdir
+ tests/templates/dunelike
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/templates/dunelike)))))
+(subdir
+ ./run/templates/dunelike
+ (dynamic_include ../../../tests/templates/dunelike/rules.dune))
+
+(subdir
+ tests/templates/functorize
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/templates/functorize)))))
+(subdir
+ ./run/templates/functorize
+ (dynamic_include ../../../tests/templates/functorize/rules.dune))
+
+(subdir
+ tests/templates/functorize/archive_deps
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/archive_deps)))))
+(subdir
+ ./run/templates/functorize/archive_deps
+ (dynamic_include
+  ../../../../tests/templates/functorize/archive_deps/rules.dune))
+
+(subdir
+ tests/templates/functorize/bad_deps
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/bad_deps)))))
+(subdir
+ ./run/templates/functorize/bad_deps
+ (dynamic_include ../../../../tests/templates/functorize/bad_deps/rules.dune))
+
+(subdir
+ tests/templates/functorize/bad_input
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/bad_input)))))
+(subdir
+ ./run/templates/functorize/bad_input
+ (dynamic_include
+  ../../../../tests/templates/functorize/bad_input/rules.dune))
+
+(subdir
+ tests/templates/functorize/cmifile
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/cmifile)))))
+(subdir
+ ./run/templates/functorize/cmifile
+ (dynamic_include ../../../../tests/templates/functorize/cmifile/rules.dune))
+
+(subdir
+ tests/templates/functorize/complete_arg
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/complete_arg)))))
+(subdir
+ ./run/templates/functorize/complete_arg
+ (dynamic_include
+  ../../../../tests/templates/functorize/complete_arg/rules.dune))
+
+(subdir
+ tests/templates/functorize/crc_mismatch
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/crc_mismatch)))))
+(subdir
+ ./run/templates/functorize/crc_mismatch
+ (dynamic_include
+  ../../../../tests/templates/functorize/crc_mismatch/rules.dune))
+
+(subdir
+ tests/templates/functorize/dunelike
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/dunelike)))))
+(subdir
+ ./run/templates/functorize/dunelike
+ (dynamic_include ../../../../tests/templates/functorize/dunelike/rules.dune))
+
+(subdir
+ tests/templates/functorize/instance_arg
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/instance_arg)))))
+(subdir
+ ./run/templates/functorize/instance_arg
+ (dynamic_include
+  ../../../../tests/templates/functorize/instance_arg/rules.dune))
+
+(subdir
+ tests/templates/functorize/missing_impl
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/missing_impl)))))
+(subdir
+ ./run/templates/functorize/missing_impl
+ (dynamic_include
+  ../../../../tests/templates/functorize/missing_impl/rules.dune))
+
+(subdir
+ tests/templates/functorize/module_alias
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/module_alias)))))
+(subdir
+ ./run/templates/functorize/module_alias
+ (dynamic_include
+  ../../../../tests/templates/functorize/module_alias/rules.dune))
+
+(subdir
+ tests/templates/functorize/multi_instances
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/multi_instances)))))
+(subdir
+ ./run/templates/functorize/multi_instances
+ (dynamic_include
+  ../../../../tests/templates/functorize/multi_instances/rules.dune))
+
+(subdir
+ tests/templates/functorize/nested_static
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/nested_static)))))
+(subdir
+ ./run/templates/functorize/nested_static
+ (dynamic_include
+  ../../../../tests/templates/functorize/nested_static/rules.dune))
+
+(subdir
+ tests/templates/functorize/partial_deps
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/partial_deps)))))
+(subdir
+ ./run/templates/functorize/partial_deps
+ (dynamic_include
+  ../../../../tests/templates/functorize/partial_deps/rules.dune))
+
+(subdir
+ tests/templates/functorize/shared_dep
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/shared_dep)))))
+(subdir
+ ./run/templates/functorize/shared_dep
+ (dynamic_include
+  ../../../../tests/templates/functorize/shared_dep/rules.dune))
+
+(subdir
+ tests/templates/functorize/uses_plain
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../../tests/templates/functorize/uses_plain)))))
+(subdir
+ ./run/templates/functorize/uses_plain
+ (dynamic_include
+  ../../../../tests/templates/functorize/uses_plain/rules.dune))
+
+(subdir
+ tests/templates/max_arity
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/templates/max_arity)))))
+(subdir
+ ./run/templates/max_arity
+ (dynamic_include ../../../tests/templates/max_arity/rules.dune))
+
+(subdir
+ tests/templates/phantom_arg_reveal
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/templates/phantom_arg_reveal)))))
+(subdir
+ ./run/templates/phantom_arg_reveal
+ (dynamic_include ../../../tests/templates/phantom_arg_reveal/rules.dune))
+
+(subdir
+ tests/tmc
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tmc)))))
+(subdir ./run/tmc (dynamic_include ../../tests/tmc/rules.dune))
+
+(subdir
+ tests/tool-command-line
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-command-line)))))
+(subdir
+ ./run/tool-command-line
+ (dynamic_include ../../tests/tool-command-line/rules.dune))
+
+(subdir
+ tests/tool-debugger/basic
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/tool-debugger/basic)))))
+(subdir
+ ./run/tool-debugger/basic
+ (dynamic_include ../../../tests/tool-debugger/basic/rules.dune))
+
+(subdir
+ tests/tool-debugger/dynlink
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/tool-debugger/dynlink)))))
+(subdir
+ ./run/tool-debugger/dynlink
+ (dynamic_include ../../../tests/tool-debugger/dynlink/rules.dune))
+
+(subdir
+ tests/tool-debugger/find-artifacts
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/tool-debugger/find-artifacts)))))
+(subdir
+ ./run/tool-debugger/find-artifacts
+ (dynamic_include ../../../tests/tool-debugger/find-artifacts/rules.dune))
+
+(subdir
+ tests/tool-debugger/module_named_main
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/tool-debugger/module_named_main)))))
+(subdir
+ ./run/tool-debugger/module_named_main
+ (dynamic_include ../../../tests/tool-debugger/module_named_main/rules.dune))
+
+(subdir
+ tests/tool-debugger/no_debug_event
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/tool-debugger/no_debug_event)))))
+(subdir
+ ./run/tool-debugger/no_debug_event
+ (dynamic_include ../../../tests/tool-debugger/no_debug_event/rules.dune))
+
+(subdir
+ tests/tool-debugger/printer
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/tool-debugger/printer)))))
+(subdir
+ ./run/tool-debugger/printer
+ (dynamic_include ../../../tests/tool-debugger/printer/rules.dune))
+
+(subdir
+ tests/tool-debugger/temporary-breakpoints
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/tool-debugger/temporary-breakpoints)))))
+(subdir
+ ./run/tool-debugger/temporary-breakpoints
+ (dynamic_include
+  ../../../tests/tool-debugger/temporary-breakpoints/rules.dune))
+
+(subdir
+ tests/tool-dumpobj
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-dumpobj)))))
+(subdir
+ ./run/tool-dumpobj
+ (dynamic_include ../../tests/tool-dumpobj/rules.dune))
+
+(subdir
+ tests/tool-dumpobj-events
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-dumpobj-events)))))
+(subdir
+ ./run/tool-dumpobj-events
+ (dynamic_include ../../tests/tool-dumpobj-events/rules.dune))
+
+(subdir
+ tests/tool-expect-test
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-expect-test)))))
+(subdir
+ ./run/tool-expect-test
+ (dynamic_include ../../tests/tool-expect-test/rules.dune))
+
+(subdir
+ tests/tool-lexyacc
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-lexyacc)))))
+(subdir
+ ./run/tool-lexyacc
+ (dynamic_include ../../tests/tool-lexyacc/rules.dune))
+
+(subdir
+ tests/tool-ocaml
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocaml)))))
+(subdir ./run/tool-ocaml (dynamic_include ../../tests/tool-ocaml/rules.dune))
+
+(subdir
+ tests/tool-ocaml-annot
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocaml-annot)))))
+(subdir
+ ./run/tool-ocaml-annot
+ (dynamic_include ../../tests/tool-ocaml-annot/rules.dune))
+
+(subdir
+ tests/tool-ocamlc-compat32
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamlc-compat32)))))
+(subdir
+ ./run/tool-ocamlc-compat32
+ (dynamic_include ../../tests/tool-ocamlc-compat32/rules.dune))
+
+(subdir
+ tests/tool-ocamlc-error-cleanup
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamlc-error-cleanup)))))
+(subdir
+ ./run/tool-ocamlc-error-cleanup
+ (dynamic_include ../../tests/tool-ocamlc-error-cleanup/rules.dune))
+
+(subdir
+ tests/tool-ocamlc-locations
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamlc-locations)))))
+(subdir
+ ./run/tool-ocamlc-locations
+ (dynamic_include ../../tests/tool-ocamlc-locations/rules.dune))
+
+(subdir
+ tests/tool-ocamlc-open
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamlc-open)))))
+(subdir
+ ./run/tool-ocamlc-open
+ (dynamic_include ../../tests/tool-ocamlc-open/rules.dune))
+
+(subdir
+ tests/tool-ocamlc-stop-after
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamlc-stop-after)))))
+(subdir
+ ./run/tool-ocamlc-stop-after
+ (dynamic_include ../../tests/tool-ocamlc-stop-after/rules.dune))
+
+(subdir
+ tests/tool-ocamldep-abstract-kinds
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamldep-abstract-kinds)))))
+(subdir
+ ./run/tool-ocamldep-abstract-kinds
+ (dynamic_include ../../tests/tool-ocamldep-abstract-kinds/rules.dune))
+
+(subdir
+ tests/tool-ocamldep-modalias
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamldep-modalias)))))
+(subdir
+ ./run/tool-ocamldep-modalias
+ (dynamic_include ../../tests/tool-ocamldep-modalias/rules.dune))
+
+(subdir
+ tests/tool-ocamldep-modules-only
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamldep-modules-only)))))
+(subdir
+ ./run/tool-ocamldep-modules-only
+ (dynamic_include ../../tests/tool-ocamldep-modules-only/rules.dune))
+
+(subdir
+ tests/tool-ocamldep-shadowing
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamldep-shadowing)))))
+(subdir
+ ./run/tool-ocamldep-shadowing
+ (dynamic_include ../../tests/tool-ocamldep-shadowing/rules.dune))
+
+(subdir
+ tests/tool-ocamldep-with-kinds
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamldep-with-kinds)))))
+(subdir
+ ./run/tool-ocamldep-with-kinds
+ (dynamic_include ../../tests/tool-ocamldep-with-kinds/rules.dune))
+
+(subdir
+ tests/tool-ocamldoc
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamldoc)))))
+(subdir
+ ./run/tool-ocamldoc
+ (dynamic_include ../../tests/tool-ocamldoc/rules.dune))
+
+(subdir
+ tests/tool-ocamldoc-open
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamldoc-open)))))
+(subdir
+ ./run/tool-ocamldoc-open
+ (dynamic_include ../../tests/tool-ocamldoc-open/rules.dune))
+
+(subdir
+ tests/tool-ocamlfilt
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamlfilt)))))
+(subdir
+ ./run/tool-ocamlfilt
+ (dynamic_include ../../tests/tool-ocamlfilt/rules.dune))
+
+(subdir
+ tests/tool-ocamlobjinfo
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamlobjinfo)))))
+(subdir
+ ./run/tool-ocamlobjinfo
+ (dynamic_include ../../tests/tool-ocamlobjinfo/rules.dune))
+
+(subdir
+ tests/tool-ocamlopt-disable-builtin-check
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamlopt-disable-builtin-check)))))
+(subdir
+ ./run/tool-ocamlopt-disable-builtin-check
+ (dynamic_include ../../tests/tool-ocamlopt-disable-builtin-check/rules.dune))
+
+(subdir
+ tests/tool-ocamlopt-save-ir
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamlopt-save-ir)))))
+(subdir
+ ./run/tool-ocamlopt-save-ir
+ (dynamic_include ../../tests/tool-ocamlopt-save-ir/rules.dune))
+
+(subdir
+ tests/tool-ocamlopt-stop-after
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamlopt-stop-after)))))
+(subdir
+ ./run/tool-ocamlopt-stop-after
+ (dynamic_include ../../tests/tool-ocamlopt-stop-after/rules.dune))
+
+(subdir
+ tests/tool-ocamltest
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamltest)))))
+(subdir
+ ./run/tool-ocamltest
+ (dynamic_include ../../tests/tool-ocamltest/rules.dune))
+
+(subdir
+ tests/tool-ocamltest-var-expansion
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-ocamltest-var-expansion)))))
+(subdir
+ ./run/tool-ocamltest-var-expansion
+ (dynamic_include ../../tests/tool-ocamltest-var-expansion/rules.dune))
+
+(subdir
+ tests/tool-toplevel
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-toplevel)))))
+(subdir
+ ./run/tool-toplevel
+ (dynamic_include ../../tests/tool-toplevel/rules.dune))
+
+(subdir
+ tests/tool-toplevel-invocation
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tool-toplevel-invocation)))))
+(subdir
+ ./run/tool-toplevel-invocation
+ (dynamic_include ../../tests/tool-toplevel-invocation/rules.dune))
+
+(subdir
+ tests/tool-toplevel/known-bugs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/tool-toplevel/known-bugs)))))
+(subdir
+ ./run/tool-toplevel/known-bugs
+ (dynamic_include ../../../tests/tool-toplevel/known-bugs/rules.dune))
+
+(subdir
+ tests/translprim
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/translprim)))))
+(subdir ./run/translprim (dynamic_include ../../tests/translprim/rules.dune))
+
+(subdir
+ tests/tsan
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/tsan)))))
+(subdir ./run/tsan (dynamic_include ../../tests/tsan/rules.dune))
+
+(subdir
+ tests/typedtree
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typedtree)))))
+(subdir ./run/typedtree (dynamic_include ../../tests/typedtree/rules.dune))
+
+(subdir
+ tests/typeopt
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typeopt)))))
+(subdir ./run/typeopt (dynamic_include ../../tests/typeopt/rules.dune))
+
+(subdir
+ tests/typing-abstract-kinds
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-abstract-kinds)))))
+(subdir
+ ./run/typing-abstract-kinds
+ (dynamic_include ../../tests/typing-abstract-kinds/rules.dune))
+
+(subdir
+ tests/typing-abstract-kinds-missing-cmi
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-abstract-kinds-missing-cmi)))))
+(subdir
+ ./run/typing-abstract-kinds-missing-cmi
+ (dynamic_include ../../tests/typing-abstract-kinds-missing-cmi/rules.dune))
+
+(subdir
+ tests/typing-app-propagation
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-app-propagation)))))
+(subdir
+ ./run/typing-app-propagation
+ (dynamic_include ../../tests/typing-app-propagation/rules.dune))
+
+(subdir
+ tests/typing-core-bugs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-core-bugs)))))
+(subdir
+ ./run/typing-core-bugs
+ (dynamic_include ../../tests/typing-core-bugs/rules.dune))
+
+(subdir
+ tests/typing-deprecated
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-deprecated)))))
+(subdir
+ ./run/typing-deprecated
+ (dynamic_include ../../tests/typing-deprecated/rules.dune))
+
+(subdir
+ tests/typing-extension-constructor
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-extension-constructor)))))
+(subdir
+ ./run/typing-extension-constructor
+ (dynamic_include ../../tests/typing-extension-constructor/rules.dune))
+
+(subdir
+ tests/typing-extensions
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-extensions)))))
+(subdir
+ ./run/typing-extensions
+ (dynamic_include ../../tests/typing-extensions/rules.dune))
+
+(subdir
+ tests/typing-external
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-external)))))
+(subdir
+ ./run/typing-external
+ (dynamic_include ../../tests/typing-external/rules.dune))
+
+(subdir
+ tests/typing-fstclassmod
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-fstclassmod)))))
+(subdir
+ ./run/typing-fstclassmod
+ (dynamic_include ../../tests/typing-fstclassmod/rules.dune))
+
+(subdir
+ tests/typing-gadts
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-gadts)))))
+(subdir
+ ./run/typing-gadts
+ (dynamic_include ../../tests/typing-gadts/rules.dune))
+
+(subdir
+ tests/typing-hidden-predef
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-hidden-predef)))))
+(subdir
+ ./run/typing-hidden-predef
+ (dynamic_include ../../tests/typing-hidden-predef/rules.dune))
+
+(subdir
+ tests/typing-immediate
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-immediate)))))
+(subdir
+ ./run/typing-immediate
+ (dynamic_include ../../tests/typing-immediate/rules.dune))
+
+(subdir
+ tests/typing-implicit-source-positions
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-implicit-source-positions)))))
+(subdir
+ ./run/typing-implicit-source-positions
+ (dynamic_include ../../tests/typing-implicit-source-positions/rules.dune))
+
+(subdir
+ tests/typing-implicit_unpack
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-implicit_unpack)))))
+(subdir
+ ./run/typing-implicit_unpack
+ (dynamic_include ../../tests/typing-implicit_unpack/rules.dune))
+
+(subdir
+ tests/typing-jkind-bounds
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-jkind-bounds)))))
+(subdir
+ ./run/typing-jkind-bounds
+ (dynamic_include ../../tests/typing-jkind-bounds/rules.dune))
+
+(subdir
+ tests/typing-jkind-bounds/inclusion
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/typing-jkind-bounds/inclusion)))))
+(subdir
+ ./run/typing-jkind-bounds/inclusion
+ (dynamic_include ../../../tests/typing-jkind-bounds/inclusion/rules.dune))
+
+(subdir
+ tests/typing-jkind-bounds/poly-variant-limit
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/typing-jkind-bounds/poly-variant-limit)))))
+(subdir
+ ./run/typing-jkind-bounds/poly-variant-limit
+ (dynamic_include
+  ../../../tests/typing-jkind-bounds/poly-variant-limit/rules.dune))
+
+(subdir
+ tests/typing-jkind-bounds/regression-tests
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/typing-jkind-bounds/regression-tests)))))
+(subdir
+ ./run/typing-jkind-bounds/regression-tests
+ (dynamic_include
+  ../../../tests/typing-jkind-bounds/regression-tests/rules.dune))
+
+(subdir
+ tests/typing-jkind-bounds/stall-once
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/typing-jkind-bounds/stall-once)))))
+(subdir
+ ./run/typing-jkind-bounds/stall-once
+ (dynamic_include ../../../tests/typing-jkind-bounds/stall-once/rules.dune))
+
+(subdir
+ tests/typing-jkind-bounds/subsumption
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/typing-jkind-bounds/subsumption)))))
+(subdir
+ ./run/typing-jkind-bounds/subsumption
+ (dynamic_include ../../../tests/typing-jkind-bounds/subsumption/rules.dune))
+
+(subdir
+ tests/typing-jkind-bounds/unsafe-across-files
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/typing-jkind-bounds/unsafe-across-files)))))
+(subdir
+ ./run/typing-jkind-bounds/unsafe-across-files
+ (dynamic_include
+  ../../../tests/typing-jkind-bounds/unsafe-across-files/rules.dune))
+
+(subdir
+ tests/typing-jkind-bounds/verbosity
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/typing-jkind-bounds/verbosity)))))
+(subdir
+ ./run/typing-jkind-bounds/verbosity
+ (dynamic_include ../../../tests/typing-jkind-bounds/verbosity/rules.dune))
+
+(subdir
+ tests/typing-kind
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-kind)))))
+(subdir
+ ./run/typing-kind
+ (dynamic_include ../../tests/typing-kind/rules.dune))
+
+(subdir
+ tests/typing-labeled-tuples
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-labeled-tuples)))))
+(subdir
+ ./run/typing-labeled-tuples
+ (dynamic_include ../../tests/typing-labeled-tuples/rules.dune))
+
+(subdir
+ tests/typing-labels
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-labels)))))
+(subdir
+ ./run/typing-labels
+ (dynamic_include ../../tests/typing-labels/rules.dune))
+
+(subdir
+ tests/typing-layouts
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts)))))
+(subdir
+ ./run/typing-layouts
+ (dynamic_include ../../tests/typing-layouts/rules.dune))
+
+(subdir
+ tests/typing-layouts-addressable
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-addressable)))))
+(subdir
+ ./run/typing-layouts-addressable
+ (dynamic_include ../../tests/typing-layouts-addressable/rules.dune))
+
+(subdir
+ tests/typing-layouts-arrays
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-arrays)))))
+(subdir
+ ./run/typing-layouts-arrays
+ (dynamic_include ../../tests/typing-layouts-arrays/rules.dune))
+
+(subdir
+ tests/typing-layouts-bits16
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-bits16)))))
+(subdir
+ ./run/typing-layouts-bits16
+ (dynamic_include ../../tests/typing-layouts-bits16/rules.dune))
+
+(subdir
+ tests/typing-layouts-bits32
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-bits32)))))
+(subdir
+ ./run/typing-layouts-bits32
+ (dynamic_include ../../tests/typing-layouts-bits32/rules.dune))
+
+(subdir
+ tests/typing-layouts-bits64
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-bits64)))))
+(subdir
+ ./run/typing-layouts-bits64
+ (dynamic_include ../../tests/typing-layouts-bits64/rules.dune))
+
+(subdir
+ tests/typing-layouts-bits8
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-bits8)))))
+(subdir
+ ./run/typing-layouts-bits8
+ (dynamic_include ../../tests/typing-layouts-bits8/rules.dune))
+
+(subdir
+ tests/typing-layouts-block-indices
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-block-indices)))))
+(subdir
+ ./run/typing-layouts-block-indices
+ (dynamic_include ../../tests/typing-layouts-block-indices/rules.dune))
+
+(subdir
+ tests/typing-layouts-box
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-box)))))
+(subdir
+ ./run/typing-layouts-box
+ (dynamic_include ../../tests/typing-layouts-box/rules.dune))
+
+(subdir
+ tests/typing-layouts-caml-modify
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-caml-modify)))))
+(subdir
+ ./run/typing-layouts-caml-modify
+ (dynamic_include ../../tests/typing-layouts-caml-modify/rules.dune))
+
+(subdir
+ tests/typing-layouts-err-msg
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-err-msg)))))
+(subdir
+ ./run/typing-layouts-err-msg
+ (dynamic_include ../../tests/typing-layouts-err-msg/rules.dune))
+
+(subdir
+ tests/typing-layouts-float32
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-float32)))))
+(subdir
+ ./run/typing-layouts-float32
+ (dynamic_include ../../tests/typing-layouts-float32/rules.dune))
+
+(subdir
+ tests/typing-layouts-float64
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-float64)))))
+(subdir
+ ./run/typing-layouts-float64
+ (dynamic_include ../../tests/typing-layouts-float64/rules.dune))
+
+(subdir
+ tests/typing-layouts-gadt-sort-var
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-gadt-sort-var)))))
+(subdir
+ ./run/typing-layouts-gadt-sort-var
+ (dynamic_include ../../tests/typing-layouts-gadt-sort-var/rules.dune))
+
+(subdir
+ tests/typing-layouts-iarrays
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-iarrays)))))
+(subdir
+ ./run/typing-layouts-iarrays
+ (dynamic_include ../../tests/typing-layouts-iarrays/rules.dune))
+
+(subdir
+ tests/typing-layouts-missing-cmi
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-missing-cmi)))))
+(subdir
+ ./run/typing-layouts-missing-cmi
+ (dynamic_include ../../tests/typing-layouts-missing-cmi/rules.dune))
+
+(subdir
+ tests/typing-layouts-or-null
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-or-null)))))
+(subdir
+ ./run/typing-layouts-or-null
+ (dynamic_include ../../tests/typing-layouts-or-null/rules.dune))
+
+(subdir
+ tests/typing-layouts-products
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-products)))))
+(subdir
+ ./run/typing-layouts-products
+ (dynamic_include ../../tests/typing-layouts-products/rules.dune))
+
+(subdir
+ tests/typing-layouts-return
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-return)))))
+(subdir
+ ./run/typing-layouts-return
+ (dynamic_include ../../tests/typing-layouts-return/rules.dune))
+
+(subdir
+ tests/typing-layouts-scannable
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-scannable)))))
+(subdir
+ ./run/typing-layouts-scannable
+ (dynamic_include ../../tests/typing-layouts-scannable/rules.dune))
+
+(subdir
+ tests/typing-layouts-untagged-immediate
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-untagged-immediate)))))
+(subdir
+ ./run/typing-layouts-untagged-immediate
+ (dynamic_include ../../tests/typing-layouts-untagged-immediate/rules.dune))
+
+(subdir
+ tests/typing-layouts-vec128
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-vec128)))))
+(subdir
+ ./run/typing-layouts-vec128
+ (dynamic_include ../../tests/typing-layouts-vec128/rules.dune))
+
+(subdir
+ tests/typing-layouts-void
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-void)))))
+(subdir
+ ./run/typing-layouts-void
+ (dynamic_include ../../tests/typing-layouts-void/rules.dune))
+
+(subdir
+ tests/typing-layouts-word
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-layouts-word)))))
+(subdir
+ ./run/typing-layouts-word
+ (dynamic_include ../../tests/typing-layouts-word/rules.dune))
+
+(subdir
+ tests/typing-local
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-local)))))
+(subdir
+ ./run/typing-local
+ (dynamic_include ../../tests/typing-local/rules.dune))
+
+(subdir
+ tests/typing-misc
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-misc)))))
+(subdir
+ ./run/typing-misc
+ (dynamic_include ../../tests/typing-misc/rules.dune))
+
+(subdir
+ tests/typing-misc-bugs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-misc-bugs)))))
+(subdir
+ ./run/typing-misc-bugs
+ (dynamic_include ../../tests/typing-misc-bugs/rules.dune))
+
+(subdir
+ tests/typing-missing-cmi
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-missing-cmi)))))
+(subdir
+ ./run/typing-missing-cmi
+ (dynamic_include ../../tests/typing-missing-cmi/rules.dune))
+
+(subdir
+ tests/typing-missing-cmi-2
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-missing-cmi-2)))))
+(subdir
+ ./run/typing-missing-cmi-2
+ (dynamic_include ../../tests/typing-missing-cmi-2/rules.dune))
+
+(subdir
+ tests/typing-missing-cmi-3
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-missing-cmi-3)))))
+(subdir
+ ./run/typing-missing-cmi-3
+ (dynamic_include ../../tests/typing-missing-cmi-3/rules.dune))
+
+(subdir
+ tests/typing-missing-cmi-indirections
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-missing-cmi-indirections)))))
+(subdir
+ ./run/typing-missing-cmi-indirections
+ (dynamic_include ../../tests/typing-missing-cmi-indirections/rules.dune))
+
+(subdir
+ tests/typing-modal-kinds
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-modal-kinds)))))
+(subdir
+ ./run/typing-modal-kinds
+ (dynamic_include ../../tests/typing-modal-kinds/rules.dune))
+
+(subdir
+ tests/typing-mode-polymorphism
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-mode-polymorphism)))))
+(subdir
+ ./run/typing-mode-polymorphism
+ (dynamic_include ../../tests/typing-mode-polymorphism/rules.dune))
+
+(subdir
+ tests/typing-mode-polymorphism/linking
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/typing-mode-polymorphism/linking)))))
+(subdir
+ ./run/typing-mode-polymorphism/linking
+ (dynamic_include ../../../tests/typing-mode-polymorphism/linking/rules.dune))
+
+(subdir
+ tests/typing-modes
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-modes)))))
+(subdir
+ ./run/typing-modes
+ (dynamic_include ../../tests/typing-modes/rules.dune))
+
+(subdir
+ tests/typing-modules
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-modules)))))
+(subdir
+ ./run/typing-modules
+ (dynamic_include ../../tests/typing-modules/rules.dune))
+
+(subdir
+ tests/typing-modules-bugs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-modules-bugs)))))
+(subdir
+ ./run/typing-modules-bugs
+ (dynamic_include ../../tests/typing-modules-bugs/rules.dune))
+
+(subdir
+ tests/typing-modules/inclusion_errors_with_renamed_source_file
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/typing-modules/inclusion_errors_with_renamed_source_file)))))
+(subdir
+ ./run/typing-modules/inclusion_errors_with_renamed_source_file
+ (dynamic_include
+  ../../../tests/typing-modules/inclusion_errors_with_renamed_source_file/rules.dune))
+
+(subdir
+ tests/typing-modules/pr13099
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../../tests/typing-modules/pr13099)))))
+(subdir
+ ./run/typing-modules/pr13099
+ (dynamic_include ../../../tests/typing-modules/pr13099/rules.dune))
+
+(subdir
+ tests/typing-multifile
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-multifile)))))
+(subdir
+ ./run/typing-multifile
+ (dynamic_include ../../tests/typing-multifile/rules.dune))
+
+(subdir
+ tests/typing-objects
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-objects)))))
+(subdir
+ ./run/typing-objects
+ (dynamic_include ../../tests/typing-objects/rules.dune))
+
+(subdir
+ tests/typing-objects-bugs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-objects-bugs)))))
+(subdir
+ ./run/typing-objects-bugs
+ (dynamic_include ../../tests/typing-objects-bugs/rules.dune))
+
+(subdir
+ tests/typing-ocamlc-i
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-ocamlc-i)))))
+(subdir
+ ./run/typing-ocamlc-i
+ (dynamic_include ../../tests/typing-ocamlc-i/rules.dune))
+
+(subdir
+ tests/typing-poly
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-poly)))))
+(subdir
+ ./run/typing-poly
+ (dynamic_include ../../tests/typing-poly/rules.dune))
+
+(subdir
+ tests/typing-poly-bugs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-poly-bugs)))))
+(subdir
+ ./run/typing-poly-bugs
+ (dynamic_include ../../tests/typing-poly-bugs/rules.dune))
+
+(subdir
+ tests/typing-polyvariants-bugs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-polyvariants-bugs)))))
+(subdir
+ ./run/typing-polyvariants-bugs
+ (dynamic_include ../../tests/typing-polyvariants-bugs/rules.dune))
+
+(subdir
+ tests/typing-polyvariants-bugs-2
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-polyvariants-bugs-2)))))
+(subdir
+ ./run/typing-polyvariants-bugs-2
+ (dynamic_include ../../tests/typing-polyvariants-bugs-2/rules.dune))
+
+(subdir
+ tests/typing-private
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-private)))))
+(subdir
+ ./run/typing-private
+ (dynamic_include ../../tests/typing-private/rules.dune))
+
+(subdir
+ tests/typing-private-bugs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-private-bugs)))))
+(subdir
+ ./run/typing-private-bugs
+ (dynamic_include ../../tests/typing-private-bugs/rules.dune))
+
+(subdir
+ tests/typing-recmod
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-recmod)))))
+(subdir
+ ./run/typing-recmod
+ (dynamic_include ../../tests/typing-recmod/rules.dune))
+
+(subdir
+ tests/typing-recordarg
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-recordarg)))))
+(subdir
+ ./run/typing-recordarg
+ (dynamic_include ../../tests/typing-recordarg/rules.dune))
+
+(subdir
+ tests/typing-recovery
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-recovery)))))
+(subdir
+ ./run/typing-recovery
+ (dynamic_include ../../tests/typing-recovery/rules.dune))
+
+(subdir
+ tests/typing-rectypes-bugs
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-rectypes-bugs)))))
+(subdir
+ ./run/typing-rectypes-bugs
+ (dynamic_include ../../tests/typing-rectypes-bugs/rules.dune))
+
+(subdir
+ tests/typing-safe-linking
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-safe-linking)))))
+(subdir
+ ./run/typing-safe-linking
+ (dynamic_include ../../tests/typing-safe-linking/rules.dune))
+
+(subdir
+ tests/typing-separability
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-separability)))))
+(subdir
+ ./run/typing-separability
+ (dynamic_include ../../tests/typing-separability/rules.dune))
+
+(subdir
+ tests/typing-shadowing-of-pervasives-submodules
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-shadowing-of-pervasives-submodules)))))
+(subdir
+ ./run/typing-shadowing-of-pervasives-submodules
+ (dynamic_include
+  ../../tests/typing-shadowing-of-pervasives-submodules/rules.dune))
+
+(subdir
+ tests/typing-short-paths
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-short-paths)))))
+(subdir
+ ./run/typing-short-paths
+ (dynamic_include ../../tests/typing-short-paths/rules.dune))
+
+(subdir
+ tests/typing-signatures
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-signatures)))))
+(subdir
+ ./run/typing-signatures
+ (dynamic_include ../../tests/typing-signatures/rules.dune))
+
+(subdir
+ tests/typing-sigsubst
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-sigsubst)))))
+(subdir
+ ./run/typing-sigsubst
+ (dynamic_include ../../tests/typing-sigsubst/rules.dune))
+
+(subdir
+ tests/typing-simd
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-simd)))))
+(subdir
+ ./run/typing-simd
+ (dynamic_include ../../tests/typing-simd/rules.dune))
+
+(subdir
+ tests/typing-small-numbers
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-small-numbers)))))
+(subdir
+ ./run/typing-small-numbers
+ (dynamic_include ../../tests/typing-small-numbers/rules.dune))
+
+(subdir
+ tests/typing-typeparam
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-typeparam)))))
+(subdir
+ ./run/typing-typeparam
+ (dynamic_include ../../tests/typing-typeparam/rules.dune))
+
+(subdir
+ tests/typing-unboxed
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-unboxed)))))
+(subdir
+ ./run/typing-unboxed
+ (dynamic_include ../../tests/typing-unboxed/rules.dune))
+
+(subdir
+ tests/typing-unboxed-types
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-unboxed-types)))))
+(subdir
+ ./run/typing-unboxed-types
+ (dynamic_include ../../tests/typing-unboxed-types/rules.dune))
+
+(subdir
+ tests/typing-unicode
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-unicode)))))
+(subdir
+ ./run/typing-unicode
+ (dynamic_include ../../tests/typing-unicode/rules.dune))
+
+(subdir
+ tests/typing-unique
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-unique)))))
+(subdir
+ ./run/typing-unique
+ (dynamic_include ../../tests/typing-unique/rules.dune))
+
+(subdir
+ tests/typing-warnings
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-warnings)))))
+(subdir
+ ./run/typing-warnings
+ (dynamic_include ../../tests/typing-warnings/rules.dune))
+
+(subdir
+ tests/typing-zero-alloc
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/typing-zero-alloc)))))
+(subdir
+ ./run/typing-zero-alloc
+ (dynamic_include ../../tests/typing-zero-alloc/rules.dune))
+
+(subdir
+ tests/uid-deps
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/uid-deps)))))
+(subdir ./run/uid-deps (dynamic_include ../../tests/uid-deps/rules.dune))
+
+(subdir
+ tests/uids
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/uids)))))
+(subdir ./run/uids (dynamic_include ../../tests/uids/rules.dune))
+
+(subdir
+ tests/unboxed-primitive-args
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/unboxed-primitive-args)))))
+(subdir
+ ./run/unboxed-primitive-args
+ (dynamic_include ../../tests/unboxed-primitive-args/rules.dune))
+
+(subdir
+ tests/unicode
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/unicode)))))
+(subdir ./run/unicode (dynamic_include ../../tests/unicode/rules.dune))
+
+(subdir
+ tests/unwind
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/unwind)))))
+(subdir ./run/unwind (dynamic_include ../../tests/unwind/rules.dune))
+
+(subdir
+ tests/utils
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/utils)))))
+(subdir ./run/utils (dynamic_include ../../tests/utils/rules.dune))
+
+(subdir
+ tests/warnings
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/warnings)))))
+(subdir ./run/warnings (dynamic_include ../../tests/warnings/rules.dune))
+
+(subdir
+ tests/weak-ephe-final
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/weak-ephe-final)))))
+(subdir
+ ./run/weak-ephe-final
+ (dynamic_include ../../tests/weak-ephe-final/rules.dune))
+
+(subdir
+ tests/win-unicode
+ (rule
+  (target rules.dune)
+  (deps (source_tree .))
+  (action
+   (with-stdout-to
+    "%{target}"
+    (run
+     "%{project_root}/ocamltest/ocamltest.native"
+     -no-ocamlsrcdir
+     -dune
+     -list-tests
+     ../../tests/win-unicode)))))
+(subdir
+ ./run/win-unicode
+ (dynamic_include ../../tests/win-unicode/rules.dune))
+

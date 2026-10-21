@@ -55,6 +55,8 @@ let default_timeout = ref 0
 
 let keep_test_dir_on_success = ref false
 
+let exit_0_on_failure = ref false
+
 let find_test_dirs = ref []
 
 let list_tests = ref []
@@ -71,9 +73,24 @@ let translate = ref false
 let style = ref Translate.Plain
 let compact = ref false
 let dune = ref false
+let no_ocamlsrcdir = ref false
+let no_diff = ref false
 
 let add_to_list r x =
   r := !r @ [x]
+
+let override_table = Hashtbl.create 10
+
+let file_override s = Hashtbl.find_opt override_table s
+
+let add_override s =
+  match String.index s '=' with
+  | i ->
+     let k = String.sub s 0 i in
+     let v = String.sub s (i + 1) (String.length s - i - 1) in
+     Hashtbl.replace override_table k v
+  | exception Not_found ->
+     failwith "Malformed override parameter"
 
 let commandline_options =
 [
@@ -100,6 +117,8 @@ let commandline_options =
    " Find tests recursively in a given directory");
   ("-keep-test-dir-on-success", Arg.Set keep_test_dir_on_success,
    " Keep the test directory (with the generated test artefacts) on success.");
+  ("-exit-0-on-failure", Arg.Unit (fun () -> exit_0_on_failure := true),
+   " Exit 0 even if a test fails (as long as it runs)");
   ("-run-ocamlrunparam", Arg.Set_string run_ocamlrunparam,
    "<params> Append <params> to OCAMLRUNPARAM when running test programs.");
   ("-translate", Arg.Set translate,
@@ -111,7 +130,13 @@ let commandline_options =
   ("-keep-chars", Arg.Unit (fun () -> style := Translate.Chars),
    " If translating, preserve char offsets in the output.");
   ("-dune", Arg.Unit (fun () -> dune := true),
-   " Generate dune files instead of running tests")
+   " Generate dune files instead of running tests");
+  ("-no-ocamlsrcdir", Arg.Unit (fun () -> no_ocamlsrcdir := true),
+   " Do not use OCAMLSRCDIR to find dependencies");
+  ("-no-diff", Arg.Unit (fun () -> no_diff := true),
+   " Do not run 'diff' but instead copy generated outputs back to the source directory");
+  ("-override", Arg.String add_override,
+   " Specify path to an OCaml component")
 ]
 
 let files_to_test = ref []
@@ -131,9 +156,12 @@ let list_tests = !list_tests
 let find_tests = !find_tests
 let list_all_tests = !list_all_tests
 let keep_test_dir_on_success = !keep_test_dir_on_success
+let exit_0_on_failure = !exit_0_on_failure
 let show_timings = !show_timings
 let run_ocamlrunparam = !run_ocamlrunparam
 let translate = !translate
 let style = !style
 let compact = !compact
 let dune = !dune
+let no_ocamlsrcdir = !no_ocamlsrcdir
+let no_diff = !no_diff

@@ -118,6 +118,7 @@ val ocamlopt_opt_exit_status : Variables.t
 val ocamlrunparam : Variables.t
 
 val ocamlsrcdir : Variables.t
+val ocamlsrcdir_runtime : Variables.t
 
 val ocamldebug_flags : Variables.t
 

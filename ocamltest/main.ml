@@ -175,7 +175,7 @@ let run_test_tree log add_msg behavior env summ ast =
               test.test_name
               (List.length test.test_actions);
             let (result, newenv) =
-              Actions_runner.run log testenv test.test_actions in
+              Actions_eval.run log testenv test.test_actions in
             let msg = Result.string_of_result result in
             let sub_behavior =
               if Result.is_pass result then Run else Skip_all in
@@ -283,7 +283,7 @@ let print_test_tasks ~log env (Ast (stmts, subs)) =
   match gen [] env stmts subs with
   | acc ->
      let tasks = List.concat (List.rev acc) in
-     Actions_runner.print_task_items env tasks;
+     Actions_eval.print_task_items env tasks;
      Pass
   | exception (Exit r) when Result.is_pass r -> Pass
   | exception (Exit r) when Result.is_skip r -> Skip
@@ -431,6 +431,7 @@ let test_file test_filename =
        in
        let common_prefix = " ... testing '" ^ test_basename ^ "'" in
        let msgs = List.rev !msgs in
+       if not generate_only then begin
        if summary = Skip && msgs <> [] then
          List.iter (Printf.printf "%s with %s\n%!" common_prefix) msgs
        else begin
@@ -443,6 +444,7 @@ let test_file test_filename =
          if summary = Fail then
            List.iter (Printf.printf "%s with %s\n%!" common_prefix) msgs
        end;
+       end;
        Actions.clear_all_hooks();
        summary
     ) in
@@ -454,7 +456,8 @@ let test_file test_filename =
   | Pass | Skip ->
       if not Options.keep_test_dir_on_success then
         clean_test_build_directory ()
-  end
+  end;
+  summary
 
 let is_test filename =
   let input_channel = open_in filename in
@@ -532,20 +535,83 @@ let () =
   let list_tests dir =
     match list_tests dir with
     | [] -> failed := true
-    | res -> List.iter print_endline res
+    | res ->
+       if Options.dune then begin
+         if dir <> Filename.current_dir_name then begin
+           Sys.chdir dir;
+           Format.printf "%a@.@." Sexp.pp
+             Sexp.(S [A "copy_files"; S [A "only_sources"; A "true"];
+                      S [A "files"; A (Filename.concat dir "*")]]);
+           Format.printf "%a@.@." Sexp.pp
+             Sexp.(S [A "copy_files"; S [A "only_sources"; A "true"];
+                      S [A "files"; A (Filename.concat dir "*/*")]])
+         end;
+         let gen_file f =
+           match test_file f with
+           | Pass | Skip -> ()
+           | Fail -> failwith "Test should not fail when generating!"
+         in
+         List.iter gen_file res
+       end else List.iter print_endline res
   in
-  let find_test_dirs dir = List.iter print_endline (find_test_dirs dir) in
+  let find_test_dirs dir =
+    let print_dune test_dir =
+      let open Sexp in
+      let rec invert = function
+        | s when s = "" || s = Filename.current_dir_name ->
+           Filename.current_dir_name
+        | s when Filename.dirname s = Filename.current_dir_name ->
+           Filename.parent_dir_name
+        | s ->
+           Filename.(concat (invert (dirname s)) parent_dir_name)
+      in
+      let inv = invert test_dir ^ Filename.dir_sep in
+      let test_suff =
+        match String.remove_prefix ~prefix:"tests/" test_dir with
+        | Some suff -> suff
+        | None -> failwith "Dune rule generation is only supported for tests/<DIR>"
+      in
+      let run_dir = "./run/" ^ test_suff in
+      let cmd =
+        [A "%{project_root}/ocamltest/ocamltest.native";
+         A "-no-ocamlsrcdir";
+         A "-dune";
+         A "-list-tests";
+         A (inv ^ test_dir)]
+      in
+      let rules =
+        S [A "subdir"; A test_dir;
+           S [A "rule";
+              S [A "target"; A "rules.dune"];
+              S [A "deps"; S [A "source_tree"; A "."]];
+              S [A "action";
+                 S [A "with-stdout-to"; A "%{target}";
+                    S (A "run" :: cmd)]]]]
+      in
+      let run =
+        S [A "subdir"; A run_dir;
+           S [A "dynamic_include"; A (inv ^ test_dir ^ "/rules.dune")]]
+      in
+      Format.printf "%a@.%a@.@." pp rules pp run
+    in
+    List.iter
+      (if Options.dune then print_dune else print_endline)
+      (find_test_dirs dir)
+  in
   let find_tests dir = List.iter print_endline (find_tests dir) in
   let doit f x = work_done := true; f x in
   List.iter (doit find_test_dirs) Options.find_test_dirs;
   List.iter (doit list_tests) Options.list_tests;
   List.iter (doit find_tests) Options.find_tests;
   List.iter (doit list_all_tests) Options.list_all_tests;
-  let do_file =
+  let do_file f =
     if Options.translate then
-      Translate.file ~style:Options.style ~compact:Options.compact
+      Translate.file ~style:Options.style ~compact:Options.compact f
     else
-      test_file
+      match test_file f with
+      | Pass | Skip -> ()
+      | Fail ->
+         if not Options.exit_0_on_failure then failed := true
   in
   List.iter (doit do_file) Options.files_to_test;
   if not !work_done then print_usage();
