@@ -71,7 +71,7 @@
  (dynamic_include ../../tests/array-functions/rules.dune))
 
 (subdir
- tests/asmcomp
+ tests/asmcomp-ox
  (rule
   (target rules.dune)
   (enabled_if (<> "%{context_name}" main))
@@ -84,18 +84,18 @@
      -no-ocamlsrcdir
      -dune
      -list-tests
-     ../../tests/asmcomp))))
+     ../../tests/asmcomp-ox))))
  (rule
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
 (subdir
- ./run/asmcomp
- (copy_files (only_sources true) (files "../../tests/asmcomp/*"))
- (dynamic_include ../../tests/asmcomp/rules.dune))
+ ./run/asmcomp-ox
+ (copy_files (only_sources true) (files "../../tests/asmcomp-ox/*"))
+ (dynamic_include ../../tests/asmcomp-ox/rules.dune))
 
 (subdir
- tests/asmgen
+ tests/asmgen-ox
  (rule
   (target rules.dune)
   (enabled_if (<> "%{context_name}" main))
@@ -108,15 +108,15 @@
      -no-ocamlsrcdir
      -dune
      -list-tests
-     ../../tests/asmgen))))
+     ../../tests/asmgen-ox))))
  (rule
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
 (subdir
- ./run/asmgen
- (copy_files (only_sources true) (files "../../tests/asmgen/*"))
- (dynamic_include ../../tests/asmgen/rules.dune))
+ ./run/asmgen-ox
+ (copy_files (only_sources true) (files "../../tests/asmgen-ox/*"))
+ (dynamic_include ../../tests/asmgen-ox/rules.dune))
 
 (subdir
  tests/ast-invariants

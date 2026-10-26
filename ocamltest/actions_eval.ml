@@ -23,7 +23,6 @@ let run_task_item ~log : Actions.task_item -> Result.t = function
      Actions_helpers.do_setup_build_env
        ~source_dir ~build_dir ~remove ~files ~subdirs
   | Run_cmd { settings; message; exits } ->
-     Printf.fprintf log "Run_cmd %b\n%!" settings.append;
      Actions_helpers.do_run_cmd ~settings ~message ~exits log
   | Compare_files { kind_of_output; files; tool; promote } ->
      let is_nonempty file =
