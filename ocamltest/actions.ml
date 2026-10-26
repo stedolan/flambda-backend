@@ -23,6 +23,7 @@ type task_item =
   | Setup_build_env of
       { source_dir: string;
         build_dir: string;
+        remove: string list;
         files: string list;
         subdirs: string list }
   | Run_cmd of
@@ -41,19 +42,26 @@ type task =
 
 exception Is_static of Result.t
 
-let seq tasks =
+let combine ~drop_skip tasks =
+  let dropped = ref false in
   match
     tasks |> List.filter_map (function
-      | Static ({ status = (Fail | Skip | Predicate false); _ } as r) ->
+      | Static ({ status = (Fail | Predicate false); _ } as r) ->
          raise (Is_static r)
       | Static { status = (Pass | Predicate true); _ } ->
          None
+      | Static ({ status = Skip; _ } as r) ->
+         if drop_skip then (dropped := true; None)
+         else raise (Is_static r)
       | Task tasks ->
          Some tasks)
-    with
-    | exception (Is_static r) -> Static r
-    | [] -> Static Result.pass
-    | tasks -> Task (List.concat tasks)
+  with
+  | exception (Is_static r) -> Static r
+  | [] -> Static (if !dropped then Result.skip else Result.pass)
+  | tasks -> Task (List.concat tasks)
+
+let seq tasks = combine ~drop_skip:false tasks
+let par tasks = combine ~drop_skip:true tasks
 
 type code = out_channel -> Environments.t -> task * Environments.t
 

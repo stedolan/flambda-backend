@@ -19,10 +19,11 @@ let run_task_item ~log : Actions.task_item -> Result.t = function
      Builtin_actions.do_check_file_absent ~filename
   | Copy_file { src; dst } ->
      Builtin_actions.do_copy_file ~src ~dst log
-  | Setup_build_env { source_dir; build_dir; files; subdirs } ->
+  | Setup_build_env { source_dir; build_dir; remove; files; subdirs } ->
      Actions_helpers.do_setup_build_env
-       ~source_dir ~build_dir ~files ~subdirs
+       ~source_dir ~build_dir ~remove ~files ~subdirs
   | Run_cmd { settings; message; exits } ->
+     Printf.fprintf log "Run_cmd %b\n%!" settings.append;
      Actions_helpers.do_run_cmd ~settings ~message ~exits log
   | Compare_files { kind_of_output; files; tool; promote } ->
      let is_nonempty file =
@@ -139,13 +140,14 @@ let print_task_item env (t : Actions.task_item) : unit =
   | Check_file_exists {filename; reason=_} -> Printf.printf "@FIXMEcheck %s\n" filename
   | Check_file_absent {filename} -> Printf.printf "@FIXMEcheck_abs %s\n" filename
   | Copy_file {src;dst} -> Printf.printf "cp %s %s\n" (quote src) (quote dst)
-  | Setup_build_env {source_dir;build_dir;files;subdirs} ->
+  | Setup_build_env {source_dir;build_dir;remove;files;subdirs} ->
      let source_dir' = Environments.safe_lookup Builtin_variables.test_source_directory env in
      if source_dir <> source_dir' then failwith "setup_build_env: invalid source_dir";
 (*
      List.iter (check_name `Src) files;
      List.iter (check_name `Src) subdirs;
 *)
+     Printf.printf "rm -f %s\n" (String.concat " " (List.map (fun x -> quote x) remove));
      Printf.printf "mkdir -p %s\n" (quote ~kind:`Build build_dir);
      if files <> [] then
        Printf.printf "cp %s %s\n" (String.concat " " (List.map (fun f -> quote (Filename.concat source_dir f)) files)) (quote build_dir);
@@ -190,7 +192,8 @@ let ocaml_dependency_paths : (string * string * Sexp.t list option) list=
     "runtime/ocamlrun", "runtime/ocamlrun", None;
     "runtime/ocamlrund", "runtime/ocamlrund", None;
     "stdlib", "stdlib/build",
-    Some ([S [A "glob_files"; A "%{project_root}/stdlib/build/{*.{cmi,cmx,cmo},stdlib.{cma,cmxa,a},std_exit.{cmo,cmx,o},runtime-launch-info}"]])
+    Some ([S [A "glob_files"; A "%{project_root}/stdlib/build/{*.{cmi,cmx,cmo},stdlib.{cma,cmxa,a},std_exit.{cmo,cmx,o},runtime-launch-info}"]]);
+    "tools/ocamlfilt", "tools/ocamlfilt.exe", None;
   ]
 
 let ocaml_dependency_table =
@@ -237,8 +240,9 @@ let generate_dune_dependencies env its =
   let collect_deps : Actions.task_item -> unit = function
     | Chdir _ -> ()
     | Copy_file {src; dst=_} -> check_path src
-    | Check_file_exists _ | Check_file_absent _ -> ()
-    | Setup_build_env { source_dir; build_dir = _; files; subdirs } ->
+    | Check_file_exists p -> check_path p.filename
+    | Check_file_absent _ -> ()
+    | Setup_build_env { source_dir; build_dir = _; remove = _; files; subdirs } ->
        if source_dir <> src_dir' then failwith (Printf.sprintf "setup_build_env: invalid source_dir %s (expected %s)" source_dir src_dir') ;
        dep_files := files @ !dep_files;
        dep_dirs := subdirs @ !dep_dirs

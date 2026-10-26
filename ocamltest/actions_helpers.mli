@@ -38,7 +38,7 @@ val readonly_files : Environments.t -> string list
 
 val setup_symlinks : string -> string -> string list -> unit
 
-val setup_build_env : bool -> string list -> Actions.code
+val setup_build_env : bool -> ?remove:string list -> string list -> Actions.code
 
 val setup_simple_build_env : bool -> string list -> Actions.code
 
@@ -67,6 +67,7 @@ val check_output : string -> Variables.t -> Variables.t -> Actions.code
 val do_setup_build_env :
   source_dir:string ->
   build_dir:string ->
+  remove:string list ->
   files:string list ->
   subdirs:string list ->
   Result.t

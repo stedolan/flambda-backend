@@ -248,8 +248,9 @@ module Sexp = struct
   type t = A of string | S of t list
 
   let unquoted s =
+    (s <> "") &&
     s |> String.for_all (function
-      | 'a'..'z' | 'A'..'Z' | '0'..'9' | '-' | '_' | '.' | '=' | '?' | '/' -> true
+      | 'a'..'z' | 'A'..'Z' | '0'..'9' | '-' | '_' | '.' | '=' | '?' | '/' | '<' | '>' -> true
       | _ -> false)
   
   let rec pp ppf =

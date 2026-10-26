@@ -90,38 +90,11 @@ let report_error loc e bt =
 
 type summary = Pass | Skip | Fail
 
-let summary_of_status : Result.status -> summary = function
+let summary_of_result (r : Result.t) : summary =
+  match r.status with
   | Pass | Predicate true -> Pass
   | Skip | Predicate false -> Skip
   | Fail -> Fail
-
-(* The sequential join passes if both tests pass.
-
-   This implies that a linear sequence of actions, a path along the
-   test tree, is considered successful if all actions passed. *)
-let join_sequential r1 r2 =
-  match r1, r2 with
-  | Fail, _ | _, Fail -> Fail
-  | Pass, Pass -> Pass
-  | Skip, _ | _, Skip -> Skip
-
-(* The parallel join passes if either test passes.
-
-   This implies that a test formed of several parallel branches is
-   considered successful if at least one of the branches is successful.
-*)
-let join_parallel r1 r2 =
-  match r1, r2 with
-  | Fail, _ | _, Fail -> Fail
-  | Pass, _ | _, Pass -> Pass
-  | Skip, Skip -> Skip
-
-let join_list_parallel results = List.fold_left join_parallel Skip results
-
-let string_of_summary = function
-  | Pass -> "passed"
-  | Fail -> "failed"
-  | Skip -> "skipped"
 
 let string_of_test_location ~branches line =
   String.concat ""
@@ -129,26 +102,26 @@ let string_of_test_location ~branches line =
        branches)
   ^ Printf.sprintf "line %d" line
 
-let run_test_tree log add_msg behavior env summ ast =
+let run_test_tree log add_msg behavior env ast =
   (* Interpret the statements contained in [stmts] and [segments] (effectively,
      run [stmts @ List.concat segments]), then go into each of the subtrees in
      [subs]. [branches] is a list of indices of [split] arms that we've
      descended into. *)
-  let rec run_statements behavior env summ stmts segments subs ~branches
-      ~must_do_something =
+  let rec run_statements behavior env stmts segments subs ~branches =
     match stmts with
     | Environment_statement s :: rest ->
       begin match interpret_environment_statement env s with
       | env ->
-        run_statements behavior env summ rest segments subs ~branches
-          ~must_do_something
+        run_statements behavior env rest segments subs ~branches
       | exception e ->
         let bt = Printexc.get_backtrace () in
         let line = s.loc.Location.loc_start.Lexing.pos_lnum in
-        Printf.ksprintf add_msg "%s %s"
+        let msg = Printf.sprintf "%s %s"
           (string_of_test_location ~branches line)
-          (report_error s.loc e bt);
-        Fail
+          (report_error s.loc e bt)
+        in
+        Printf.ksprintf add_msg "%s" msg;
+        Actions.Static (Result.fail_with_reason msg)
       end
     | Test (_, name, mods) :: rest ->
       let skip_all =
@@ -165,81 +138,66 @@ let run_test_tree log add_msg behavior env summ ast =
       in
       let name = { name with node = Environments.expand env name.node } in
       let test = lookup_test name in
-      let (msg, behavior, env, result) =
+      let (tasks, env) =
         match behavior with
-        | Skip_all -> ("", Skip_all, env, Result.skip)
+        | Skip_all -> (Actions.Static Result.skip, env)
         | Run ->
           begin try
             let testenv = List.fold_left apply_modifiers env mods in
             Printf.fprintf log "Running test %s with %d actions\n%!"
               test.test_name
               (List.length test.test_actions);
-            let (result, newenv) =
-              Actions_eval.run log testenv test.test_actions in
-            let msg = Result.string_of_result result in
-            let sub_behavior =
-              if Result.is_pass result then Run else Skip_all in
-            (msg, sub_behavior, newenv, result)
+            Tests.collect log testenv test
           with e ->
-            let bt = Printexc.get_backtrace () in
-            (report_error name.loc e bt, Skip_all, env, Result.fail)
+            if not skip_all then
+              Printf.ksprintf add_msg "%s (%s) %s" locstr name.node
+                (report_error name.loc e (Printexc.get_backtrace ()));
+            (Actions.Static Result.fail, env)
           end
       in
-      if not skip_all then
-        Printf.ksprintf add_msg "%s (%s) %s" locstr name.node msg;
-      let summ = join_sequential summ (summary_of_status result.status) in
-      let must_do_something =
-        must_do_something && not (Tests.does_something test)
-      in
-      run_statements behavior env summ rest segments subs ~branches
-        ~must_do_something
+      Actions.seq [tasks;
+                   run_statements behavior env rest segments subs ~branches]
     | Split alternatives :: rest ->
       let count = List.length alternatives in
       let run_alternative i alternative =
         Printf.fprintf log "Running split branch %d of %d\n%!" (i + 1) count;
-        run_statements behavior env summ alternative (rest :: segments)
-          subs ~branches:(i + 1 :: branches) ~must_do_something
+        run_statements behavior env alternative (rest :: segments)
+          subs ~branches:(i + 1 :: branches)
       in
-      join_list_parallel (List.mapi run_alternative alternatives)
+      Actions.par (List.mapi run_alternative alternatives)
     | [] ->
-      run_segments behavior env summ segments subs ~branches ~must_do_something
-  and run_segments behavior env summ segments subs ~branches
-      ~must_do_something =
+      run_segments behavior env segments subs ~branches
+  and run_segments behavior env segments subs ~branches =
     match segments with
     | segment :: segments ->
-        run_statements behavior env summ segment segments subs ~branches
-          ~must_do_something
+        run_statements behavior env segment segments subs ~branches
     | [] ->
         (* If [subs] is empty, there are no further test actions to
            perform: we are at the end of a test path and can report
            our current summary. Otherwise we continue with each
            branch, and parallel-join the result summaries. *)
         begin match subs with
-        | [] ->
-          if not must_do_something then summ
-          else (
-            match summ with
-            | Pass ->
-              add_msg "does the test tree do something? => failed";
-              Fail
-            | Skip | Fail -> summ
-          )
+        | [] -> Actions.Static Result.pass
         | _ ->
         (* CR mshinwell/xclerc: maybe sequences of actions that "do something"
            and then have further actions that do not "do something" should be
            flagged *)
-            join_list_parallel
+            Actions.par
               (List.map
-                (run_tree behavior env summ ~branches ~must_do_something)
+                (run_tree behavior env ~branches)
                 subs)
         end
-  and run_tree behavior env summ (Ast (stmts, subs)) ~branches
-      ~must_do_something =
-    run_statements behavior env summ stmts [] subs ~branches ~must_do_something
-  in run_tree behavior env summ ast ~branches:[] ~must_do_something:true
+  and run_tree behavior env (Ast (stmts, subs)) ~branches =
+    run_statements behavior env stmts [] subs ~branches
+  in
+  match run_tree behavior env ast ~branches:[] with
+  | Static r when Result.is_pass r ->
+     add_msg "does the test tree do something? => failed";
+     Actions.Static Result.fail
+  | (Static _ | Task _) as t -> t
 
 
-let print_test_tasks ~log env (Ast (stmts, subs)) =
+let _print_test_tasks ~log env (Ast (stmts, subs)) =
   let exception Exit of Result.t in
   let rec gen acc env stmts subs =
     match stmts, subs with
@@ -421,32 +379,51 @@ let test_file test_filename =
          loop rootenv rootenv_statements
        in
        let rootenv = Environments.initialize Environments.Post log rootenv in
-       let summary =
+       let result =
+         let task =
+           run_test_tree log add_msg initial_status rootenv tsl_ast in
+         match initial_summary with
+         | Skip -> Result.skip
+         | Fail -> Result.fail
+         | Pass ->
+            match task with
+            | Static r -> r
+            | Task tasks ->
+            if generate_only then begin
+              Actions_eval.print_task_items initial_environment tasks;
+              Result.pass
+            end else Actions_eval.run_tasks ~log tasks
+         (*
          if generate_only then
            if initial_status = Skip_all then initial_summary
            else print_test_tasks ~log rootenv tsl_ast
          else
-           run_test_tree log add_msg initial_status rootenv initial_summary
-             tsl_ast
+           let tasks =
+             run_test_tree log add_msg initial_status rootenv tsl_ast in
+           match initial_summary, tasks with
+           | (Skip|Fail), _ -> initial_summary
+           | Pass, Static r -> summary_of_result r
+           | Pass, Task t -> summary_of_result (Actions_eval.run_tasks ~log t)
+          *)
        in
        let common_prefix = " ... testing '" ^ test_basename ^ "'" in
        let msgs = List.rev !msgs in
        if not generate_only then begin
-       if summary = Skip && msgs <> [] then
+       if Result.is_skip result && msgs <> [] then
          List.iter (Printf.printf "%s with %s\n%!" common_prefix) msgs
        else begin
          Printf.printf "%s => %s%s\n%!" common_prefix
-           (string_of_summary summary)
-           (if Options.show_timings && summary = Pass then
+           (Result.string_of_result result)
+           (if Options.show_timings && Result.is_pass result then
               let wall_clock_duration = Unix.gettimeofday () -. start in
               Printf.sprintf " (wall clock: %.02fs)" wall_clock_duration
             else "");
-         if summary = Fail then
+         if Result.is_fail result then
            List.iter (Printf.printf "%s with %s\n%!" common_prefix) msgs
        end;
        end;
        Actions.clear_all_hooks();
-       summary
+       summary_of_result result
     ) in
   if not Options.log_to_stderr then close_out log;
   begin match summary with
@@ -542,9 +519,6 @@ let () =
            Format.printf "%a@.@." Sexp.pp
              Sexp.(S [A "copy_files"; S [A "only_sources"; A "true"];
                       S [A "files"; A (Filename.concat dir "*")]]);
-           Format.printf "%a@.@." Sexp.pp
-             Sexp.(S [A "copy_files"; S [A "only_sources"; A "true"];
-                      S [A "files"; A (Filename.concat dir "*/*")]])
          end;
          let gen_file f =
            match test_file f with
@@ -583,10 +557,15 @@ let () =
         S [A "subdir"; A test_dir;
            S [A "rule";
               S [A "target"; A "rules.dune"];
+              S [A "enabled_if"; S [A "<>"; A "%{context_name}"; A "main"]];
               S [A "deps"; S [A "source_tree"; A "."]];
               S [A "action";
                  S [A "with-stdout-to"; A "%{target}";
-                    S (A "run" :: cmd)]]]]
+                    S (A "run" :: cmd)]]];
+           S [A "rule";
+              S [A "target"; A "rules.dune"];
+              S [A "enabled_if"; S [A "="; A "%{context_name}"; A "main"]];
+              S [A "action"; S [A "write-file"; A "%{target}"; A ""]]]]
       in
       let run =
         S [A "subdir"; A run_dir;
@@ -595,7 +574,7 @@ let () =
       Format.printf "%a@.%a@.@." pp rules pp run
     in
     List.iter
-      (if Options.dune then print_dune else print_endline)
+      (fun x -> if Options.dune then print_dune x else print_endline x)
       (find_test_dirs dir)
   in
   let find_tests dir = List.iter print_endline (find_tests dir) in

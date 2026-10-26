@@ -37,6 +37,7 @@
  ; our own otherlibs/unix/, and neither can we depend on the "unix" library
  ; or this same one will be used.
  (ocamlopt_flags (:standard -I +unix unix.cmxa))
+ (ocamlc_flags (:standard -I +unix unix.cma))
  (foreign_stubs
   (language c)
   (names run_unix run_stubs)))

@@ -108,7 +108,8 @@ let setup_subdirectories source_directory build_directory subdirs =
   in
   List.iter cp_dir subdirs
 
-let setup_build_env add_testfile additional_files (_log : out_channel) env =
+let setup_build_env add_testfile ?(remove=[]) additional_files
+      (_log : out_channel) env =
   let source_dir = (test_source_directory env) in
   let build_dir = (test_build_directory env) in
   let some_files = additional_files @ (readonly_files env) in
@@ -117,11 +118,14 @@ let setup_build_env add_testfile additional_files (_log : out_channel) env =
     then (testfile env) :: some_files
     else some_files in
   let subdirs = subdirectories env in
-  Actions.Task [Setup_build_env { source_dir; build_dir; files; subdirs }], env
+  Actions.Task [Setup_build_env { source_dir; build_dir;
+                                  remove; files; subdirs }],
+  env
 
-let do_setup_build_env ~source_dir ~build_dir ~files ~subdirs =
+let do_setup_build_env ~source_dir ~build_dir ~remove ~files ~subdirs =
   setup_symlinks source_dir build_dir files;
   setup_subdirectories source_dir build_dir subdirs;
+  List.iter Sys.force_remove remove;
   Sys.chdir build_dir;
   Result.pass
 

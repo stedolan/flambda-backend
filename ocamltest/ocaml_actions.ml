@@ -394,10 +394,9 @@ let setup_tool_build_env (tool : Ocaml_tools.tool) log env =
       tool_output_variable
       tool_output_file env
   in
-  Sys.force_remove tool_output_file;
   let env =
     Environments.add Builtin_variables.test_build_directory build_dir env in
-  Actions_helpers.setup_build_env false source_modules log env
+  Actions_helpers.setup_build_env false ~remove:[tool_output_file] source_modules log env
 
 let setup_compiler_build_env (compiler : Ocaml_compilers.compiler) log env =
   let (module Compiler) = compiler in

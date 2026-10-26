@@ -23,6 +23,7 @@ type task_item =
   | Setup_build_env of
       { source_dir: string;
         build_dir: string;
+        remove: string list;
         files: string list;
         subdirs: string list }
   | Run_cmd of
@@ -39,7 +40,13 @@ type task =
   | Static of Result.t
   | Task of task_item list
 
+(** [seq tasks] passes if all of the tasks pass,
+    and skips/fails if any tasks skip or fail *)
 val seq : task list -> task
+
+(** [par tasks] filters out the skipped tasks,
+    and passes if the remaining ones pass *)
+val par : task list -> task
 
 type code = out_channel -> Environments.t -> task * Environments.t
 

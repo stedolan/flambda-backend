@@ -57,6 +57,34 @@ let test_of_action action =
   test_description = Actions.description action;
 }
 
+let collect_actions log testenv actions =
+  let total = List.length actions in
+  let rec run_actions_aux action_number env acc = function
+    | [] -> (List.rev acc, env)
+    | action::remaining_actions ->
+      begin
+        Printf.fprintf log "\nRunning action %d/%d (%s)\n%!"
+          action_number total (Actions.name action);
+        let (task, env') = Actions.run log env action in
+        let task_str =
+          match task with
+          | Static r -> Result.string_of_result r
+          | Task ts -> Printf.sprintf "%d tasks" (List.length ts)
+        in
+        Printf.fprintf log "Action %d/%d (%s) %s\n%!"
+          action_number total (Actions.name action)
+          task_str;
+        run_actions_aux (action_number + 1) env' (task :: acc) remaining_actions
+      end in
+  let tasks, env = run_actions_aux 1 testenv [] actions in
+  Actions.seq tasks, env
+
+let collect log env test =
+  Printf.fprintf log "Running test %s with %d actions\n%!"
+    test.test_name
+    (List.length test.test_actions);
+  collect_actions log env test.test_actions
+
 module TestSet = Set.Make
 (struct
   type nonrec t = t
