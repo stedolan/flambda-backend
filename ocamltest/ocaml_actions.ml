@@ -137,7 +137,7 @@ let generate_module generator output_variable input log env =
     ~stdout_variable:output_variable
     ~stderr_variable:output_variable
     ~append:true
-    ~exits:[expected_exit_status]
+    ~exits:[expected_exit_status, Result.pass]
     ~what
     log env commandline,
   generator.generated_compilation_units basename
@@ -279,7 +279,7 @@ let compile_program (compiler : Ocaml_compilers.compiler) log env =
           ~stdout_variable:Compiler.output_variable
           ~stderr_variable:Compiler.output_variable
           ~append:true
-          ~exits:[expected_exit_status]
+          ~exits:[expected_exit_status, Result.pass]
           ~what
           log env commandline],
       env
@@ -318,7 +318,7 @@ let compile_module (compiler : Ocaml_compilers.compiler) module_ log env =
     ~stdout_variable:Compiler.output_variable
     ~stderr_variable:Compiler.output_variable
     ~append:true
-    ~exits:[expected_exit_status]
+    ~exits:[expected_exit_status, Result.pass]
     ~what
     log env commandline
 
@@ -489,7 +489,7 @@ let compile (compiler : Ocaml_compilers.compiler) log env =
       ~stdout_variable:Compiler.output_variable
       ~stderr_variable:Compiler.output_variable
       ~append:true
-      ~exits:[expected_exit_status]
+      ~exits:[expected_exit_status, Result.pass]
       ~what
       log env commandline,
     env
@@ -564,7 +564,7 @@ let objinfo log env =
     ~stdout_variable:Builtin_variables.output
     ~stderr_variable:Builtin_variables.output
     ~append:true
-    ~exits:[expected_exit_status]
+    ~exits:[expected_exit_status, Result.pass]
     ~what
     log (env_with_lib_unix env) commandline,
   env
@@ -604,7 +604,7 @@ let mklib log env =
     ~stdout_variable:Ocaml_variables.compiler_output
     ~stderr_variable:Ocaml_variables.compiler_output
     ~append:true
-    ~exits:[expected_exit_status]
+    ~exits:[expected_exit_status, Result.pass]
     ~what
     log env commandline,
   env
@@ -637,7 +637,7 @@ let run_fexpr log env =
     ~stdout_variable:Builtin_variables.output
     ~stderr_variable:Builtin_variables.output
     ~append:true
-    ~exits:[0]
+    ~exits:[0, Result.pass]
     ~what
     log env commandline,
   env
@@ -717,7 +717,7 @@ let finalise_codegen_msvc test_basename log env =
       ~stdout_variable:Ocaml_variables.compiler_output
       ~stderr_variable:Ocaml_variables.compiler_output
       ~append:true
-      ~exits:[expected_exit_status]
+      ~exits:[expected_exit_status, Result.pass]
       ~what
       log env commandline in
   let archmod = Ocaml_files.asmgen_archmod in
@@ -765,7 +765,7 @@ let run_codegen log env =
       ~stdout_variable:Ocaml_variables.compiler_output
       ~stderr_variable:Ocaml_variables.compiler_output
       ~append:true
-      ~exits:[expected_exit_status]
+      ~exits:[expected_exit_status, Result.pass]
       ~what
       log env commandline in
   if expected_exit_status=0
@@ -805,7 +805,7 @@ let run_cc log env =
     ~stdout_variable:Ocaml_variables.compiler_output
     ~stderr_variable:Ocaml_variables.compiler_output
     ~append:true
-    ~exits:[expected_exit_status]
+    ~exits:[expected_exit_status, Result.pass]
     ~what
     log env commandline,
   env
@@ -844,7 +844,7 @@ let run_expect_once input_file principal log env ~backend =
     ~environment:default_ocaml_env
     (* CR sdolan: reimplement skipping -principal mode on exit 3.
        See https://github.com/oxcaml/oxcaml/pull/6375 *)
-    ~exits:[0; 3]
+    ~exits:[0, Result.pass; 3, Result.pass]
     ~what:"expect"
     log env commandline,
   env,
@@ -1024,7 +1024,7 @@ let compile_module compiler compilername compileroutput log env
       ~stdout_variable:compileroutput
       ~stderr_variable:compileroutput
       ~append:true
-      ~exits:[expected_exit_status]
+      ~exits:[expected_exit_status, Result.pass]
       ~what
       log env commandline,
     env
@@ -1135,7 +1135,7 @@ let run_test_program_in_toplevel (toplevel : Ocaml_toplevels.toplevel) log env =
             ~environment:default_ocaml_env
             ~stdout_variable:compiler_output_variable
             ~stderr_variable:compiler_output_variable
-            ~exits:[expected_exit_status]
+            ~exits:[expected_exit_status, Result.pass]
             ~what
             log env commandline
           else Actions_helpers.run_cmd
@@ -1143,7 +1143,7 @@ let run_test_program_in_toplevel (toplevel : Ocaml_toplevels.toplevel) log env =
             ~stdin_variable:Builtin_variables.test_file
             ~stdout_variable:compiler_output_variable
             ~stderr_variable:compiler_output_variable
-            ~exits:[expected_exit_status]
+            ~exits:[expected_exit_status, Result.pass]
             ~what
             log env commandline
         in
@@ -1476,7 +1476,7 @@ let compile_ocamldoc (basename,filetype as module_) log env =
       ~stdout_variable:Ocamldoc.output_variable
       ~stderr_variable:Ocamldoc.output_variable
       ~append:true
-      ~exits:[expected_exit_status]
+      ~exits:[expected_exit_status, Result.pass]
       ~what
       log env commandline
   in
@@ -1561,7 +1561,7 @@ let run_ocamldoc =
       ~stdout_variable:Ocamldoc.output_variable
       ~stderr_variable:Ocamldoc.output_variable
       ~append:true
-      ~exits:[0]
+      ~exits:[0, Result.pass]
       ~what:"ocamldoc"
       log env commandline in
   Actions.seq (t1 @ t2 @ [t3]), env

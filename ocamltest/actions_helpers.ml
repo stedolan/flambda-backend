@@ -143,7 +143,7 @@ let run_cmd
     ?(stderr_variable=Builtin_variables.stderr)
     ?(append=false)
     ?timeout
-    ?(exits=[0])
+    ?(exits=[0,Result.pass])
     ~what
     log env original_cmd
   =
@@ -226,14 +226,14 @@ let do_run_cmd ~(settings : Run_command.settings) ~message ~exits log =
   dump_file "stdout" settings.stdout_filename;
   if settings.stdout_filename <> settings.stderr_filename then
     dump_file "stderr" settings.stderr_filename;
-  if List.mem n exits
-  then Result.pass
-  else
+  try List.assoc n exits
+  with Not_found ->
     let reason = Printf.sprintf "%s\nfailed with exit code %d" message n in
     Result.fail_with_reason reason
 
 let run
     ~full_environment
+    ?exits
     (log_message : string)
     (redirect_output : bool)
     (prog_variable : Variables.t)
@@ -267,9 +267,9 @@ let run
       end else None, None
     in
     let expected_exit_status =
-      exit_status_of_variable env Builtin_variables.exit_status
+      exit_status_of_variable env Builtin_variables.exit_status, Result.pass
     in
-    let exits = [expected_exit_status] in
+    let exits = Option.value exits ~default:[expected_exit_status] in
     run_cmd ~full_environment ?stdout_variable ?stderr_variable
       ~exits ~what log env commandline, env
 
@@ -328,6 +328,34 @@ let run_script log env =
   Sys.force_remove response_file;
   final_value *)
 
+let run_config_script log env =
+  let response_file = Filename.temp_file "ocamltest" ".response" in
+  let scriptenv = Environments.add
+    Builtin_variables.ocamltest_response response_file env in
+  let (task, newenv) = run
+    ~full_environment:true
+    ~exits:[0, Result.pass; 125, Result.skip]
+    "Running script"
+    true
+    Builtin_variables.script
+    None
+    log scriptenv in
+  (* This command is run immediately, during setup. *)
+  let r =
+    match[@ocaml.warning "-fragile-match"] task with
+    | Task [Run_cmd {settings;message;exits}] ->
+       do_run_cmd ~settings ~message ~exits log
+    | _ -> assert false
+  in
+  let task =
+    if Result.is_pass r then task
+    else
+      let reason = String.trim (Sys.string_of_file response_file) in
+      Actions.Static { r with reason = Some reason }
+  in
+  Sys.remove response_file;
+  task, newenv
+
 let run_hook hook_name log input_env =
   Printf.fprintf log "Entering run_hook for hook %s\n%!" hook_name;
   let response_file = "ocamltest-" ^ testfile input_env ^ ".response" in
@@ -352,8 +380,9 @@ let run_hook hook_name log input_env =
     timeout = timeout;
     log = log;
   } in
+  let exits = [0, Result.pass] in
   Actions.Task [
-    Run_cmd { settings; message = "hook " ^ hook_name; exits = [0] };
+    Run_cmd { settings; message = "hook " ^ hook_name; exits };
     Check_file_absent { filename = response_file } ],
   input_env
 (*

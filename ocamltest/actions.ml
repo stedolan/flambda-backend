@@ -29,7 +29,7 @@ type task_item =
   | Run_cmd of
       { settings: Run_command.settings;
         message: string;
-        exits: int list }
+        exits: (int * Result.t) list }
   | Compare_files of
       { kind_of_output: string;
         files: Filecompare.files;

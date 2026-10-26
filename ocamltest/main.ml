@@ -507,7 +507,8 @@ let () =
          let gen_file f =
            let env, _msgs, task = test_file f in
            match task with
-           | Actions.Static _ -> () (* FIXME *)
+           | Actions.Static r ->
+              Format.printf ";; %s %S@." f (Result.string_of_result r)
            | Actions.Task task -> Actions_eval.print_task_items env task
          in
          List.iter gen_file res

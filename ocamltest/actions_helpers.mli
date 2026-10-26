@@ -49,13 +49,15 @@ val run_cmd :
   ?stderr_variable : Variables.t ->
   ?append : bool ->
   ?timeout : int ->
-  ?exits:(int list) ->
+  ?exits:(int * Result.t) list ->
   what:string ->
   out_channel -> Environments.t -> string list -> Actions.task
 
 val run_program : Actions.code
 
 val run_script : Actions.code
+
+val run_config_script : Actions.code
 
 val run_hook : string -> Actions.code
 
@@ -75,7 +77,7 @@ val do_setup_build_env :
 val do_run_cmd :
   settings:Run_command.settings ->
   message:string ->
-  exits:int list ->
+  exits:(int * Result.t) list ->
   out_channel ->
   Result.t
 

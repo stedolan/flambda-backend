@@ -84,7 +84,7 @@ let debug debugger_type log env =
     ~stdout_variable:Builtin_variables.output
     ~stderr_variable:Builtin_variables.output
     ~append:true
-    ~exits:[expected_exit_status]
+    ~exits:[expected_exit_status, Result.pass]
     ~what
     log (env_with_lib_unix env) commandline,
   env
