@@ -212,7 +212,7 @@ let ocaml_dependency_table =
     Hashtbl.replace table k (file, dep));
   table
 
-let generate_dune_dependencies env its =
+let generate_dune_dependencies ~dir:relative_dir env its =
   let add_trailing_sep s = Filename.concat s "" in
   let src_dir' =
     Environments.safe_lookup Builtin_variables.test_source_directory env
@@ -257,10 +257,12 @@ let generate_dune_dependencies env its =
     | Run_cmd { settings = { progname; argv; _ }; _ } ->
        List.iter check_path (progname :: Array.to_list argv)
     | Compare_files {files; _} ->
-       let maybe_strip_prefix ~prefix s =
-         Option.value (String.remove_prefix ~prefix s) ~default:s in
-       cmp := (maybe_strip_prefix ~prefix:src_dir files.reference_filename,
-               maybe_strip_prefix ~prefix:src_dir (promoted_output files)) :: !cmp;
+       let maybe_strip_src s =
+         Option.value (String.remove_prefix ~prefix:src_dir s) ~default:s in
+       let reference =
+         Filename.concat relative_dir (maybe_strip_src files.reference_filename) in
+       let output = maybe_strip_src (promoted_output files) in
+       cmp := (reference, output) :: !cmp;
   in
   List.iter collect_deps its;
   let dep_files = List.sort_uniq String.compare !dep_files in
@@ -307,9 +309,9 @@ let generate_dune_dependencies env its =
   | missing ->
      Error missing
 
-let print_task_items env its =
+let print_task_items ~dir env its =
   let test_file = Environments.safe_lookup Builtin_variables.test_file env in
-  match generate_dune_dependencies env its with
+  match generate_dune_dependencies ~dir env its with
   | Ok dune ->
      Format.printf ";; TEST OK %s@." test_file;
      Format.printf "%a@.@." Sexp.pp dune;

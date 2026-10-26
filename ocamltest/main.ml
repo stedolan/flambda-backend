@@ -241,7 +241,7 @@ let _print_test_tasks ~log env (Ast (stmts, subs)) =
   match gen [] env stmts subs with
   | acc ->
      let tasks = List.concat (List.rev acc) in
-     Actions_eval.print_task_items env tasks;
+     Actions_eval.print_task_items ~dir:"." env tasks;
      Pass
   | exception (Exit r) when Result.is_pass r -> Pass
   | exception (Exit r) when Result.is_skip r -> Skip
@@ -509,7 +509,7 @@ let () =
            match task with
            | Actions.Static r ->
               Format.printf ";; %s %S@." f (Result.string_of_result r)
-           | Actions.Task task -> Actions_eval.print_task_items env task
+           | Actions.Task task -> Actions_eval.print_task_items ~dir env task
          in
          List.iter gen_file res
        end else List.iter print_endline res
