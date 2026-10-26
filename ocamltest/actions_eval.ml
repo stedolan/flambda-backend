@@ -18,7 +18,7 @@ let run_task_item ~log : Actions.task_item -> Result.t = function
   | Check_file_absent { filename } ->
      Builtin_actions.do_check_file_absent ~filename
   | Copy_file { src; dst } ->
-     Builtin_actions.do_copy_file ~src ~dst log
+     Builtin_actions.do_copy_file log ~src ~dst
   | Setup_build_env { source_dir; build_dir; remove; files; subdirs } ->
      Actions_helpers.do_setup_build_env
        ~source_dir ~build_dir ~remove ~files ~subdirs
@@ -49,6 +49,10 @@ let rec run_tasks ~log tasks =
      | r when ts = [] -> r
      | { status = Pass | Predicate true; _ } -> run_tasks ~log ts
      | { status = Skip | Fail | Predicate false; _ } as r -> r
+
+let run_task ~log = function
+  | Actions.Static r -> r
+  | Actions.Task tasks -> run_tasks ~log tasks
 
 let run log testenv actions =
   let total = List.length actions in

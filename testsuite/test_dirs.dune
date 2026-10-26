@@ -19,6 +19,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/afl-instrumentation
+ (copy_files (only_sources true) (files "../../tests/afl-instrumentation/*"))
  (dynamic_include ../../tests/afl-instrumentation/rules.dune))
 
 (subdir
@@ -40,7 +41,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/arch-power (dynamic_include ../../tests/arch-power/rules.dune))
+(subdir
+ ./run/arch-power
+ (copy_files (only_sources true) (files "../../tests/arch-power/*"))
+ (dynamic_include ../../tests/arch-power/rules.dune))
 
 (subdir
  tests/array-functions
@@ -63,6 +67,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/array-functions
+ (copy_files (only_sources true) (files "../../tests/array-functions/*"))
  (dynamic_include ../../tests/array-functions/rules.dune))
 
 (subdir
@@ -84,7 +89,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/asmcomp (dynamic_include ../../tests/asmcomp/rules.dune))
+(subdir
+ ./run/asmcomp
+ (copy_files (only_sources true) (files "../../tests/asmcomp/*"))
+ (dynamic_include ../../tests/asmcomp/rules.dune))
 
 (subdir
  tests/asmgen
@@ -105,7 +113,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/asmgen (dynamic_include ../../tests/asmgen/rules.dune))
+(subdir
+ ./run/asmgen
+ (copy_files (only_sources true) (files "../../tests/asmgen/*"))
+ (dynamic_include ../../tests/asmgen/rules.dune))
 
 (subdir
  tests/ast-invariants
@@ -128,6 +139,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/ast-invariants
+ (copy_files (only_sources true) (files "../../tests/ast-invariants/*"))
  (dynamic_include ../../tests/ast-invariants/rules.dune))
 
 (subdir
@@ -149,7 +161,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/async-exns (dynamic_include ../../tests/async-exns/rules.dune))
+(subdir
+ ./run/async-exns
+ (copy_files (only_sources true) (files "../../tests/async-exns/*"))
+ (dynamic_include ../../tests/async-exns/rules.dune))
 
 (subdir
  tests/atomic-locs
@@ -172,6 +187,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/atomic-locs
+ (copy_files (only_sources true) (files "../../tests/atomic-locs/*"))
  (dynamic_include ../../tests/atomic-locs/rules.dune))
 
 (subdir
@@ -193,7 +209,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/backtrace (dynamic_include ../../tests/backtrace/rules.dune))
+(subdir
+ ./run/backtrace
+ (copy_files (only_sources true) (files "../../tests/backtrace/*"))
+ (dynamic_include ../../tests/backtrace/rules.dune))
 
 (subdir
  tests/backtrace-multifiles
@@ -216,6 +235,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/backtrace-multifiles
+ (copy_files
+  (only_sources true)
+  (files "../../tests/backtrace-multifiles/*"))
  (dynamic_include ../../tests/backtrace-multifiles/rules.dune))
 
 (subdir
@@ -239,6 +261,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/badly-ordered-deps
+ (copy_files (only_sources true) (files "../../tests/badly-ordered-deps/*"))
  (dynamic_include ../../tests/badly-ordered-deps/rules.dune))
 
 (subdir
@@ -260,7 +283,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/basic (dynamic_include ../../tests/basic/rules.dune))
+(subdir
+ ./run/basic
+ (copy_files (only_sources true) (files "../../tests/basic/*"))
+ (dynamic_include ../../tests/basic/rules.dune))
 
 (subdir
  tests/basic-float
@@ -283,6 +309,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/basic-float
+ (copy_files (only_sources true) (files "../../tests/basic-float/*"))
  (dynamic_include ../../tests/basic-float/rules.dune))
 
 (subdir
@@ -304,7 +331,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/basic-io (dynamic_include ../../tests/basic-io/rules.dune))
+(subdir
+ ./run/basic-io
+ (copy_files (only_sources true) (files "../../tests/basic-io/*"))
+ (dynamic_include ../../tests/basic-io/rules.dune))
 
 (subdir
  tests/basic-io-2
@@ -325,7 +355,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/basic-io-2 (dynamic_include ../../tests/basic-io-2/rules.dune))
+(subdir
+ ./run/basic-io-2
+ (copy_files (only_sources true) (files "../../tests/basic-io-2/*"))
+ (dynamic_include ../../tests/basic-io-2/rules.dune))
 
 (subdir
  tests/basic-manyargs
@@ -348,6 +381,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/basic-manyargs
+ (copy_files (only_sources true) (files "../../tests/basic-manyargs/*"))
  (dynamic_include ../../tests/basic-manyargs/rules.dune))
 
 (subdir
@@ -371,6 +405,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/basic-modules
+ (copy_files (only_sources true) (files "../../tests/basic-modules/*"))
  (dynamic_include ../../tests/basic-modules/rules.dune))
 
 (subdir
@@ -392,7 +427,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/basic-more (dynamic_include ../../tests/basic-more/rules.dune))
+(subdir
+ ./run/basic-more
+ (copy_files (only_sources true) (files "../../tests/basic-more/*"))
+ (dynamic_include ../../tests/basic-more/rules.dune))
 
 (subdir
  tests/basic-multdef
@@ -415,6 +453,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/basic-multdef
+ (copy_files (only_sources true) (files "../../tests/basic-multdef/*"))
  (dynamic_include ../../tests/basic-multdef/rules.dune))
 
 (subdir
@@ -438,6 +477,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/basic-private
+ (copy_files (only_sources true) (files "../../tests/basic-private/*"))
  (dynamic_include ../../tests/basic-private/rules.dune))
 
 (subdir
@@ -461,6 +501,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/binary-emitter
+ (copy_files (only_sources true) (files "../../tests/binary-emitter/*"))
  (dynamic_include ../../tests/binary-emitter/rules.dune))
 
 (subdir
@@ -484,6 +525,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/branch-relaxation
+ (copy_files (only_sources true) (files "../../tests/branch-relaxation/*"))
  (dynamic_include ../../tests/branch-relaxation/rules.dune))
 
 (subdir
@@ -505,7 +547,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/c-api (dynamic_include ../../tests/c-api/rules.dune))
+(subdir
+ ./run/c-api
+ (copy_files (only_sources true) (files "../../tests/c-api/*"))
+ (dynamic_include ../../tests/c-api/rules.dune))
 
 (subdir
  tests/callback
@@ -526,7 +571,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/callback (dynamic_include ../../tests/callback/rules.dune))
+(subdir
+ ./run/callback
+ (copy_files (only_sources true) (files "../../tests/callback/*"))
+ (dynamic_include ../../tests/callback/rules.dune))
 
 (subdir
  tests/cmi-stamp-normalization
@@ -549,6 +597,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/cmi-stamp-normalization
+ (copy_files
+  (only_sources true)
+  (files "../../tests/cmi-stamp-normalization/*"))
  (dynamic_include ../../tests/cmi-stamp-normalization/rules.dune))
 
 (subdir
@@ -570,7 +621,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/codegen (dynamic_include ../../tests/codegen/rules.dune))
+(subdir
+ ./run/codegen
+ (copy_files (only_sources true) (files "../../tests/codegen/*"))
+ (dynamic_include ../../tests/codegen/rules.dune))
 
 (subdir
  tests/compaction
@@ -591,7 +645,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/compaction (dynamic_include ../../tests/compaction/rules.dune))
+(subdir
+ ./run/compaction
+ (copy_files (only_sources true) (files "../../tests/compaction/*"))
+ (dynamic_include ../../tests/compaction/rules.dune))
 
 (subdir
  tests/compiler-libs
@@ -614,6 +671,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/compiler-libs
+ (copy_files (only_sources true) (files "../../tests/compiler-libs/*"))
  (dynamic_include ../../tests/compiler-libs/rules.dune))
 
 (subdir
@@ -637,6 +695,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/comprehensions
+ (copy_files (only_sources true) (files "../../tests/comprehensions/*"))
  (dynamic_include ../../tests/comprehensions/rules.dune))
 
 (subdir
@@ -658,7 +717,27 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/dash-Ix (dynamic_include ../../tests/dash-Ix/rules.dune))
+(subdir
+ ./run/dash-Ix
+ (copy_files (only_sources true) (files "../../tests/dash-Ix/*"))
+ (dynamic_include ../../tests/dash-Ix/rules.dune)
+ (subdir
+  liba
+  (copy_files (only_sources true) (files "../../../tests/dash-Ix/liba/*")))
+ (subdir
+  liba_alt
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/dash-Ix/liba_alt/*")))
+ (subdir
+  libb
+  (copy_files (only_sources true) (files "../../../tests/dash-Ix/libb/*")))
+ (subdir
+  libc
+  (copy_files (only_sources true) (files "../../../tests/dash-Ix/libc/*")))
+ (subdir
+  slib
+  (copy_files (only_sources true) (files "../../../tests/dash-Ix/slib/*"))))
 
 (subdir
  tests/effect-syntax
@@ -681,6 +760,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/effect-syntax
+ (copy_files (only_sources true) (files "../../tests/effect-syntax/*"))
  (dynamic_include ../../tests/effect-syntax/rules.dune))
 
 (subdir
@@ -702,7 +782,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/effects (dynamic_include ../../tests/effects/rules.dune))
+(subdir
+ ./run/effects
+ (copy_files (only_sources true) (files "../../tests/effects/*"))
+ (dynamic_include ../../tests/effects/rules.dune))
 
 (subdir
  tests/effects-safe
@@ -725,6 +808,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/effects-safe
+ (copy_files (only_sources true) (files "../../tests/effects-safe/*"))
  (dynamic_include ../../tests/effects-safe/rules.dune))
 
 (subdir
@@ -748,6 +832,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/effects/preemption
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/effects/preemption/*"))
  (dynamic_include ../../../tests/effects/preemption/rules.dune))
 
 (subdir
@@ -771,6 +858,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/effects/tls
+ (copy_files (only_sources true) (files "../../../tests/effects/tls/*"))
  (dynamic_include ../../../tests/effects/tls/rules.dune))
 
 (subdir
@@ -792,7 +880,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/embedded (dynamic_include ../../tests/embedded/rules.dune))
+(subdir
+ ./run/embedded
+ (copy_files (only_sources true) (files "../../tests/embedded/*"))
+ (dynamic_include ../../tests/embedded/rules.dune))
 
 (subdir
  tests/ephe-c-api
@@ -813,7 +904,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/ephe-c-api (dynamic_include ../../tests/ephe-c-api/rules.dune))
+(subdir
+ ./run/ephe-c-api
+ (copy_files (only_sources true) (files "../../tests/ephe-c-api/*"))
+ (dynamic_include ../../tests/ephe-c-api/rules.dune))
 
 (subdir
  tests/exception-extra-args
@@ -836,6 +930,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/exception-extra-args
+ (copy_files
+  (only_sources true)
+  (files "../../tests/exception-extra-args/*"))
  (dynamic_include ../../tests/exception-extra-args/rules.dune))
 
 (subdir
@@ -859,6 +956,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/exotic-syntax
+ (copy_files (only_sources true) (files "../../tests/exotic-syntax/*"))
  (dynamic_include ../../tests/exotic-syntax/rules.dune))
 
 (subdir
@@ -882,6 +980,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/extension-constructor
+ (copy_files
+  (only_sources true)
+  (files "../../tests/extension-constructor/*"))
  (dynamic_include ../../tests/extension-constructor/rules.dune))
 
 (subdir
@@ -903,7 +1004,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/external (dynamic_include ../../tests/external/rules.dune))
+(subdir
+ ./run/external
+ (copy_files (only_sources true) (files "../../tests/external/*"))
+ (dynamic_include ../../tests/external/rules.dune))
 
 (subdir
  tests/flambda
@@ -924,7 +1028,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/flambda (dynamic_include ../../tests/flambda/rules.dune))
+(subdir
+ ./run/flambda
+ (copy_files (only_sources true) (files "../../tests/flambda/*"))
+ (dynamic_include ../../tests/flambda/rules.dune))
 
 (subdir
  tests/flambda2
@@ -945,7 +1052,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/flambda2 (dynamic_include ../../tests/flambda2/rules.dune))
+(subdir
+ ./run/flambda2
+ (copy_files (only_sources true) (files "../../tests/flambda2/*"))
+ (dynamic_include ../../tests/flambda2/rules.dune))
 
 (subdir
  tests/flambda2/examples
@@ -968,6 +1078,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/flambda2/examples
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/flambda2/examples/*"))
  (dynamic_include ../../../tests/flambda2/examples/rules.dune))
 
 (subdir
@@ -991,6 +1104,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/flambda2/examples/unknown
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/flambda2/examples/unknown/*"))
  (dynamic_include ../../../../tests/flambda2/examples/unknown/rules.dune))
 
 (subdir
@@ -1014,6 +1130,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/flambda2/examples/wrong
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/flambda2/examples/wrong/*"))
  (dynamic_include ../../../../tests/flambda2/examples/wrong/rules.dune))
 
 (subdir
@@ -1037,6 +1156,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/flambda2/rec_info_alias
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/flambda2/rec_info_alias/*"))
  (dynamic_include ../../../tests/flambda2/rec_info_alias/rules.dune))
 
 (subdir
@@ -1060,6 +1182,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/flambda2/simplify
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/flambda2/simplify/*"))
  (dynamic_include ../../../tests/flambda2/simplify/rules.dune))
 
 (subdir
@@ -1083,6 +1208,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/flambda2/simplify/inlining_arguments_meet
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/flambda2/simplify/inlining_arguments_meet/*"))
  (dynamic_include
   ../../../../tests/flambda2/simplify/inlining_arguments_meet/rules.dune))
 
@@ -1107,6 +1235,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/flambda2/symbol_projections
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/flambda2/symbol_projections/*"))
  (dynamic_include ../../../tests/flambda2/symbol_projections/rules.dune))
 
 (subdir
@@ -1130,6 +1261,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/float-unboxing
+ (copy_files (only_sources true) (files "../../tests/float-unboxing/*"))
  (dynamic_include ../../tests/float-unboxing/rules.dune))
 
 (subdir
@@ -1151,7 +1283,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/fma (dynamic_include ../../tests/fma/rules.dune))
+(subdir
+ ./run/fma
+ (copy_files (only_sources true) (files "../../tests/fma/*"))
+ (dynamic_include ../../tests/fma/rules.dune))
 
 (subdir
  tests/formats-transition
@@ -1174,6 +1309,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/formats-transition
+ (copy_files (only_sources true) (files "../../tests/formats-transition/*"))
  (dynamic_include ../../tests/formats-transition/rules.dune))
 
 (subdir
@@ -1195,7 +1331,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/formatting (dynamic_include ../../tests/formatting/rules.dune))
+(subdir
+ ./run/formatting
+ (copy_files (only_sources true) (files "../../tests/formatting/*"))
+ (dynamic_include ../../tests/formatting/rules.dune))
 
 (subdir
  tests/frame-pointers
@@ -1218,6 +1357,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/frame-pointers
+ (copy_files (only_sources true) (files "../../tests/frame-pointers/*"))
  (dynamic_include ../../tests/frame-pointers/rules.dune))
 
 (subdir
@@ -1239,7 +1379,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/functors (dynamic_include ../../tests/functors/rules.dune))
+(subdir
+ ./run/functors
+ (copy_files (only_sources true) (files "../../tests/functors/*"))
+ (dynamic_include ../../tests/functors/rules.dune))
 
 (subdir
  tests/gc-rates
@@ -1260,7 +1403,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/gc-rates (dynamic_include ../../tests/gc-rates/rules.dune))
+(subdir
+ ./run/gc-rates
+ (copy_files (only_sources true) (files "../../tests/gc-rates/*"))
+ (dynamic_include ../../tests/gc-rates/rules.dune))
 
 (subdir
  tests/gc-roots
@@ -1281,7 +1427,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/gc-roots (dynamic_include ../../tests/gc-roots/rules.dune))
+(subdir
+ ./run/gc-roots
+ (copy_files (only_sources true) (files "../../tests/gc-roots/*"))
+ (dynamic_include ../../tests/gc-roots/rules.dune))
 
 (subdir
  tests/generalized-open
@@ -1304,6 +1453,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/generalized-open
+ (copy_files (only_sources true) (files "../../tests/generalized-open/*"))
  (dynamic_include ../../tests/generalized-open/rules.dune))
 
 (subdir
@@ -1327,6 +1477,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/generated-parse-errors
+ (copy_files
+  (only_sources true)
+  (files "../../tests/generated-parse-errors/*"))
  (dynamic_include ../../tests/generated-parse-errors/rules.dune))
 
 (subdir
@@ -1350,6 +1503,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/heap_extent
+ (copy_files (only_sources true) (files "../../tests/heap_extent/*"))
  (dynamic_include ../../tests/heap_extent/rules.dune))
 
 (subdir
@@ -1373,7 +1527,28 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/hidden_includes
- (dynamic_include ../../tests/hidden_includes/rules.dune))
+ (copy_files (only_sources true) (files "../../tests/hidden_includes/*"))
+ (dynamic_include ../../tests/hidden_includes/rules.dune)
+ (subdir
+  liba
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/hidden_includes/liba/*")))
+ (subdir
+  liba_alt
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/hidden_includes/liba_alt/*")))
+ (subdir
+  libb
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/hidden_includes/libb/*")))
+ (subdir
+  libc
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/hidden_includes/libc/*"))))
 
 (subdir
  tests/implicit-types
@@ -1396,6 +1571,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/implicit-types
+ (copy_files (only_sources true) (files "../../tests/implicit-types/*"))
  (dynamic_include ../../tests/implicit-types/rules.dune))
 
 (subdir
@@ -1419,6 +1595,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/int64-unboxing
+ (copy_files (only_sources true) (files "../../tests/int64-unboxing/*"))
  (dynamic_include ../../tests/int64-unboxing/rules.dune))
 
 (subdir
@@ -1442,6 +1619,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/language-extensions
+ (copy_files (only_sources true) (files "../../tests/language-extensions/*"))
  (dynamic_include ../../tests/language-extensions/rules.dune))
 
 (subdir
@@ -1465,6 +1643,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/layout_poly
+ (copy_files (only_sources true) (files "../../tests/layout_poly/*"))
  (dynamic_include ../../tests/layout_poly/rules.dune))
 
 (subdir
@@ -1488,6 +1667,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/layout_poly/cross_module_static
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/layout_poly/cross_module_static/*"))
  (dynamic_include ../../../tests/layout_poly/cross_module_static/rules.dune))
 
 (subdir
@@ -1511,6 +1693,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/layout_poly/transitive_deps
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/layout_poly/transitive_deps/*"))
  (dynamic_include ../../../tests/layout_poly/transitive_deps/rules.dune))
 
 (subdir
@@ -1532,7 +1717,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lazy (dynamic_include ../../tests/lazy/rules.dune))
+(subdir
+ ./run/lazy
+ (copy_files (only_sources true) (files "../../tests/lazy/*"))
+ (dynamic_include ../../tests/lazy/rules.dune))
 
 (subdir
  tests/let-syntax
@@ -1553,7 +1741,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/let-syntax (dynamic_include ../../tests/let-syntax/rules.dune))
+(subdir
+ ./run/let-syntax
+ (copy_files (only_sources true) (files "../../tests/let-syntax/*"))
+ (dynamic_include ../../tests/let-syntax/rules.dune))
 
 (subdir
  tests/letrec-check
@@ -1576,6 +1767,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/letrec-check
+ (copy_files (only_sources true) (files "../../tests/letrec-check/*"))
  (dynamic_include ../../tests/letrec-check/rules.dune))
 
 (subdir
@@ -1599,6 +1791,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/letrec-compilation
+ (copy_files (only_sources true) (files "../../tests/letrec-compilation/*"))
  (dynamic_include ../../tests/letrec-compilation/rules.dune))
 
 (subdir
@@ -1620,7 +1813,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lexing (dynamic_include ../../tests/lexing/rules.dune))
+(subdir
+ ./run/lexing
+ (copy_files (only_sources true) (files "../../tests/lexing/*"))
+ (dynamic_include ../../tests/lexing/rules.dune))
 
 (subdir
  tests/lf_skiplist
@@ -1643,6 +1839,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lf_skiplist
+ (copy_files (only_sources true) (files "../../tests/lf_skiplist/*"))
  (dynamic_include ../../tests/lf_skiplist/rules.dune))
 
 (subdir
@@ -1664,7 +1861,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-arg (dynamic_include ../../tests/lib-arg/rules.dune))
+(subdir
+ ./run/lib-arg
+ (copy_files (only_sources true) (files "../../tests/lib-arg/*"))
+ (dynamic_include ../../tests/lib-arg/rules.dune))
 
 (subdir
  tests/lib-array
@@ -1685,7 +1885,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-array (dynamic_include ../../tests/lib-array/rules.dune))
+(subdir
+ ./run/lib-array
+ (copy_files (only_sources true) (files "../../tests/lib-array/*"))
+ (dynamic_include ../../tests/lib-array/rules.dune))
 
 (subdir
  tests/lib-atomic
@@ -1706,7 +1909,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-atomic (dynamic_include ../../tests/lib-atomic/rules.dune))
+(subdir
+ ./run/lib-atomic
+ (copy_files (only_sources true) (files "../../tests/lib-atomic/*"))
+ (dynamic_include ../../tests/lib-atomic/rules.dune))
 
 (subdir
  tests/lib-bigarray
@@ -1729,6 +1935,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-bigarray
+ (copy_files (only_sources true) (files "../../tests/lib-bigarray/*"))
  (dynamic_include ../../tests/lib-bigarray/rules.dune))
 
 (subdir
@@ -1752,6 +1959,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-bigarray-2
+ (copy_files (only_sources true) (files "../../tests/lib-bigarray-2/*"))
  (dynamic_include ../../tests/lib-bigarray-2/rules.dune))
 
 (subdir
@@ -1775,6 +1983,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-bigarray-file
+ (copy_files (only_sources true) (files "../../tests/lib-bigarray-file/*"))
  (dynamic_include ../../tests/lib-bigarray-file/rules.dune))
 
 (subdir
@@ -1796,7 +2005,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-bool (dynamic_include ../../tests/lib-bool/rules.dune))
+(subdir
+ ./run/lib-bool
+ (copy_files (only_sources true) (files "../../tests/lib-bool/*"))
+ (dynamic_include ../../tests/lib-bool/rules.dune))
 
 (subdir
  tests/lib-buffer
@@ -1817,7 +2029,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-buffer (dynamic_include ../../tests/lib-buffer/rules.dune))
+(subdir
+ ./run/lib-buffer
+ (copy_files (only_sources true) (files "../../tests/lib-buffer/*"))
+ (dynamic_include ../../tests/lib-buffer/rules.dune))
 
 (subdir
  tests/lib-bytes
@@ -1838,7 +2053,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-bytes (dynamic_include ../../tests/lib-bytes/rules.dune))
+(subdir
+ ./run/lib-bytes
+ (copy_files (only_sources true) (files "../../tests/lib-bytes/*"))
+ (dynamic_include ../../tests/lib-bytes/rules.dune))
 
 (subdir
  tests/lib-bytes-utf
@@ -1861,6 +2079,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-bytes-utf
+ (copy_files (only_sources true) (files "../../tests/lib-bytes-utf/*"))
  (dynamic_include ../../tests/lib-bytes-utf/rules.dune))
 
 (subdir
@@ -1884,6 +2103,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-channels
+ (copy_files (only_sources true) (files "../../tests/lib-channels/*"))
  (dynamic_include ../../tests/lib-channels/rules.dune))
 
 (subdir
@@ -1905,7 +2125,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-char (dynamic_include ../../tests/lib-char/rules.dune))
+(subdir
+ ./run/lib-char
+ (copy_files (only_sources true) (files "../../tests/lib-char/*"))
+ (dynamic_include ../../tests/lib-char/rules.dune))
 
 (subdir
  tests/lib-digest
@@ -1926,7 +2149,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-digest (dynamic_include ../../tests/lib-digest/rules.dune))
+(subdir
+ ./run/lib-digest
+ (copy_files (only_sources true) (files "../../tests/lib-digest/*"))
+ (dynamic_include ../../tests/lib-digest/rules.dune))
 
 (subdir
  tests/lib-domain
@@ -1947,7 +2173,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-domain (dynamic_include ../../tests/lib-domain/rules.dune))
+(subdir
+ ./run/lib-domain
+ (copy_files (only_sources true) (files "../../tests/lib-domain/*"))
+ (dynamic_include ../../tests/lib-domain/rules.dune))
 
 (subdir
  tests/lib-dynarray
@@ -1970,6 +2199,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynarray
+ (copy_files (only_sources true) (files "../../tests/lib-dynarray/*"))
  (dynamic_include ../../tests/lib-dynarray/rules.dune))
 
 (subdir
@@ -1993,6 +2223,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-bytecode
+ (copy_files
+  (only_sources true)
+  (files "../../tests/lib-dynlink-bytecode/*"))
  (dynamic_include ../../tests/lib-dynlink-bytecode/rules.dune))
 
 (subdir
@@ -2016,6 +2249,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-csharp
+ (copy_files (only_sources true) (files "../../tests/lib-dynlink-csharp/*"))
  (dynamic_include ../../tests/lib-dynlink-csharp/rules.dune))
 
 (subdir
@@ -2039,6 +2273,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-domains
+ (copy_files (only_sources true) (files "../../tests/lib-dynlink-domains/*"))
  (dynamic_include ../../tests/lib-dynlink-domains/rules.dune))
 
 (subdir
@@ -2062,6 +2297,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-init-info
+ (copy_files
+  (only_sources true)
+  (files "../../tests/lib-dynlink-init-info/*"))
  (dynamic_include ../../tests/lib-dynlink-init-info/rules.dune))
 
 (subdir
@@ -2085,6 +2323,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-initializers
+ (copy_files
+  (only_sources true)
+  (files "../../tests/lib-dynlink-initializers/*"))
  (dynamic_include ../../tests/lib-dynlink-initializers/rules.dune))
 
 (subdir
@@ -2108,7 +2349,13 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-native
- (dynamic_include ../../tests/lib-dynlink-native/rules.dune))
+ (copy_files (only_sources true) (files "../../tests/lib-dynlink-native/*"))
+ (dynamic_include ../../tests/lib-dynlink-native/rules.dune)
+ (subdir
+  sub
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-native/sub/*"))))
 
 (subdir
  tests/lib-dynlink-packed
@@ -2131,6 +2378,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-packed
+ (copy_files (only_sources true) (files "../../tests/lib-dynlink-packed/*"))
  (dynamic_include ../../tests/lib-dynlink-packed/rules.dune))
 
 (subdir
@@ -2154,7 +2402,13 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-pr4229
- (dynamic_include ../../tests/lib-dynlink-pr4229/rules.dune))
+ (copy_files (only_sources true) (files "../../tests/lib-dynlink-pr4229/*"))
+ (dynamic_include ../../tests/lib-dynlink-pr4229/rules.dune)
+ (subdir
+  sub
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-pr4229/sub/*"))))
 
 (subdir
  tests/lib-dynlink-pr4839
@@ -2177,7 +2431,33 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-pr4839
- (dynamic_include ../../tests/lib-dynlink-pr4839/rules.dune))
+ (copy_files (only_sources true) (files "../../tests/lib-dynlink-pr4839/*"))
+ (dynamic_include ../../tests/lib-dynlink-pr4839/rules.dune)
+ (subdir
+  host
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-pr4839/host/*")))
+ (subdir
+  plugin1
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-pr4839/plugin1/*")))
+ (subdir
+  plugin2
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-pr4839/plugin2/*")))
+ (subdir
+  plugin3
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-pr4839/plugin3/*")))
+ (subdir
+  plugin4
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-pr4839/plugin4/*"))))
 
 (subdir
  tests/lib-dynlink-pr6950
@@ -2200,6 +2480,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-pr6950
+ (copy_files (only_sources true) (files "../../tests/lib-dynlink-pr6950/*"))
  (dynamic_include ../../tests/lib-dynlink-pr6950/rules.dune))
 
 (subdir
@@ -2223,6 +2504,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-pr9209
+ (copy_files (only_sources true) (files "../../tests/lib-dynlink-pr9209/*"))
  (dynamic_include ../../tests/lib-dynlink-pr9209/rules.dune))
 
 (subdir
@@ -2246,7 +2528,48 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-dynlink-private
- (dynamic_include ../../tests/lib-dynlink-private/rules.dune))
+ (copy_files (only_sources true) (files "../../tests/lib-dynlink-private/*"))
+ (dynamic_include ../../tests/lib-dynlink-private/rules.dune)
+ (subdir
+  plugin1
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-private/plugin1/*")))
+ (subdir
+  plugin2
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-private/plugin2/*")))
+ (subdir
+  plugin2b
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-private/plugin2b/*")))
+ (subdir
+  plugin2c
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-private/plugin2c/*")))
+ (subdir
+  plugin3
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-private/plugin3/*")))
+ (subdir
+  plugin4
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-private/plugin4/*")))
+ (subdir
+  plugin5
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-private/plugin5/*")))
+ (subdir
+  plugin6
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/lib-dynlink-private/plugin6/*"))))
 
 (subdir
  tests/lib-either
@@ -2267,7 +2590,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-either (dynamic_include ../../tests/lib-either/rules.dune))
+(subdir
+ ./run/lib-either
+ (copy_files (only_sources true) (files "../../tests/lib-either/*"))
+ (dynamic_include ../../tests/lib-either/rules.dune))
 
 (subdir
  tests/lib-extensions
@@ -2290,6 +2616,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-extensions
+ (copy_files (only_sources true) (files "../../tests/lib-extensions/*"))
  (dynamic_include ../../tests/lib-extensions/rules.dune))
 
 (subdir
@@ -2313,6 +2640,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-filename
+ (copy_files (only_sources true) (files "../../tests/lib-filename/*"))
  (dynamic_include ../../tests/lib-filename/rules.dune))
 
 (subdir
@@ -2334,7 +2662,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-float (dynamic_include ../../tests/lib-float/rules.dune))
+(subdir
+ ./run/lib-float
+ (copy_files (only_sources true) (files "../../tests/lib-float/*"))
+ (dynamic_include ../../tests/lib-float/rules.dune))
 
 (subdir
  tests/lib-floatarray
@@ -2357,6 +2688,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-floatarray
+ (copy_files (only_sources true) (files "../../tests/lib-floatarray/*"))
  (dynamic_include ../../tests/lib-floatarray/rules.dune))
 
 (subdir
@@ -2378,7 +2710,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-format (dynamic_include ../../tests/lib-format/rules.dune))
+(subdir
+ ./run/lib-format
+ (copy_files (only_sources true) (files "../../tests/lib-format/*"))
+ (dynamic_include ../../tests/lib-format/rules.dune))
 
 (subdir
  tests/lib-fun
@@ -2399,7 +2734,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-fun (dynamic_include ../../tests/lib-fun/rules.dune))
+(subdir
+ ./run/lib-fun
+ (copy_files (only_sources true) (files "../../tests/lib-fun/*"))
+ (dynamic_include ../../tests/lib-fun/rules.dune))
 
 (subdir
  tests/lib-hashtbl
@@ -2422,6 +2760,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-hashtbl
+ (copy_files (only_sources true) (files "../../tests/lib-hashtbl/*"))
  (dynamic_include ../../tests/lib-hashtbl/rules.dune))
 
 (subdir
@@ -2443,7 +2782,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-int (dynamic_include ../../tests/lib-int/rules.dune))
+(subdir
+ ./run/lib-int
+ (copy_files (only_sources true) (files "../../tests/lib-int/*"))
+ (dynamic_include ../../tests/lib-int/rules.dune))
 
 (subdir
  tests/lib-int64
@@ -2464,7 +2806,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-int64 (dynamic_include ../../tests/lib-int64/rules.dune))
+(subdir
+ ./run/lib-int64
+ (copy_files (only_sources true) (files "../../tests/lib-int64/*"))
+ (dynamic_include ../../tests/lib-int64/rules.dune))
 
 (subdir
  tests/lib-internalformat
@@ -2487,6 +2832,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-internalformat
+ (copy_files (only_sources true) (files "../../tests/lib-internalformat/*"))
  (dynamic_include ../../tests/lib-internalformat/rules.dune))
 
 (subdir
@@ -2508,7 +2854,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-lazy (dynamic_include ../../tests/lib-lazy/rules.dune))
+(subdir
+ ./run/lib-lazy
+ (copy_files (only_sources true) (files "../../tests/lib-lazy/*"))
+ (dynamic_include ../../tests/lib-lazy/rules.dune))
 
 (subdir
  tests/lib-list
@@ -2529,7 +2878,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-list (dynamic_include ../../tests/lib-list/rules.dune))
+(subdir
+ ./run/lib-list
+ (copy_files (only_sources true) (files "../../tests/lib-list/*"))
+ (dynamic_include ../../tests/lib-list/rules.dune))
 
 (subdir
  tests/lib-marshal
@@ -2552,6 +2904,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-marshal
+ (copy_files (only_sources true) (files "../../tests/lib-marshal/*"))
  (dynamic_include ../../tests/lib-marshal/rules.dune))
 
 (subdir
@@ -2573,7 +2926,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-obj (dynamic_include ../../tests/lib-obj/rules.dune))
+(subdir
+ ./run/lib-obj
+ (copy_files (only_sources true) (files "../../tests/lib-obj/*"))
+ (dynamic_include ../../tests/lib-obj/rules.dune))
 
 (subdir
  tests/lib-option
@@ -2594,7 +2950,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-option (dynamic_include ../../tests/lib-option/rules.dune))
+(subdir
+ ./run/lib-option
+ (copy_files (only_sources true) (files "../../tests/lib-option/*"))
+ (dynamic_include ../../tests/lib-option/rules.dune))
 
 (subdir
  tests/lib-pair
@@ -2615,7 +2974,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-pair (dynamic_include ../../tests/lib-pair/rules.dune))
+(subdir
+ ./run/lib-pair
+ (copy_files (only_sources true) (files "../../tests/lib-pair/*"))
+ (dynamic_include ../../tests/lib-pair/rules.dune))
 
 (subdir
  tests/lib-pqueue
@@ -2636,7 +2998,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-pqueue (dynamic_include ../../tests/lib-pqueue/rules.dune))
+(subdir
+ ./run/lib-pqueue
+ (copy_files (only_sources true) (files "../../tests/lib-pqueue/*"))
+ (dynamic_include ../../tests/lib-pqueue/rules.dune))
 
 (subdir
  tests/lib-printf
@@ -2657,7 +3022,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-printf (dynamic_include ../../tests/lib-printf/rules.dune))
+(subdir
+ ./run/lib-printf
+ (copy_files (only_sources true) (files "../../tests/lib-printf/*"))
+ (dynamic_include ../../tests/lib-printf/rules.dune))
 
 (subdir
  tests/lib-queue
@@ -2678,7 +3046,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-queue (dynamic_include ../../tests/lib-queue/rules.dune))
+(subdir
+ ./run/lib-queue
+ (copy_files (only_sources true) (files "../../tests/lib-queue/*"))
+ (dynamic_include ../../tests/lib-queue/rules.dune))
 
 (subdir
  tests/lib-random
@@ -2699,7 +3070,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-random (dynamic_include ../../tests/lib-random/rules.dune))
+(subdir
+ ./run/lib-random
+ (copy_files (only_sources true) (files "../../tests/lib-random/*"))
+ (dynamic_include ../../tests/lib-random/rules.dune))
 
 (subdir
  tests/lib-result
@@ -2720,7 +3094,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-result (dynamic_include ../../tests/lib-result/rules.dune))
+(subdir
+ ./run/lib-result
+ (copy_files (only_sources true) (files "../../tests/lib-result/*"))
+ (dynamic_include ../../tests/lib-result/rules.dune))
 
 (subdir
  tests/lib-runtime-events
@@ -2743,6 +3120,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-runtime-events
+ (copy_files (only_sources true) (files "../../tests/lib-runtime-events/*"))
  (dynamic_include ../../tests/lib-runtime-events/rules.dune))
 
 (subdir
@@ -2764,7 +3142,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-scanf (dynamic_include ../../tests/lib-scanf/rules.dune))
+(subdir
+ ./run/lib-scanf
+ (copy_files (only_sources true) (files "../../tests/lib-scanf/*"))
+ (dynamic_include ../../tests/lib-scanf/rules.dune))
 
 (subdir
  tests/lib-scanf-2
@@ -2787,6 +3168,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-scanf-2
+ (copy_files (only_sources true) (files "../../tests/lib-scanf-2/*"))
  (dynamic_include ../../tests/lib-scanf-2/rules.dune))
 
 (subdir
@@ -2808,7 +3190,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-seq (dynamic_include ../../tests/lib-seq/rules.dune))
+(subdir
+ ./run/lib-seq
+ (copy_files (only_sources true) (files "../../tests/lib-seq/*"))
+ (dynamic_include ../../tests/lib-seq/rules.dune))
 
 (subdir
  tests/lib-set
@@ -2829,7 +3214,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-set (dynamic_include ../../tests/lib-set/rules.dune))
+(subdir
+ ./run/lib-set
+ (copy_files (only_sources true) (files "../../tests/lib-set/*"))
+ (dynamic_include ../../tests/lib-set/rules.dune))
 
 (subdir
  tests/lib-smallint
@@ -2852,6 +3240,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-smallint
+ (copy_files (only_sources true) (files "../../tests/lib-smallint/*"))
  (dynamic_include ../../tests/lib-smallint/rules.dune))
 
 (subdir
@@ -2873,7 +3262,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-stack (dynamic_include ../../tests/lib-stack/rules.dune))
+(subdir
+ ./run/lib-stack
+ (copy_files (only_sources true) (files "../../tests/lib-stack/*"))
+ (dynamic_include ../../tests/lib-stack/rules.dune))
 
 (subdir
  tests/lib-stdlabels
@@ -2896,6 +3288,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-stdlabels
+ (copy_files (only_sources true) (files "../../tests/lib-stdlabels/*"))
  (dynamic_include ../../tests/lib-stdlabels/rules.dune))
 
 (subdir
@@ -2917,7 +3310,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-str (dynamic_include ../../tests/lib-str/rules.dune))
+(subdir
+ ./run/lib-str
+ (copy_files (only_sources true) (files "../../tests/lib-str/*"))
+ (dynamic_include ../../tests/lib-str/rules.dune))
 
 (subdir
  tests/lib-string
@@ -2938,7 +3334,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-string (dynamic_include ../../tests/lib-string/rules.dune))
+(subdir
+ ./run/lib-string
+ (copy_files (only_sources true) (files "../../tests/lib-string/*"))
+ (dynamic_include ../../tests/lib-string/rules.dune))
 
 (subdir
  tests/lib-sync
@@ -2959,7 +3358,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-sync (dynamic_include ../../tests/lib-sync/rules.dune))
+(subdir
+ ./run/lib-sync
+ (copy_files (only_sources true) (files "../../tests/lib-sync/*"))
+ (dynamic_include ../../tests/lib-sync/rules.dune))
 
 (subdir
  tests/lib-sys
@@ -2980,7 +3382,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-sys (dynamic_include ../../tests/lib-sys/rules.dune))
+(subdir
+ ./run/lib-sys
+ (copy_files (only_sources true) (files "../../tests/lib-sys/*"))
+ (dynamic_include ../../tests/lib-sys/rules.dune))
 
 (subdir
  tests/lib-systhreads
@@ -3003,6 +3408,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-systhreads
+ (copy_files (only_sources true) (files "../../tests/lib-systhreads/*"))
  (dynamic_include ../../tests/lib-systhreads/rules.dune))
 
 (subdir
@@ -3026,6 +3432,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-threads
+ (copy_files (only_sources true) (files "../../tests/lib-threads/*"))
  (dynamic_include ../../tests/lib-threads/rules.dune))
 
 (subdir
@@ -3047,7 +3454,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/lib-uchar (dynamic_include ../../tests/lib-uchar/rules.dune))
+(subdir
+ ./run/lib-uchar
+ (copy_files (only_sources true) (files "../../tests/lib-uchar/*"))
+ (dynamic_include ../../tests/lib-uchar/rules.dune))
 
 (subdir
  tests/lib-unix/common
@@ -3070,6 +3480,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/common
+ (copy_files (only_sources true) (files "../../../tests/lib-unix/common/*"))
  (dynamic_include ../../../tests/lib-unix/common/rules.dune))
 
 (subdir
@@ -3093,6 +3504,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/isatty
+ (copy_files (only_sources true) (files "../../../tests/lib-unix/isatty/*"))
  (dynamic_include ../../../tests/lib-unix/isatty/rules.dune))
 
 (subdir
@@ -3116,6 +3528,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/kill
+ (copy_files (only_sources true) (files "../../../tests/lib-unix/kill/*"))
  (dynamic_include ../../../tests/lib-unix/kill/rules.dune))
 
 (subdir
@@ -3139,6 +3552,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/realpath
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/lib-unix/realpath/*"))
  (dynamic_include ../../../tests/lib-unix/realpath/rules.dune))
 
 (subdir
@@ -3162,7 +3578,15 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/unix-execvpe
- (dynamic_include ../../../tests/lib-unix/unix-execvpe/rules.dune))
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/lib-unix/unix-execvpe/*"))
+ (dynamic_include ../../../tests/lib-unix/unix-execvpe/rules.dune)
+ (subdir
+  subdir
+  (copy_files
+   (only_sources true)
+   (files "../../../../tests/lib-unix/unix-execvpe/subdir/*"))))
 
 (subdir
  tests/lib-unix/unix-socket
@@ -3185,6 +3609,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/unix-socket
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/lib-unix/unix-socket/*"))
  (dynamic_include ../../../tests/lib-unix/unix-socket/rules.dune))
 
 (subdir
@@ -3208,6 +3635,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/win-channel-of
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/lib-unix/win-channel-of/*"))
  (dynamic_include ../../../tests/lib-unix/win-channel-of/rules.dune))
 
 (subdir
@@ -3231,6 +3661,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/win-createprocess
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/lib-unix/win-createprocess/*"))
  (dynamic_include ../../../tests/lib-unix/win-createprocess/rules.dune))
 
 (subdir
@@ -3254,6 +3687,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/win-env
+ (copy_files (only_sources true) (files "../../../tests/lib-unix/win-env/*"))
  (dynamic_include ../../../tests/lib-unix/win-env/rules.dune))
 
 (subdir
@@ -3277,6 +3711,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/win-socketpair
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/lib-unix/win-socketpair/*"))
  (dynamic_include ../../../tests/lib-unix/win-socketpair/rules.dune))
 
 (subdir
@@ -3300,6 +3737,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/win-stat
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/lib-unix/win-stat/*"))
  (dynamic_include ../../../tests/lib-unix/win-stat/rules.dune))
 
 (subdir
@@ -3323,6 +3763,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/lib-unix/win-symlink
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/lib-unix/win-symlink/*"))
  (dynamic_include ../../../tests/lib-unix/win-symlink/rules.dune))
 
 (subdir
@@ -3344,7 +3787,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/link-order (dynamic_include ../../tests/link-order/rules.dune))
+(subdir
+ ./run/link-order
+ (copy_files (only_sources true) (files "../../tests/link-order/*"))
+ (dynamic_include ../../tests/link-order/rules.dune))
 
 (subdir
  tests/link-test
@@ -3365,7 +3811,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/link-test (dynamic_include ../../tests/link-test/rules.dune))
+(subdir
+ ./run/link-test
+ (copy_files (only_sources true) (files "../../tests/link-test/*"))
+ (dynamic_include ../../tests/link-test/rules.dune))
 
 (subdir
  tests/load_path
@@ -3386,7 +3835,13 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/load_path (dynamic_include ../../tests/load_path/rules.dune))
+(subdir
+ ./run/load_path
+ (copy_files (only_sources true) (files "../../tests/load_path/*"))
+ (dynamic_include ../../tests/load_path/rules.dune)
+ (subdir
+  test
+  (copy_files (only_sources true) (files "../../../tests/load_path/test/*"))))
 
 (subdir
  tests/local-functions
@@ -3409,6 +3864,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/local-functions
+ (copy_files (only_sources true) (files "../../tests/local-functions/*"))
  (dynamic_include ../../tests/local-functions/rules.dune))
 
 (subdir
@@ -3430,7 +3886,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/locale (dynamic_include ../../tests/locale/rules.dune))
+(subdir
+ ./run/locale
+ (copy_files (only_sources true) (files "../../tests/locale/*"))
+ (dynamic_include ../../tests/locale/rules.dune))
 
 (subdir
  tests/manifests
@@ -3451,7 +3910,15 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/manifests (dynamic_include ../../tests/manifests/rules.dune))
+(subdir
+ ./run/manifests
+ (copy_files (only_sources true) (files "../../tests/manifests/*"))
+ (dynamic_include ../../tests/manifests/rules.dune)
+ (subdir
+  manifests
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/manifests/manifests/*"))))
 
 (subdir
  tests/manifests-link
@@ -3474,6 +3941,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/manifests-link
+ (copy_files (only_sources true) (files "../../tests/manifests-link/*"))
  (dynamic_include ../../tests/manifests-link/rules.dune))
 
 (subdir
@@ -3497,6 +3965,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/manual-intf-c
+ (copy_files (only_sources true) (files "../../tests/manual-intf-c/*"))
  (dynamic_include ../../tests/manual-intf-c/rules.dune))
 
 (subdir
@@ -3520,6 +3989,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/manual-module-init
+ (copy_files (only_sources true) (files "../../tests/manual-module-init/*"))
  (dynamic_include ../../tests/manual-module-init/rules.dune))
 
 (subdir
@@ -3543,6 +4013,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/manual-module-init-cycle
+ (copy_files
+  (only_sources true)
+  (files "../../tests/manual-module-init-cycle/*"))
  (dynamic_include ../../tests/manual-module-init-cycle/rules.dune))
 
 (subdir
@@ -3566,6 +4039,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/manual-module-init-sticky-failure
+ (copy_files
+  (only_sources true)
+  (files "../../tests/manual-module-init-sticky-failure/*"))
  (dynamic_include ../../tests/manual-module-init-sticky-failure/rules.dune))
 
 (subdir
@@ -3589,6 +4065,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/match-exception
+ (copy_files (only_sources true) (files "../../tests/match-exception/*"))
  (dynamic_include ../../tests/match-exception/rules.dune))
 
 (subdir
@@ -3612,6 +4089,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/match-exception-warnings
+ (copy_files
+  (only_sources true)
+  (files "../../tests/match-exception-warnings/*"))
  (dynamic_include ../../tests/match-exception-warnings/rules.dune))
 
 (subdir
@@ -3635,6 +4115,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/match-side-effects
+ (copy_files (only_sources true) (files "../../tests/match-side-effects/*"))
  (dynamic_include ../../tests/match-side-effects/rules.dune))
 
 (subdir
@@ -3658,6 +4139,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/memory-model
+ (copy_files (only_sources true) (files "../../tests/memory-model/*"))
  (dynamic_include ../../tests/memory-model/rules.dune))
 
 (subdir
@@ -3679,7 +4161,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/messages (dynamic_include ../../tests/messages/rules.dune))
+(subdir
+ ./run/messages
+ (copy_files (only_sources true) (files "../../tests/messages/*"))
+ (dynamic_include ../../tests/messages/rules.dune))
 
 (subdir
  tests/messages/locations
@@ -3702,6 +4187,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/messages/locations
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/messages/locations/*"))
  (dynamic_include ../../../tests/messages/locations/rules.dune))
 
 (subdir
@@ -3723,7 +4211,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/misc (dynamic_include ../../tests/misc/rules.dune))
+(subdir
+ ./run/misc
+ (copy_files (only_sources true) (files "../../tests/misc/*"))
+ (dynamic_include ../../tests/misc/rules.dune))
 
 (subdir
  tests/misc-kb
@@ -3744,7 +4235,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/misc-kb (dynamic_include ../../tests/misc-kb/rules.dune))
+(subdir
+ ./run/misc-kb
+ (copy_files (only_sources true) (files "../../tests/misc-kb/*"))
+ (dynamic_include ../../tests/misc-kb/rules.dune))
 
 (subdir
  tests/misc-unsafe
@@ -3767,6 +4261,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/misc-unsafe
+ (copy_files (only_sources true) (files "../../tests/misc-unsafe/*"))
  (dynamic_include ../../tests/misc-unsafe/rules.dune))
 
 (subdir
@@ -3790,6 +4285,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/mixed-blocks
+ (copy_files (only_sources true) (files "../../tests/mixed-blocks/*"))
  (dynamic_include ../../tests/mixed-blocks/rules.dune))
 
 (subdir
@@ -3813,6 +4309,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/mixed-modules
+ (copy_files (only_sources true) (files "../../tests/mixed-modules/*"))
  (dynamic_include ../../tests/mixed-modules/rules.dune))
 
 (subdir
@@ -3836,6 +4333,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/mixed-modules/multi-file
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/mixed-modules/multi-file/*"))
  (dynamic_include ../../../tests/mixed-modules/multi-file/rules.dune))
 
 (subdir
@@ -3859,6 +4359,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/native-cfi-stepping
+ (copy_files (only_sources true) (files "../../tests/native-cfi-stepping/*"))
  (dynamic_include ../../tests/native-cfi-stepping/rules.dune))
 
 (subdir
@@ -3882,6 +4383,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/native-debugger
+ (copy_files (only_sources true) (files "../../tests/native-debugger/*"))
  (dynamic_include ../../tests/native-debugger/rules.dune))
 
 (subdir
@@ -3905,6 +4407,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/nested-mixed-records
+ (copy_files
+  (only_sources true)
+  (files "../../tests/nested-mixed-records/*"))
  (dynamic_include ../../tests/nested-mixed-records/rules.dune))
 
 (subdir
@@ -3928,6 +4433,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/no-alias-deps
+ (copy_files (only_sources true) (files "../../tests/no-alias-deps/*"))
  (dynamic_include ../../tests/no-alias-deps/rules.dune))
 
 (subdir
@@ -3949,7 +4455,19 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/opaque (dynamic_include ../../tests/opaque/rules.dune))
+(subdir
+ ./run/opaque
+ (copy_files (only_sources true) (files "../../tests/opaque/*"))
+ (dynamic_include ../../tests/opaque/rules.dune)
+ (subdir
+  fst
+  (copy_files (only_sources true) (files "../../../tests/opaque/fst/*")))
+ (subdir
+  intf
+  (copy_files (only_sources true) (files "../../../tests/opaque/intf/*")))
+ (subdir
+  snd
+  (copy_files (only_sources true) (files "../../../tests/opaque/snd/*"))))
 
 (subdir
  tests/output-complete-obj
@@ -3972,6 +4490,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/output-complete-obj
+ (copy_files (only_sources true) (files "../../tests/output-complete-obj/*"))
  (dynamic_include ../../tests/output-complete-obj/rules.dune))
 
 (subdir
@@ -3995,6 +4514,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/packs/basic
+ (copy_files (only_sources true) (files "../../../tests/packs/basic/*"))
  (dynamic_include ../../../tests/packs/basic/rules.dune))
 
 (subdir
@@ -4018,6 +4538,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/packs/flambda2_export_info
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/packs/flambda2_export_info/*"))
  (dynamic_include ../../../tests/packs/flambda2_export_info/rules.dune))
 
 (subdir
@@ -4041,6 +4564,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/packs/inconsistent
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/packs/inconsistent/*"))
  (dynamic_include ../../../tests/packs/inconsistent/rules.dune))
 
 (subdir
@@ -4062,7 +4588,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/parallel (dynamic_include ../../tests/parallel/rules.dune))
+(subdir
+ ./run/parallel
+ (copy_files (only_sources true) (files "../../tests/parallel/*"))
+ (dynamic_include ../../tests/parallel/rules.dune))
 
 (subdir
  tests/parse-errors
@@ -4085,6 +4614,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/parse-errors
+ (copy_files (only_sources true) (files "../../tests/parse-errors/*"))
  (dynamic_include ../../tests/parse-errors/rules.dune))
 
 (subdir
@@ -4106,7 +4636,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/parsetree (dynamic_include ../../tests/parsetree/rules.dune))
+(subdir
+ ./run/parsetree
+ (copy_files (only_sources true) (files "../../tests/parsetree/*"))
+ (dynamic_include ../../tests/parsetree/rules.dune))
 
 (subdir
  tests/parsing
@@ -4127,7 +4660,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/parsing (dynamic_include ../../tests/parsing/rules.dune))
+(subdir
+ ./run/parsing
+ (copy_files (only_sources true) (files "../../tests/parsing/*"))
+ (dynamic_include ../../tests/parsing/rules.dune))
 
 (subdir
  tests/peek_and_poke
@@ -4150,6 +4686,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/peek_and_poke
+ (copy_files (only_sources true) (files "../../tests/peek_and_poke/*"))
  (dynamic_include ../../tests/peek_and_poke/rules.dune))
 
 (subdir
@@ -4171,7 +4708,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/polling (dynamic_include ../../tests/polling/rules.dune))
+(subdir
+ ./run/polling
+ (copy_files (only_sources true) (files "../../tests/polling/*"))
+ (dynamic_include ../../tests/polling/rules.dune))
 
 (subdir
  tests/ppx-attributes
@@ -4194,6 +4734,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/ppx-attributes
+ (copy_files (only_sources true) (files "../../tests/ppx-attributes/*"))
  (dynamic_include ../../tests/ppx-attributes/rules.dune))
 
 (subdir
@@ -4217,6 +4758,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/ppx-contexts
+ (copy_files (only_sources true) (files "../../tests/ppx-contexts/*"))
  (dynamic_include ../../tests/ppx-contexts/rules.dune))
 
 (subdir
@@ -4240,6 +4782,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/ppx-empty-cases
+ (copy_files (only_sources true) (files "../../tests/ppx-empty-cases/*"))
  (dynamic_include ../../tests/ppx-empty-cases/rules.dune))
 
 (subdir
@@ -4263,6 +4806,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/ppx-error-message
+ (copy_files (only_sources true) (files "../../tests/ppx-error-message/*"))
  (dynamic_include ../../tests/ppx-error-message/rules.dune))
 
 (subdir
@@ -4286,6 +4830,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/prim-bigstring
+ (copy_files (only_sources true) (files "../../tests/prim-bigstring/*"))
  (dynamic_include ../../tests/prim-bigstring/rules.dune))
 
 (subdir
@@ -4307,7 +4852,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/prim-bswap (dynamic_include ../../tests/prim-bswap/rules.dune))
+(subdir
+ ./run/prim-bswap
+ (copy_files (only_sources true) (files "../../tests/prim-bswap/*"))
+ (dynamic_include ../../tests/prim-bswap/rules.dune))
 
 (subdir
  tests/prim-revapply
@@ -4330,6 +4878,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/prim-revapply
+ (copy_files (only_sources true) (files "../../tests/prim-revapply/*"))
  (dynamic_include ../../tests/prim-revapply/rules.dune))
 
 (subdir
@@ -4353,6 +4902,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/printing-types
+ (copy_files (only_sources true) (files "../../tests/printing-types/*"))
  (dynamic_include ../../tests/printing-types/rules.dune))
 
 (subdir
@@ -4376,8 +4926,47 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/profile/counters/language_extensions
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/profile/counters/language_extensions/*"))
  (dynamic_include
-  ../../../../tests/profile/counters/language_extensions/rules.dune))
+  ../../../../tests/profile/counters/language_extensions/rules.dune)
+ (subdir
+  comprehensions
+  (copy_files
+   (only_sources true)
+   (files
+    "../../../../../tests/profile/counters/language_extensions/comprehensions/*")))
+ (subdir
+  immutable_array_comprehensions
+  (copy_files
+   (only_sources true)
+   (files
+    "../../../../../tests/profile/counters/language_extensions/immutable_array_comprehensions/*")))
+ (subdir
+  immutable_arrays
+  (copy_files
+   (only_sources true)
+   (files
+    "../../../../../tests/profile/counters/language_extensions/immutable_arrays/*")))
+ (subdir
+  include_functor
+  (copy_files
+   (only_sources true)
+   (files
+    "../../../../../tests/profile/counters/language_extensions/include_functor/*")))
+ (subdir
+  module_strengthening
+  (copy_files
+   (only_sources true)
+   (files
+    "../../../../../tests/profile/counters/language_extensions/module_strengthening/*")))
+ (subdir
+  nested
+  (copy_files
+   (only_sources true)
+   (files
+    "../../../../../tests/profile/counters/language_extensions/nested/*"))))
 
 (subdir
  tests/quotation
@@ -4398,7 +4987,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/quotation (dynamic_include ../../tests/quotation/rules.dune))
+(subdir
+ ./run/quotation
+ (copy_files (only_sources true) (files "../../tests/quotation/*"))
+ (dynamic_include ../../tests/quotation/rules.dune))
 
 (subdir
  tests/quotation/eval
@@ -4421,6 +5013,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/quotation/eval
+ (copy_files (only_sources true) (files "../../../tests/quotation/eval/*"))
  (dynamic_include ../../../tests/quotation/eval/rules.dune))
 
 (subdir
@@ -4444,6 +5037,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/quotation/eval/current_unit
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/quotation/eval/current_unit/*"))
  (dynamic_include ../../../../tests/quotation/eval/current_unit/rules.dune))
 
 (subdir
@@ -4467,6 +5063,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/quotation/flags
+ (copy_files (only_sources true) (files "../../../tests/quotation/flags/*"))
  (dynamic_include ../../../tests/quotation/flags/rules.dune))
 
 (subdir
@@ -4490,6 +5087,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/quotation/linker
+ (copy_files (only_sources true) (files "../../../tests/quotation/linker/*"))
  (dynamic_include ../../../tests/quotation/linker/rules.dune))
 
 (subdir
@@ -4513,6 +5111,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/quotation/typing
+ (copy_files (only_sources true) (files "../../../tests/quotation/typing/*"))
  (dynamic_include ../../../tests/quotation/typing/rules.dune))
 
 (subdir
@@ -4536,6 +5135,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/quotation/typing/eval
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/quotation/typing/eval/*"))
  (dynamic_include ../../../../tests/quotation/typing/eval/rules.dune))
 
 (subdir
@@ -4559,6 +5161,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/quotation/typing/inspection
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/quotation/typing/inspection/*"))
  (dynamic_include ../../../../tests/quotation/typing/inspection/rules.dune))
 
 (subdir
@@ -4582,6 +5187,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/quotation/typing/quotes_splices
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/quotation/typing/quotes_splices/*"))
  (dynamic_include
   ../../../../tests/quotation/typing/quotes_splices/rules.dune))
 
@@ -4606,6 +5214,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/raise-counts
+ (copy_files (only_sources true) (files "../../tests/raise-counts/*"))
  (dynamic_include ../../tests/raise-counts/rules.dune))
 
 (subdir
@@ -4627,7 +5236,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/reaper (dynamic_include ../../tests/reaper/rules.dune))
+(subdir
+ ./run/reaper
+ (copy_files (only_sources true) (files "../../tests/reaper/*"))
+ (dynamic_include ../../tests/reaper/rules.dune))
 
 (subdir
  tests/records-and-block-indices
@@ -4650,6 +5262,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/records-and-block-indices
+ (copy_files
+  (only_sources true)
+  (files "../../tests/records-and-block-indices/*"))
  (dynamic_include ../../tests/records-and-block-indices/rules.dune))
 
 (subdir
@@ -4673,6 +5288,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/bigarray_index_truncation
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/bigarray_index_truncation/*"))
  (dynamic_include
   ../../../tests/regression/bigarray_index_truncation/rules.dune))
 
@@ -4697,6 +5315,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/gpr1623
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/gpr1623/*"))
  (dynamic_include ../../../tests/regression/gpr1623/rules.dune))
 
 (subdir
@@ -4720,6 +5341,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/large-bigarray-pacing
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/large-bigarray-pacing/*"))
  (dynamic_include ../../../tests/regression/large-bigarray-pacing/rules.dune))
 
 (subdir
@@ -4743,8 +5367,16 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/missing_set_of_closures
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/missing_set_of_closures/*"))
  (dynamic_include
-  ../../../tests/regression/missing_set_of_closures/rules.dune))
+  ../../../tests/regression/missing_set_of_closures/rules.dune)
+ (subdir
+  dir
+  (copy_files
+   (only_sources true)
+   (files "../../../../tests/regression/missing_set_of_closures/dir/*"))))
 
 (subdir
  tests/regression/name_eq_peephole
@@ -4767,6 +5399,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/name_eq_peephole
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/name_eq_peephole/*"))
  (dynamic_include ../../../tests/regression/name_eq_peephole/rules.dune))
 
 (subdir
@@ -4790,6 +5425,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/polyvariant_arg_layout
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/polyvariant_arg_layout/*"))
  (dynamic_include
   ../../../tests/regression/polyvariant_arg_layout/rules.dune))
 
@@ -4814,6 +5452,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr10611
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr10611/*"))
  (dynamic_include ../../../tests/regression/pr10611/rules.dune))
 
 (subdir
@@ -4837,6 +5478,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr11865
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr11865/*"))
  (dynamic_include ../../../tests/regression/pr11865/rules.dune))
 
 (subdir
@@ -4860,6 +5504,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr11887
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr11887/*"))
  (dynamic_include ../../../tests/regression/pr11887/rules.dune))
 
 (subdir
@@ -4883,6 +5530,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr1580
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr1580/*"))
  (dynamic_include ../../../tests/regression/pr1580/rules.dune))
 
 (subdir
@@ -4906,6 +5556,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr2098
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr2098/*"))
  (dynamic_include ../../../tests/regression/pr2098/rules.dune))
 
 (subdir
@@ -4929,6 +5582,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr3612
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr3612/*"))
  (dynamic_include ../../../tests/regression/pr3612/rules.dune))
 
 (subdir
@@ -4952,6 +5608,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr5233
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr5233/*"))
  (dynamic_include ../../../tests/regression/pr5233/rules.dune))
 
 (subdir
@@ -4975,6 +5634,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr5757
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr5757/*"))
  (dynamic_include ../../../tests/regression/pr5757/rules.dune))
 
 (subdir
@@ -4998,6 +5660,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr6024
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr6024/*"))
  (dynamic_include ../../../tests/regression/pr6024/rules.dune))
 
 (subdir
@@ -5021,6 +5686,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr7042
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr7042/*"))
  (dynamic_include ../../../tests/regression/pr7042/rules.dune))
 
 (subdir
@@ -5044,6 +5712,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr7426
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr7426/*"))
  (dynamic_include ../../../tests/regression/pr7426/rules.dune))
 
 (subdir
@@ -5067,6 +5738,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr7718
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr7718/*"))
  (dynamic_include ../../../tests/regression/pr7718/rules.dune))
 
 (subdir
@@ -5090,6 +5764,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr7798
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr7798/*"))
  (dynamic_include ../../../tests/regression/pr7798/rules.dune))
 
 (subdir
@@ -5113,6 +5790,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr7920
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr7920/*"))
  (dynamic_include ../../../tests/regression/pr7920/rules.dune))
 
 (subdir
@@ -5136,6 +5816,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr8769
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr8769/*"))
  (dynamic_include ../../../tests/regression/pr8769/rules.dune))
 
 (subdir
@@ -5159,6 +5842,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr9028
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr9028/*"))
  (dynamic_include ../../../tests/regression/pr9028/rules.dune))
 
 (subdir
@@ -5182,6 +5868,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr9292
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr9292/*"))
  (dynamic_include ../../../tests/regression/pr9292/rules.dune))
 
 (subdir
@@ -5205,6 +5894,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr9326
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr9326/*"))
  (dynamic_include ../../../tests/regression/pr9326/rules.dune))
 
 (subdir
@@ -5228,6 +5920,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr9443
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr9443/*"))
  (dynamic_include ../../../tests/regression/pr9443/rules.dune))
 
 (subdir
@@ -5251,6 +5946,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/pr9853
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/pr9853/*"))
  (dynamic_include ../../../tests/regression/pr9853/rules.dune))
 
 (subdir
@@ -5274,6 +5972,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/regression/tailcall-optional-args
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/regression/tailcall-optional-args/*"))
  (dynamic_include
   ../../../tests/regression/tailcall-optional-args/rules.dune))
 
@@ -5298,6 +5999,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/reinterpret-casts
+ (copy_files (only_sources true) (files "../../tests/reinterpret-casts/*"))
  (dynamic_include ../../tests/reinterpret-casts/rules.dune))
 
 (subdir
@@ -5321,6 +6023,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/reproducibility
+ (copy_files (only_sources true) (files "../../tests/reproducibility/*"))
  (dynamic_include ../../tests/reproducibility/rules.dune))
 
 (subdir
@@ -5344,6 +6047,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/required-external
+ (copy_files (only_sources true) (files "../../tests/required-external/*"))
  (dynamic_include ../../tests/required-external/rules.dune))
 
 (subdir
@@ -5367,6 +6071,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/runtime-C-exceptions
+ (copy_files
+  (only_sources true)
+  (files "../../tests/runtime-C-exceptions/*"))
  (dynamic_include ../../tests/runtime-C-exceptions/rules.dune))
 
 (subdir
@@ -5390,6 +6097,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/runtime-errors
+ (copy_files (only_sources true) (files "../../tests/runtime-errors/*"))
  (dynamic_include ../../tests/runtime-errors/rules.dune))
 
 (subdir
@@ -5413,6 +6121,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/runtime-objects
+ (copy_files (only_sources true) (files "../../tests/runtime-objects/*"))
  (dynamic_include ../../tests/runtime-objects/rules.dune))
 
 (subdir
@@ -5436,6 +6145,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/self-contained-toplevel
+ (copy_files
+  (only_sources true)
+  (files "../../tests/self-contained-toplevel/*"))
  (dynamic_include ../../tests/self-contained-toplevel/rules.dune))
 
 (subdir
@@ -5459,6 +6171,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/shadow_include
+ (copy_files (only_sources true) (files "../../tests/shadow_include/*"))
  (dynamic_include ../../tests/shadow_include/rules.dune))
 
 (subdir
@@ -5482,6 +6195,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/shape-index
+ (copy_files (only_sources true) (files "../../tests/shape-index/*"))
  (dynamic_include ../../tests/shape-index/rules.dune))
 
 (subdir
@@ -5503,7 +6217,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/shapes (dynamic_include ../../tests/shapes/rules.dune))
+(subdir
+ ./run/shapes
+ (copy_files (only_sources true) (files "../../tests/shapes/*"))
+ (dynamic_include ../../tests/shapes/rules.dune))
 
 (subdir
  tests/slambda
@@ -5524,7 +6241,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/slambda (dynamic_include ../../tests/slambda/rules.dune))
+(subdir
+ ./run/slambda
+ (copy_files (only_sources true) (files "../../tests/slambda/*"))
+ (dynamic_include ../../tests/slambda/rules.dune))
 
 (subdir
  tests/statmemprof
@@ -5547,6 +6267,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/statmemprof
+ (copy_files (only_sources true) (files "../../tests/statmemprof/*"))
  (dynamic_include ../../tests/statmemprof/rules.dune))
 
 (subdir
@@ -5570,6 +6291,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/syntactic-arity
+ (copy_files (only_sources true) (files "../../tests/syntactic-arity/*"))
  (dynamic_include ../../tests/syntactic-arity/rules.dune))
 
 (subdir
@@ -5593,6 +6315,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tail-call-many-returns
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tail-call-many-returns/*"))
  (dynamic_include ../../tests/tail-call-many-returns/rules.dune))
 
 (subdir
@@ -5616,6 +6341,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/basic
+ (copy_files (only_sources true) (files "../../../tests/templates/basic/*"))
  (dynamic_include ../../../tests/templates/basic/rules.dune))
 
 (subdir
@@ -5639,6 +6365,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/dunelike
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/templates/dunelike/*"))
  (dynamic_include ../../../tests/templates/dunelike/rules.dune))
 
 (subdir
@@ -5662,6 +6391,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/templates/functorize/*"))
  (dynamic_include ../../../tests/templates/functorize/rules.dune))
 
 (subdir
@@ -5685,6 +6417,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/archive_deps
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/archive_deps/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/archive_deps/rules.dune))
 
@@ -5709,6 +6444,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/bad_deps
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/bad_deps/*"))
  (dynamic_include ../../../../tests/templates/functorize/bad_deps/rules.dune))
 
 (subdir
@@ -5732,6 +6470,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/bad_input
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/bad_input/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/bad_input/rules.dune))
 
@@ -5756,6 +6497,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/cmifile
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/cmifile/*"))
  (dynamic_include ../../../../tests/templates/functorize/cmifile/rules.dune))
 
 (subdir
@@ -5779,6 +6523,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/complete_arg
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/complete_arg/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/complete_arg/rules.dune))
 
@@ -5803,6 +6550,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/crc_mismatch
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/crc_mismatch/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/crc_mismatch/rules.dune))
 
@@ -5827,6 +6577,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/dunelike
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/dunelike/*"))
  (dynamic_include ../../../../tests/templates/functorize/dunelike/rules.dune))
 
 (subdir
@@ -5850,6 +6603,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/instance_arg
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/instance_arg/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/instance_arg/rules.dune))
 
@@ -5874,6 +6630,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/missing_impl
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/missing_impl/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/missing_impl/rules.dune))
 
@@ -5898,6 +6657,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/module_alias
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/module_alias/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/module_alias/rules.dune))
 
@@ -5922,6 +6684,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/multi_instances
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/multi_instances/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/multi_instances/rules.dune))
 
@@ -5946,6 +6711,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/nested_static
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/nested_static/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/nested_static/rules.dune))
 
@@ -5970,6 +6738,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/partial_deps
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/partial_deps/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/partial_deps/rules.dune))
 
@@ -5994,6 +6765,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/shared_dep
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/shared_dep/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/shared_dep/rules.dune))
 
@@ -6018,6 +6792,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/functorize/uses_plain
+ (copy_files
+  (only_sources true)
+  (files "../../../../tests/templates/functorize/uses_plain/*"))
  (dynamic_include
   ../../../../tests/templates/functorize/uses_plain/rules.dune))
 
@@ -6042,6 +6819,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/max_arity
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/templates/max_arity/*"))
  (dynamic_include ../../../tests/templates/max_arity/rules.dune))
 
 (subdir
@@ -6065,6 +6845,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/templates/phantom_arg_reveal
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/templates/phantom_arg_reveal/*"))
  (dynamic_include ../../../tests/templates/phantom_arg_reveal/rules.dune))
 
 (subdir
@@ -6086,7 +6869,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/tmc (dynamic_include ../../tests/tmc/rules.dune))
+(subdir
+ ./run/tmc
+ (copy_files (only_sources true) (files "../../tests/tmc/*"))
+ (dynamic_include ../../tests/tmc/rules.dune))
 
 (subdir
  tests/tool-command-line
@@ -6109,6 +6895,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-command-line
+ (copy_files (only_sources true) (files "../../tests/tool-command-line/*"))
  (dynamic_include ../../tests/tool-command-line/rules.dune))
 
 (subdir
@@ -6132,6 +6919,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-debugger/basic
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/tool-debugger/basic/*"))
  (dynamic_include ../../../tests/tool-debugger/basic/rules.dune))
 
 (subdir
@@ -6155,6 +6945,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-debugger/dynlink
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/tool-debugger/dynlink/*"))
  (dynamic_include ../../../tests/tool-debugger/dynlink/rules.dune))
 
 (subdir
@@ -6178,7 +6971,15 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-debugger/find-artifacts
- (dynamic_include ../../../tests/tool-debugger/find-artifacts/rules.dune))
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/tool-debugger/find-artifacts/*"))
+ (dynamic_include ../../../tests/tool-debugger/find-artifacts/rules.dune)
+ (subdir
+  in
+  (copy_files
+   (only_sources true)
+   (files "../../../../tests/tool-debugger/find-artifacts/in/*"))))
 
 (subdir
  tests/tool-debugger/module_named_main
@@ -6201,6 +7002,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-debugger/module_named_main
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/tool-debugger/module_named_main/*"))
  (dynamic_include ../../../tests/tool-debugger/module_named_main/rules.dune))
 
 (subdir
@@ -6224,6 +7028,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-debugger/no_debug_event
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/tool-debugger/no_debug_event/*"))
  (dynamic_include ../../../tests/tool-debugger/no_debug_event/rules.dune))
 
 (subdir
@@ -6247,6 +7054,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-debugger/printer
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/tool-debugger/printer/*"))
  (dynamic_include ../../../tests/tool-debugger/printer/rules.dune))
 
 (subdir
@@ -6270,6 +7080,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-debugger/temporary-breakpoints
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/tool-debugger/temporary-breakpoints/*"))
  (dynamic_include
   ../../../tests/tool-debugger/temporary-breakpoints/rules.dune))
 
@@ -6294,6 +7107,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-dumpobj
+ (copy_files (only_sources true) (files "../../tests/tool-dumpobj/*"))
  (dynamic_include ../../tests/tool-dumpobj/rules.dune))
 
 (subdir
@@ -6317,6 +7131,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-dumpobj-events
+ (copy_files (only_sources true) (files "../../tests/tool-dumpobj-events/*"))
  (dynamic_include ../../tests/tool-dumpobj-events/rules.dune))
 
 (subdir
@@ -6340,6 +7155,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-expect-test
+ (copy_files (only_sources true) (files "../../tests/tool-expect-test/*"))
  (dynamic_include ../../tests/tool-expect-test/rules.dune))
 
 (subdir
@@ -6363,6 +7179,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-lexyacc
+ (copy_files (only_sources true) (files "../../tests/tool-lexyacc/*"))
  (dynamic_include ../../tests/tool-lexyacc/rules.dune))
 
 (subdir
@@ -6384,7 +7201,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/tool-ocaml (dynamic_include ../../tests/tool-ocaml/rules.dune))
+(subdir
+ ./run/tool-ocaml
+ (copy_files (only_sources true) (files "../../tests/tool-ocaml/*"))
+ (dynamic_include ../../tests/tool-ocaml/rules.dune))
 
 (subdir
  tests/tool-ocaml-annot
@@ -6407,6 +7227,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocaml-annot
+ (copy_files (only_sources true) (files "../../tests/tool-ocaml-annot/*"))
  (dynamic_include ../../tests/tool-ocaml-annot/rules.dune))
 
 (subdir
@@ -6430,6 +7251,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamlc-compat32
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamlc-compat32/*"))
  (dynamic_include ../../tests/tool-ocamlc-compat32/rules.dune))
 
 (subdir
@@ -6453,6 +7277,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamlc-error-cleanup
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamlc-error-cleanup/*"))
  (dynamic_include ../../tests/tool-ocamlc-error-cleanup/rules.dune))
 
 (subdir
@@ -6476,6 +7303,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamlc-locations
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamlc-locations/*"))
  (dynamic_include ../../tests/tool-ocamlc-locations/rules.dune))
 
 (subdir
@@ -6499,6 +7329,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamlc-open
+ (copy_files (only_sources true) (files "../../tests/tool-ocamlc-open/*"))
  (dynamic_include ../../tests/tool-ocamlc-open/rules.dune))
 
 (subdir
@@ -6522,6 +7353,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamlc-stop-after
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamlc-stop-after/*"))
  (dynamic_include ../../tests/tool-ocamlc-stop-after/rules.dune))
 
 (subdir
@@ -6545,6 +7379,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamldep-abstract-kinds
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamldep-abstract-kinds/*"))
  (dynamic_include ../../tests/tool-ocamldep-abstract-kinds/rules.dune))
 
 (subdir
@@ -6568,6 +7405,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamldep-modalias
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamldep-modalias/*"))
  (dynamic_include ../../tests/tool-ocamldep-modalias/rules.dune))
 
 (subdir
@@ -6591,6 +7431,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamldep-modules-only
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamldep-modules-only/*"))
  (dynamic_include ../../tests/tool-ocamldep-modules-only/rules.dune))
 
 (subdir
@@ -6614,7 +7457,20 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamldep-shadowing
- (dynamic_include ../../tests/tool-ocamldep-shadowing/rules.dune))
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamldep-shadowing/*"))
+ (dynamic_include ../../tests/tool-ocamldep-shadowing/rules.dune)
+ (subdir
+  dir1
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/tool-ocamldep-shadowing/dir1/*")))
+ (subdir
+  dir2
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/tool-ocamldep-shadowing/dir2/*"))))
 
 (subdir
  tests/tool-ocamldep-with-kinds
@@ -6637,6 +7493,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamldep-with-kinds
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamldep-with-kinds/*"))
  (dynamic_include ../../tests/tool-ocamldep-with-kinds/rules.dune))
 
 (subdir
@@ -6660,6 +7519,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamldoc
+ (copy_files (only_sources true) (files "../../tests/tool-ocamldoc/*"))
  (dynamic_include ../../tests/tool-ocamldoc/rules.dune))
 
 (subdir
@@ -6683,6 +7543,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamldoc-open
+ (copy_files (only_sources true) (files "../../tests/tool-ocamldoc-open/*"))
  (dynamic_include ../../tests/tool-ocamldoc-open/rules.dune))
 
 (subdir
@@ -6706,6 +7567,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamlfilt
+ (copy_files (only_sources true) (files "../../tests/tool-ocamlfilt/*"))
  (dynamic_include ../../tests/tool-ocamlfilt/rules.dune))
 
 (subdir
@@ -6729,6 +7591,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamlobjinfo
+ (copy_files (only_sources true) (files "../../tests/tool-ocamlobjinfo/*"))
  (dynamic_include ../../tests/tool-ocamlobjinfo/rules.dune))
 
 (subdir
@@ -6752,6 +7615,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamlopt-disable-builtin-check
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamlopt-disable-builtin-check/*"))
  (dynamic_include ../../tests/tool-ocamlopt-disable-builtin-check/rules.dune))
 
 (subdir
@@ -6775,6 +7641,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamlopt-save-ir
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamlopt-save-ir/*"))
  (dynamic_include ../../tests/tool-ocamlopt-save-ir/rules.dune))
 
 (subdir
@@ -6798,6 +7667,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamlopt-stop-after
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamlopt-stop-after/*"))
  (dynamic_include ../../tests/tool-ocamlopt-stop-after/rules.dune))
 
 (subdir
@@ -6821,6 +7693,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamltest
+ (copy_files (only_sources true) (files "../../tests/tool-ocamltest/*"))
  (dynamic_include ../../tests/tool-ocamltest/rules.dune))
 
 (subdir
@@ -6844,6 +7717,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-ocamltest-var-expansion
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-ocamltest-var-expansion/*"))
  (dynamic_include ../../tests/tool-ocamltest-var-expansion/rules.dune))
 
 (subdir
@@ -6867,6 +7743,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-toplevel
+ (copy_files (only_sources true) (files "../../tests/tool-toplevel/*"))
  (dynamic_include ../../tests/tool-toplevel/rules.dune))
 
 (subdir
@@ -6890,6 +7767,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-toplevel-invocation
+ (copy_files
+  (only_sources true)
+  (files "../../tests/tool-toplevel-invocation/*"))
  (dynamic_include ../../tests/tool-toplevel-invocation/rules.dune))
 
 (subdir
@@ -6913,6 +7793,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/tool-toplevel/known-bugs
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/tool-toplevel/known-bugs/*"))
  (dynamic_include ../../../tests/tool-toplevel/known-bugs/rules.dune))
 
 (subdir
@@ -6934,7 +7817,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/translprim (dynamic_include ../../tests/translprim/rules.dune))
+(subdir
+ ./run/translprim
+ (copy_files (only_sources true) (files "../../tests/translprim/*"))
+ (dynamic_include ../../tests/translprim/rules.dune))
 
 (subdir
  tests/tsan
@@ -6955,7 +7841,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/tsan (dynamic_include ../../tests/tsan/rules.dune))
+(subdir
+ ./run/tsan
+ (copy_files (only_sources true) (files "../../tests/tsan/*"))
+ (dynamic_include ../../tests/tsan/rules.dune))
 
 (subdir
  tests/typedtree
@@ -6976,7 +7865,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/typedtree (dynamic_include ../../tests/typedtree/rules.dune))
+(subdir
+ ./run/typedtree
+ (copy_files (only_sources true) (files "../../tests/typedtree/*"))
+ (dynamic_include ../../tests/typedtree/rules.dune))
 
 (subdir
  tests/typeopt
@@ -6997,7 +7889,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/typeopt (dynamic_include ../../tests/typeopt/rules.dune))
+(subdir
+ ./run/typeopt
+ (copy_files (only_sources true) (files "../../tests/typeopt/*"))
+ (dynamic_include ../../tests/typeopt/rules.dune))
 
 (subdir
  tests/typing-abstract-kinds
@@ -7020,6 +7915,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-abstract-kinds
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-abstract-kinds/*"))
  (dynamic_include ../../tests/typing-abstract-kinds/rules.dune))
 
 (subdir
@@ -7043,6 +7941,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-abstract-kinds-missing-cmi
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-abstract-kinds-missing-cmi/*"))
  (dynamic_include ../../tests/typing-abstract-kinds-missing-cmi/rules.dune))
 
 (subdir
@@ -7066,6 +7967,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-app-propagation
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-app-propagation/*"))
  (dynamic_include ../../tests/typing-app-propagation/rules.dune))
 
 (subdir
@@ -7089,6 +7993,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-core-bugs
+ (copy_files (only_sources true) (files "../../tests/typing-core-bugs/*"))
  (dynamic_include ../../tests/typing-core-bugs/rules.dune))
 
 (subdir
@@ -7112,6 +8017,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-deprecated
+ (copy_files (only_sources true) (files "../../tests/typing-deprecated/*"))
  (dynamic_include ../../tests/typing-deprecated/rules.dune))
 
 (subdir
@@ -7135,6 +8041,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-extension-constructor
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-extension-constructor/*"))
  (dynamic_include ../../tests/typing-extension-constructor/rules.dune))
 
 (subdir
@@ -7158,6 +8067,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-extensions
+ (copy_files (only_sources true) (files "../../tests/typing-extensions/*"))
  (dynamic_include ../../tests/typing-extensions/rules.dune))
 
 (subdir
@@ -7181,6 +8091,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-external
+ (copy_files (only_sources true) (files "../../tests/typing-external/*"))
  (dynamic_include ../../tests/typing-external/rules.dune))
 
 (subdir
@@ -7204,6 +8115,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-fstclassmod
+ (copy_files (only_sources true) (files "../../tests/typing-fstclassmod/*"))
  (dynamic_include ../../tests/typing-fstclassmod/rules.dune))
 
 (subdir
@@ -7227,6 +8139,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-gadts
+ (copy_files (only_sources true) (files "../../tests/typing-gadts/*"))
  (dynamic_include ../../tests/typing-gadts/rules.dune))
 
 (subdir
@@ -7250,6 +8163,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-hidden-predef
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-hidden-predef/*"))
  (dynamic_include ../../tests/typing-hidden-predef/rules.dune))
 
 (subdir
@@ -7273,6 +8189,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-immediate
+ (copy_files (only_sources true) (files "../../tests/typing-immediate/*"))
  (dynamic_include ../../tests/typing-immediate/rules.dune))
 
 (subdir
@@ -7296,6 +8213,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-implicit-source-positions
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-implicit-source-positions/*"))
  (dynamic_include ../../tests/typing-implicit-source-positions/rules.dune))
 
 (subdir
@@ -7319,6 +8239,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-implicit_unpack
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-implicit_unpack/*"))
  (dynamic_include ../../tests/typing-implicit_unpack/rules.dune))
 
 (subdir
@@ -7342,6 +8265,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-jkind-bounds
+ (copy_files (only_sources true) (files "../../tests/typing-jkind-bounds/*"))
  (dynamic_include ../../tests/typing-jkind-bounds/rules.dune))
 
 (subdir
@@ -7365,6 +8289,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-jkind-bounds/inclusion
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/typing-jkind-bounds/inclusion/*"))
  (dynamic_include ../../../tests/typing-jkind-bounds/inclusion/rules.dune))
 
 (subdir
@@ -7388,6 +8315,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-jkind-bounds/poly-variant-limit
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/typing-jkind-bounds/poly-variant-limit/*"))
  (dynamic_include
   ../../../tests/typing-jkind-bounds/poly-variant-limit/rules.dune))
 
@@ -7412,6 +8342,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-jkind-bounds/regression-tests
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/typing-jkind-bounds/regression-tests/*"))
  (dynamic_include
   ../../../tests/typing-jkind-bounds/regression-tests/rules.dune))
 
@@ -7436,6 +8369,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-jkind-bounds/stall-once
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/typing-jkind-bounds/stall-once/*"))
  (dynamic_include ../../../tests/typing-jkind-bounds/stall-once/rules.dune))
 
 (subdir
@@ -7459,6 +8395,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-jkind-bounds/subsumption
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/typing-jkind-bounds/subsumption/*"))
  (dynamic_include ../../../tests/typing-jkind-bounds/subsumption/rules.dune))
 
 (subdir
@@ -7482,6 +8421,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-jkind-bounds/unsafe-across-files
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/typing-jkind-bounds/unsafe-across-files/*"))
  (dynamic_include
   ../../../tests/typing-jkind-bounds/unsafe-across-files/rules.dune))
 
@@ -7506,6 +8448,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-jkind-bounds/verbosity
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/typing-jkind-bounds/verbosity/*"))
  (dynamic_include ../../../tests/typing-jkind-bounds/verbosity/rules.dune))
 
 (subdir
@@ -7529,6 +8474,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-kind
+ (copy_files (only_sources true) (files "../../tests/typing-kind/*"))
  (dynamic_include ../../tests/typing-kind/rules.dune))
 
 (subdir
@@ -7552,6 +8498,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-labeled-tuples
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-labeled-tuples/*"))
  (dynamic_include ../../tests/typing-labeled-tuples/rules.dune))
 
 (subdir
@@ -7575,6 +8524,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-labels
+ (copy_files (only_sources true) (files "../../tests/typing-labels/*"))
  (dynamic_include ../../tests/typing-labels/rules.dune))
 
 (subdir
@@ -7598,6 +8548,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts
+ (copy_files (only_sources true) (files "../../tests/typing-layouts/*"))
  (dynamic_include ../../tests/typing-layouts/rules.dune))
 
 (subdir
@@ -7621,6 +8572,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-addressable
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-addressable/*"))
  (dynamic_include ../../tests/typing-layouts-addressable/rules.dune))
 
 (subdir
@@ -7644,6 +8598,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-arrays
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-arrays/*"))
  (dynamic_include ../../tests/typing-layouts-arrays/rules.dune))
 
 (subdir
@@ -7667,6 +8624,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-bits16
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-bits16/*"))
  (dynamic_include ../../tests/typing-layouts-bits16/rules.dune))
 
 (subdir
@@ -7690,6 +8650,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-bits32
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-bits32/*"))
  (dynamic_include ../../tests/typing-layouts-bits32/rules.dune))
 
 (subdir
@@ -7713,6 +8676,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-bits64
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-bits64/*"))
  (dynamic_include ../../tests/typing-layouts-bits64/rules.dune))
 
 (subdir
@@ -7736,6 +8702,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-bits8
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-bits8/*"))
  (dynamic_include ../../tests/typing-layouts-bits8/rules.dune))
 
 (subdir
@@ -7759,6 +8728,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-block-indices
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-block-indices/*"))
  (dynamic_include ../../tests/typing-layouts-block-indices/rules.dune))
 
 (subdir
@@ -7782,6 +8754,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-box
+ (copy_files (only_sources true) (files "../../tests/typing-layouts-box/*"))
  (dynamic_include ../../tests/typing-layouts-box/rules.dune))
 
 (subdir
@@ -7805,6 +8778,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-caml-modify
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-caml-modify/*"))
  (dynamic_include ../../tests/typing-layouts-caml-modify/rules.dune))
 
 (subdir
@@ -7828,6 +8804,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-err-msg
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-err-msg/*"))
  (dynamic_include ../../tests/typing-layouts-err-msg/rules.dune))
 
 (subdir
@@ -7851,6 +8830,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-float32
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-float32/*"))
  (dynamic_include ../../tests/typing-layouts-float32/rules.dune))
 
 (subdir
@@ -7874,6 +8856,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-float64
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-float64/*"))
  (dynamic_include ../../tests/typing-layouts-float64/rules.dune))
 
 (subdir
@@ -7897,6 +8882,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-gadt-sort-var
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-gadt-sort-var/*"))
  (dynamic_include ../../tests/typing-layouts-gadt-sort-var/rules.dune))
 
 (subdir
@@ -7920,6 +8908,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-iarrays
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-iarrays/*"))
  (dynamic_include ../../tests/typing-layouts-iarrays/rules.dune))
 
 (subdir
@@ -7943,6 +8934,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-missing-cmi
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-missing-cmi/*"))
  (dynamic_include ../../tests/typing-layouts-missing-cmi/rules.dune))
 
 (subdir
@@ -7966,6 +8960,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-or-null
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-or-null/*"))
  (dynamic_include ../../tests/typing-layouts-or-null/rules.dune))
 
 (subdir
@@ -7989,6 +8986,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-products
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-products/*"))
  (dynamic_include ../../tests/typing-layouts-products/rules.dune))
 
 (subdir
@@ -8012,6 +9012,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-return
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-return/*"))
  (dynamic_include ../../tests/typing-layouts-return/rules.dune))
 
 (subdir
@@ -8035,6 +9038,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-scannable
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-scannable/*"))
  (dynamic_include ../../tests/typing-layouts-scannable/rules.dune))
 
 (subdir
@@ -8058,6 +9064,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-untagged-immediate
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-untagged-immediate/*"))
  (dynamic_include ../../tests/typing-layouts-untagged-immediate/rules.dune))
 
 (subdir
@@ -8081,6 +9090,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-vec128
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-layouts-vec128/*"))
  (dynamic_include ../../tests/typing-layouts-vec128/rules.dune))
 
 (subdir
@@ -8104,6 +9116,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-void
+ (copy_files (only_sources true) (files "../../tests/typing-layouts-void/*"))
  (dynamic_include ../../tests/typing-layouts-void/rules.dune))
 
 (subdir
@@ -8127,6 +9140,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-layouts-word
+ (copy_files (only_sources true) (files "../../tests/typing-layouts-word/*"))
  (dynamic_include ../../tests/typing-layouts-word/rules.dune))
 
 (subdir
@@ -8150,6 +9164,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-local
+ (copy_files (only_sources true) (files "../../tests/typing-local/*"))
  (dynamic_include ../../tests/typing-local/rules.dune))
 
 (subdir
@@ -8173,6 +9188,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-misc
+ (copy_files (only_sources true) (files "../../tests/typing-misc/*"))
  (dynamic_include ../../tests/typing-misc/rules.dune))
 
 (subdir
@@ -8196,6 +9212,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-misc-bugs
+ (copy_files (only_sources true) (files "../../tests/typing-misc-bugs/*"))
  (dynamic_include ../../tests/typing-misc-bugs/rules.dune))
 
 (subdir
@@ -8219,7 +9236,13 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-missing-cmi
- (dynamic_include ../../tests/typing-missing-cmi/rules.dune))
+ (copy_files (only_sources true) (files "../../tests/typing-missing-cmi/*"))
+ (dynamic_include ../../tests/typing-missing-cmi/rules.dune)
+ (subdir
+  subdir
+  (copy_files
+   (only_sources true)
+   (files "../../../tests/typing-missing-cmi/subdir/*"))))
 
 (subdir
  tests/typing-missing-cmi-2
@@ -8242,6 +9265,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-missing-cmi-2
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-missing-cmi-2/*"))
  (dynamic_include ../../tests/typing-missing-cmi-2/rules.dune))
 
 (subdir
@@ -8265,6 +9291,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-missing-cmi-3
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-missing-cmi-3/*"))
  (dynamic_include ../../tests/typing-missing-cmi-3/rules.dune))
 
 (subdir
@@ -8288,6 +9317,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-missing-cmi-indirections
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-missing-cmi-indirections/*"))
  (dynamic_include ../../tests/typing-missing-cmi-indirections/rules.dune))
 
 (subdir
@@ -8311,6 +9343,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-modal-kinds
+ (copy_files (only_sources true) (files "../../tests/typing-modal-kinds/*"))
  (dynamic_include ../../tests/typing-modal-kinds/rules.dune))
 
 (subdir
@@ -8334,6 +9367,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-mode-polymorphism
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-mode-polymorphism/*"))
  (dynamic_include ../../tests/typing-mode-polymorphism/rules.dune))
 
 (subdir
@@ -8357,6 +9393,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-mode-polymorphism/linking
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/typing-mode-polymorphism/linking/*"))
  (dynamic_include ../../../tests/typing-mode-polymorphism/linking/rules.dune))
 
 (subdir
@@ -8380,6 +9419,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-modes
+ (copy_files (only_sources true) (files "../../tests/typing-modes/*"))
  (dynamic_include ../../tests/typing-modes/rules.dune))
 
 (subdir
@@ -8403,6 +9443,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-modules
+ (copy_files (only_sources true) (files "../../tests/typing-modules/*"))
  (dynamic_include ../../tests/typing-modules/rules.dune))
 
 (subdir
@@ -8426,6 +9467,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-modules-bugs
+ (copy_files (only_sources true) (files "../../tests/typing-modules-bugs/*"))
  (dynamic_include ../../tests/typing-modules-bugs/rules.dune))
 
 (subdir
@@ -8449,6 +9491,10 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-modules/inclusion_errors_with_renamed_source_file
+ (copy_files
+  (only_sources true)
+  (files
+   "../../../tests/typing-modules/inclusion_errors_with_renamed_source_file/*"))
  (dynamic_include
   ../../../tests/typing-modules/inclusion_errors_with_renamed_source_file/rules.dune))
 
@@ -8473,7 +9519,20 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-modules/pr13099
- (dynamic_include ../../../tests/typing-modules/pr13099/rules.dune))
+ (copy_files
+  (only_sources true)
+  (files "../../../tests/typing-modules/pr13099/*"))
+ (dynamic_include ../../../tests/typing-modules/pr13099/rules.dune)
+ (subdir
+  lib1
+  (copy_files
+   (only_sources true)
+   (files "../../../../tests/typing-modules/pr13099/lib1/*")))
+ (subdir
+  lib2
+  (copy_files
+   (only_sources true)
+   (files "../../../../tests/typing-modules/pr13099/lib2/*"))))
 
 (subdir
  tests/typing-multifile
@@ -8496,6 +9555,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-multifile
+ (copy_files (only_sources true) (files "../../tests/typing-multifile/*"))
  (dynamic_include ../../tests/typing-multifile/rules.dune))
 
 (subdir
@@ -8519,6 +9579,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-objects
+ (copy_files (only_sources true) (files "../../tests/typing-objects/*"))
  (dynamic_include ../../tests/typing-objects/rules.dune))
 
 (subdir
@@ -8542,6 +9603,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-objects-bugs
+ (copy_files (only_sources true) (files "../../tests/typing-objects-bugs/*"))
  (dynamic_include ../../tests/typing-objects-bugs/rules.dune))
 
 (subdir
@@ -8565,6 +9627,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-ocamlc-i
+ (copy_files (only_sources true) (files "../../tests/typing-ocamlc-i/*"))
  (dynamic_include ../../tests/typing-ocamlc-i/rules.dune))
 
 (subdir
@@ -8588,6 +9651,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-poly
+ (copy_files (only_sources true) (files "../../tests/typing-poly/*"))
  (dynamic_include ../../tests/typing-poly/rules.dune))
 
 (subdir
@@ -8611,6 +9675,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-poly-bugs
+ (copy_files (only_sources true) (files "../../tests/typing-poly-bugs/*"))
  (dynamic_include ../../tests/typing-poly-bugs/rules.dune))
 
 (subdir
@@ -8634,6 +9699,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-polyvariants-bugs
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-polyvariants-bugs/*"))
  (dynamic_include ../../tests/typing-polyvariants-bugs/rules.dune))
 
 (subdir
@@ -8657,6 +9725,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-polyvariants-bugs-2
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-polyvariants-bugs-2/*"))
  (dynamic_include ../../tests/typing-polyvariants-bugs-2/rules.dune))
 
 (subdir
@@ -8680,6 +9751,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-private
+ (copy_files (only_sources true) (files "../../tests/typing-private/*"))
  (dynamic_include ../../tests/typing-private/rules.dune))
 
 (subdir
@@ -8703,6 +9775,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-private-bugs
+ (copy_files (only_sources true) (files "../../tests/typing-private-bugs/*"))
  (dynamic_include ../../tests/typing-private-bugs/rules.dune))
 
 (subdir
@@ -8726,6 +9799,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-recmod
+ (copy_files (only_sources true) (files "../../tests/typing-recmod/*"))
  (dynamic_include ../../tests/typing-recmod/rules.dune))
 
 (subdir
@@ -8749,6 +9823,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-recordarg
+ (copy_files (only_sources true) (files "../../tests/typing-recordarg/*"))
  (dynamic_include ../../tests/typing-recordarg/rules.dune))
 
 (subdir
@@ -8772,6 +9847,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-recovery
+ (copy_files (only_sources true) (files "../../tests/typing-recovery/*"))
  (dynamic_include ../../tests/typing-recovery/rules.dune))
 
 (subdir
@@ -8795,6 +9871,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-rectypes-bugs
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-rectypes-bugs/*"))
  (dynamic_include ../../tests/typing-rectypes-bugs/rules.dune))
 
 (subdir
@@ -8818,6 +9897,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-safe-linking
+ (copy_files (only_sources true) (files "../../tests/typing-safe-linking/*"))
  (dynamic_include ../../tests/typing-safe-linking/rules.dune))
 
 (subdir
@@ -8841,6 +9921,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-separability
+ (copy_files (only_sources true) (files "../../tests/typing-separability/*"))
  (dynamic_include ../../tests/typing-separability/rules.dune))
 
 (subdir
@@ -8864,6 +9945,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-shadowing-of-pervasives-submodules
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-shadowing-of-pervasives-submodules/*"))
  (dynamic_include
   ../../tests/typing-shadowing-of-pervasives-submodules/rules.dune))
 
@@ -8888,6 +9972,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-short-paths
+ (copy_files (only_sources true) (files "../../tests/typing-short-paths/*"))
  (dynamic_include ../../tests/typing-short-paths/rules.dune))
 
 (subdir
@@ -8911,6 +9996,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-signatures
+ (copy_files (only_sources true) (files "../../tests/typing-signatures/*"))
  (dynamic_include ../../tests/typing-signatures/rules.dune))
 
 (subdir
@@ -8934,6 +10020,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-sigsubst
+ (copy_files (only_sources true) (files "../../tests/typing-sigsubst/*"))
  (dynamic_include ../../tests/typing-sigsubst/rules.dune))
 
 (subdir
@@ -8957,6 +10044,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-simd
+ (copy_files (only_sources true) (files "../../tests/typing-simd/*"))
  (dynamic_include ../../tests/typing-simd/rules.dune))
 
 (subdir
@@ -8980,6 +10068,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-small-numbers
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-small-numbers/*"))
  (dynamic_include ../../tests/typing-small-numbers/rules.dune))
 
 (subdir
@@ -9003,6 +10094,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-typeparam
+ (copy_files (only_sources true) (files "../../tests/typing-typeparam/*"))
  (dynamic_include ../../tests/typing-typeparam/rules.dune))
 
 (subdir
@@ -9026,6 +10118,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-unboxed
+ (copy_files (only_sources true) (files "../../tests/typing-unboxed/*"))
  (dynamic_include ../../tests/typing-unboxed/rules.dune))
 
 (subdir
@@ -9049,6 +10142,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-unboxed-types
+ (copy_files
+  (only_sources true)
+  (files "../../tests/typing-unboxed-types/*"))
  (dynamic_include ../../tests/typing-unboxed-types/rules.dune))
 
 (subdir
@@ -9072,6 +10168,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-unicode
+ (copy_files (only_sources true) (files "../../tests/typing-unicode/*"))
  (dynamic_include ../../tests/typing-unicode/rules.dune))
 
 (subdir
@@ -9095,6 +10192,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-unique
+ (copy_files (only_sources true) (files "../../tests/typing-unique/*"))
  (dynamic_include ../../tests/typing-unique/rules.dune))
 
 (subdir
@@ -9118,6 +10216,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-warnings
+ (copy_files (only_sources true) (files "../../tests/typing-warnings/*"))
  (dynamic_include ../../tests/typing-warnings/rules.dune))
 
 (subdir
@@ -9141,6 +10240,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/typing-zero-alloc
+ (copy_files (only_sources true) (files "../../tests/typing-zero-alloc/*"))
  (dynamic_include ../../tests/typing-zero-alloc/rules.dune))
 
 (subdir
@@ -9162,7 +10262,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/uid-deps (dynamic_include ../../tests/uid-deps/rules.dune))
+(subdir
+ ./run/uid-deps
+ (copy_files (only_sources true) (files "../../tests/uid-deps/*"))
+ (dynamic_include ../../tests/uid-deps/rules.dune))
 
 (subdir
  tests/uids
@@ -9183,7 +10286,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/uids (dynamic_include ../../tests/uids/rules.dune))
+(subdir
+ ./run/uids
+ (copy_files (only_sources true) (files "../../tests/uids/*"))
+ (dynamic_include ../../tests/uids/rules.dune))
 
 (subdir
  tests/unboxed-primitive-args
@@ -9206,6 +10312,9 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/unboxed-primitive-args
+ (copy_files
+  (only_sources true)
+  (files "../../tests/unboxed-primitive-args/*"))
  (dynamic_include ../../tests/unboxed-primitive-args/rules.dune))
 
 (subdir
@@ -9227,7 +10336,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/unicode (dynamic_include ../../tests/unicode/rules.dune))
+(subdir
+ ./run/unicode
+ (copy_files (only_sources true) (files "../../tests/unicode/*"))
+ (dynamic_include ../../tests/unicode/rules.dune))
 
 (subdir
  tests/unwind
@@ -9248,7 +10360,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/unwind (dynamic_include ../../tests/unwind/rules.dune))
+(subdir
+ ./run/unwind
+ (copy_files (only_sources true) (files "../../tests/unwind/*"))
+ (dynamic_include ../../tests/unwind/rules.dune))
 
 (subdir
  tests/utils
@@ -9269,7 +10384,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/utils (dynamic_include ../../tests/utils/rules.dune))
+(subdir
+ ./run/utils
+ (copy_files (only_sources true) (files "../../tests/utils/*"))
+ (dynamic_include ../../tests/utils/rules.dune))
 
 (subdir
  tests/warnings
@@ -9290,7 +10408,10 @@
   (target rules.dune)
   (enabled_if (= "%{context_name}" main))
   (action (write-file "%{target}" ""))))
-(subdir ./run/warnings (dynamic_include ../../tests/warnings/rules.dune))
+(subdir
+ ./run/warnings
+ (copy_files (only_sources true) (files "../../tests/warnings/*"))
+ (dynamic_include ../../tests/warnings/rules.dune))
 
 (subdir
  tests/weak-ephe-final
@@ -9313,6 +10434,7 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/weak-ephe-final
+ (copy_files (only_sources true) (files "../../tests/weak-ephe-final/*"))
  (dynamic_include ../../tests/weak-ephe-final/rules.dune))
 
 (subdir
@@ -9336,5 +10458,6 @@
   (action (write-file "%{target}" ""))))
 (subdir
  ./run/win-unicode
+ (copy_files (only_sources true) (files "../../tests/win-unicode/*"))
  (dynamic_include ../../tests/win-unicode/rules.dune))
 

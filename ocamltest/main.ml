@@ -283,8 +283,6 @@ let extract_rootenv (Ast (stmts, subs)) =
   (env, Ast (stmts, subs))
 
 let test_file test_filename =
-  let generate_only = Options.dune in
-  let start = if Options.show_timings then Unix.gettimeofday () else 0.0 in
   let skip_test = List.mem test_filename !tests_to_skip in
   let tsl_ast = tsl_parse_file_safe test_filename in
   let (rootenv_statements, tsl_ast) = extract_rootenv tsl_ast in
@@ -313,23 +311,8 @@ let test_file test_filename =
   let hookname_prefix = Filename.concat test_source_directory test_prefix in
   let test_build_directory_prefix =
     get_test_build_directory_prefix test_directory in
-  let clean_test_build_directory () =
-    if not generate_only then begin
-    try
-      Sys.rm_rf test_build_directory_prefix
-    with Sys_error _ -> ()
-    end
-  in
-  clean_test_build_directory ();
-  Sys.make_directory test_build_directory_prefix;
-  let log_filename =
-    Filename.concat test_build_directory_prefix (test_prefix ^ ".log") in
-  let log =
-    if Options.log_to_stderr then stderr else begin
-      open_out log_filename
-    end in
-  let summary = Sys.with_chdir test_build_directory_prefix
-    (fun () ->
+  let log = if Options.log_to_stderr then stderr else open_out Filename.null in
+  let rootenv, msgs, task =
        let promote = string_of_bool Options.promote in
        let default_timeout = string_of_int Options.default_timeout in
        let install_hook name =
@@ -364,7 +347,7 @@ let test_file test_filename =
        let rootenv, initial_status, initial_summary =
          let rec loop env stmts =
            match stmts with
-           | [] -> (env, initial_status, Pass)
+           | [] -> (env, initial_status, Actions.Static Result.pass)
            | s :: t ->
              begin match interpret_environment_statement env s with
              | env -> loop env t
@@ -373,42 +356,44 @@ let test_file test_filename =
                let line = s.loc.Location.loc_start.Lexing.pos_lnum in
                Printf.ksprintf add_msg "line %d %s" line
                  (report_error s.loc e bt);
-               (env, Skip_all, Fail)
+               (env, Skip_all, Actions.Static Result.fail)
              end
          in
          loop rootenv rootenv_statements
        in
        let rootenv = Environments.initialize Environments.Post log rootenv in
-       let result =
-         let task =
-           run_test_tree log add_msg initial_status rootenv tsl_ast in
-         match initial_summary with
-         | Skip -> Result.skip
-         | Fail -> Result.fail
-         | Pass ->
-            match task with
-            | Static r -> r
-            | Task tasks ->
-            if generate_only then begin
-              Actions_eval.print_task_items initial_environment tasks;
-              Result.pass
-            end else Actions_eval.run_tasks ~log tasks
-         (*
-         if generate_only then
-           if initial_status = Skip_all then initial_summary
-           else print_test_tasks ~log rootenv tsl_ast
-         else
-           let tasks =
-             run_test_tree log add_msg initial_status rootenv tsl_ast in
-           match initial_summary, tasks with
-           | (Skip|Fail), _ -> initial_summary
-           | Pass, Static r -> summary_of_result r
-           | Pass, Task t -> summary_of_result (Actions_eval.run_tasks ~log t)
-          *)
-       in
+       rootenv,
+       List.rev !msgs,
+       Actions.seq [initial_summary;
+                    run_test_tree log add_msg initial_status rootenv tsl_ast]
+  in
+  Actions.clear_all_hooks();
+  if not Options.log_to_stderr then close_out log;
+  rootenv, msgs, task
+
+let run_test ~rootenv ~msgs ~task =
+  let start = if Options.show_timings then Unix.gettimeofday () else 0.0 in
+  let test_build_directory_prefix = Environments.safe_lookup
+    Builtin_variables.test_build_directory_prefix rootenv
+  in
+  let test_basename = Environments.safe_lookup
+    Builtin_variables.test_file rootenv
+  in
+  let test_prefix = Filename.chop_extension test_basename in
+  let clean_test_build_directory () =
+    try
+      Sys.rm_rf test_build_directory_prefix
+    with Sys_error _ -> ()
+  in
+  clean_test_build_directory ();
+  Sys.make_directory test_build_directory_prefix;
+  let log_filename =
+    Filename.concat test_build_directory_prefix (test_prefix ^ ".log") in
+  let log = if Options.log_to_stderr then stderr else open_out log_filename in
+  let summary = Sys.with_chdir test_build_directory_prefix
+    (fun () ->
+       let result = Actions_eval.run_task ~log task in
        let common_prefix = " ... testing '" ^ test_basename ^ "'" in
-       let msgs = List.rev !msgs in
-       if not generate_only then begin
        if Result.is_skip result && msgs <> [] then
          List.iter (Printf.printf "%s with %s\n%!" common_prefix) msgs
        else begin
@@ -421,8 +406,6 @@ let test_file test_filename =
          if Result.is_fail result then
            List.iter (Printf.printf "%s with %s\n%!" common_prefix) msgs
        end;
-       end;
-       Actions.clear_all_hooks();
        summary_of_result result
     ) in
   if not Options.log_to_stderr then close_out log;
@@ -451,19 +434,23 @@ let sort_strings = List.sort String.compare
 let find_test_dirs dir =
   let res = ref [] in
   let rec loop dir =
+    let subdirs = ref [] in
     let contains_tests = ref false in
     Array.iter (fun s ->
         if ignored s then ()
         else begin
           let s = dir ^ "/" ^ s in
-          if Sys.is_directory s then loop s
-          else if not !contains_tests && is_test s then contains_tests := true
+          if Sys.is_directory s then begin
+            let subdir_has_tests = loop s in
+            if not subdir_has_tests then subdirs := s :: !subdirs;
+          end else if not !contains_tests && is_test s then contains_tests := true
         end
       ) (Sys.readdir dir);
-    if !contains_tests then res := dir :: !res
+    if !contains_tests then res := (dir, sort_strings !subdirs) :: !res;
+    !contains_tests
   in
-  loop dir;
-  sort_strings !res
+  loop dir |> ignore;
+  List.sort (fun (a,_) (b,_) -> String.compare a b) !res
 
 let list_tests dir =
   let res = ref [] in
@@ -482,7 +469,7 @@ let list_tests dir =
 let find_tests dir =
   if Sys.is_directory dir then
     List.concat_map
-      (fun test_dir ->
+      (fun (test_dir,_) ->
          List.map (Filename.concat test_dir) (list_tests test_dir))
       (find_test_dirs dir)
   else if is_test dir then [dir]
@@ -505,7 +492,7 @@ let () =
   let failed = ref false in
   let work_done = ref false in
   let list_all_tests dir =
-    find_test_dirs dir |> List.iter (fun dir ->
+    find_test_dirs dir |> List.iter (fun (dir,_) ->
       list_tests dir |> List.iter (fun test ->
         print_endline (Filename.concat dir test)))
   in
@@ -516,20 +503,18 @@ let () =
        if Options.dune then begin
          if dir <> Filename.current_dir_name then begin
            Sys.chdir dir;
-           Format.printf "%a@.@." Sexp.pp
-             Sexp.(S [A "copy_files"; S [A "only_sources"; A "true"];
-                      S [A "files"; A (Filename.concat dir "*")]]);
          end;
          let gen_file f =
-           match test_file f with
-           | Pass | Skip -> ()
-           | Fail -> failwith "Test should not fail when generating!"
+           let env, _msgs, task = test_file f in
+           match task with
+           | Actions.Static _ -> () (* FIXME *)
+           | Actions.Task task -> Actions_eval.print_task_items env task
          in
          List.iter gen_file res
        end else List.iter print_endline res
   in
   let find_test_dirs dir =
-    let print_dune test_dir =
+    let print_dune (test_dir, subdirs) =
       let open Sexp in
       let rec invert = function
         | s when s = "" || s = Filename.current_dir_name ->
@@ -567,15 +552,26 @@ let () =
               S [A "enabled_if"; S [A "="; A "%{context_name}"; A "main"]];
               S [A "action"; S [A "write-file"; A "%{target}"; A ""]]]]
       in
+      let subdir_copies =
+        subdirs |> List.map (fun dir ->
+          let inv = invert dir ^ Filename.dir_sep in
+          let dirname = Option.get (String.remove_prefix ~prefix:(test_dir ^ "/") dir) in
+          S [A "subdir"; A dirname;
+             S [A "copy_files"; S [A "only_sources"; A "true"];
+                 S [A "files"; A (inv ^ test_dir ^ "/" ^ dirname ^ "/*")]]])
+      in
       let run =
-        S [A "subdir"; A run_dir;
-           S [A "dynamic_include"; A (inv ^ test_dir ^ "/rules.dune")]]
+        S ([A "subdir"; A run_dir;
+            S [A "copy_files"; S [A "only_sources"; A "true"];
+               S [A "files"; A (inv ^ test_dir ^ "/*")]];
+            S [A "dynamic_include"; A (inv ^ test_dir ^ "/rules.dune")]] @
+            subdir_copies)
       in
       Format.printf "%a@.%a@.@." pp rules pp run
     in
-    List.iter
-      (fun x -> if Options.dune then print_dune x else print_endline x)
-      (find_test_dirs dir)
+    let dirs = find_test_dirs dir in
+    if Options.dune then List.iter print_dune dirs
+    else List.iter (fun (d,_) -> print_endline d) dirs
   in
   let find_tests dir = List.iter print_endline (find_tests dir) in
   let doit f x = work_done := true; f x in
@@ -586,8 +582,12 @@ let () =
   let do_file f =
     if Options.translate then
       Translate.file ~style:Options.style ~compact:Options.compact f
+    else if Options.dune then
+      failwith "-dune supported only when listing tests"
     else
-      match test_file f with
+      let rootenv, msgs, task = test_file f in
+      let summary = run_test ~rootenv ~msgs ~task in
+      match summary with
       | Pass | Skip -> ()
       | Fail ->
          if not Options.exit_0_on_failure then failed := true
