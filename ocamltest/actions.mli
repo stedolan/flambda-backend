@@ -34,6 +34,7 @@ type task_item =
       { kind_of_output: string;
         files: Filecompare.files;
         tool: Filecompare.tool;
+        reference_exists: bool;
         promote: bool }
 
 type task =

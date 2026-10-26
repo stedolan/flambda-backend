@@ -24,18 +24,23 @@ let run_task_item ~log : Actions.task_item -> Result.t = function
        ~source_dir ~build_dir ~remove ~files ~subdirs
   | Run_cmd { settings; message; exits } ->
      Actions_helpers.do_run_cmd ~settings ~message ~exits log
-  | Compare_files { kind_of_output; files; tool; promote } ->
-     let is_nonempty file =
+  | Compare_files { kind_of_output; files; tool; reference_exists; promote } ->
+     let is_empty file =
        let ch = open_in_bin file in
        Fun.protect ~finally:(fun () -> close_in_noerr ch)
-         (fun () -> in_channel_length ch > 0)
+         (fun () -> in_channel_length ch = 0)
      in
      if Options.no_diff then
-       (if is_nonempty files.output_filename then
+       (if not (Sys.file_exists files.output_filename) then
+         Result.fail_with_reason
+           ("Failed to produce output " ^ files.output_filename)
+        else if is_empty files.output_filename && not reference_exists then
+          (* Special case: empty output and no reference file is OK *)
+          Result.pass
+        else
           Builtin_actions.do_copy_file log
             ~src:files.output_filename
-            ~dst:(promoted_output files)
-        else Result.pass)
+            ~dst:(promoted_output files))
      else
        Actions_helpers.do_compare_files
          ~kind_of_output ~files ~tool ~promote log

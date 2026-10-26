@@ -950,6 +950,7 @@ let really_compare_programs backend comparison_tool log env =
     kind_of_output = "program";
     files;
     tool = comparison_tool;
+    reference_exists = false;
     promote = false }],
   env
 
