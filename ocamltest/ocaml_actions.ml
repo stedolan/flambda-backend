@@ -1664,10 +1664,7 @@ let setup_ocamlfilt =
   let filename = Ocaml_files.ocamlfilt in
   let env = Environments.add Ocaml_variables.ocamlfilt filename env in
   let reason = filename ^ " exists" in
-  if not (Sys.file_exists filename) then
-    (Result.fail_with_reason reason, env)
-  else
-    (Result.pass, env)
+  Actions.Task [Check_file_exists {filename; reason}], env
 
 let init () =
   Environments.register_initializer Environments.Post
