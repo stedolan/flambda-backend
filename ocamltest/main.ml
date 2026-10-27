@@ -531,7 +531,8 @@ let () =
         | Some suff -> suff
         | None -> failwith "Dune rule generation is only supported for tests/<DIR>"
       in
-      let run_dir = "./run/" ^ test_suff in
+      let run_dir = "run/" ^ test_suff in
+      let gen_dir = "gen/" ^ test_suff in
       let cmd =
         [A "%{project_root}/ocamltest/ocamltest.native";
          A "-no-ocamlsrcdir";
@@ -540,11 +541,11 @@ let () =
          A (inv ^ test_dir)]
       in
       let rules =
-        S [A "subdir"; A test_dir;
+        S [A "subdir"; A gen_dir;
            S [A "rule";
               S [A "target"; A "rules.dune"];
               S [A "enabled_if"; S [A "<>"; A "%{context_name}"; A "main"]];
-              S [A "deps"; S [A "source_tree"; A "."]];
+              S [A "deps"; S [A "source_tree"; A (inv ^ test_dir)]];
               S [A "action";
                  S [A "with-stdout-to"; A "%{target}";
                     S (A "run" :: cmd)]]];
@@ -565,7 +566,7 @@ let () =
         S ([A "subdir"; A run_dir;
             S [A "copy_files"; S [A "only_sources"; A "true"];
                S [A "files"; A (inv ^ test_dir ^ "/*")]];
-            S [A "dynamic_include"; A (inv ^ test_dir ^ "/rules.dune")]] @
+            S [A "dynamic_include"; A (inv ^ gen_dir ^ "/rules.dune")]] @
             subdir_copies)
       in
       Format.printf "%a@.%a@.@." pp rules pp run
