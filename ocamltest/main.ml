@@ -397,7 +397,7 @@ let run_test ~rootenv ~msgs ~task =
        if Result.is_skip result && msgs <> [] then
          List.iter (Printf.printf "%s with %s\n%!" common_prefix) msgs
        else begin
-         Printf.printf "%s => %s%s\n%!" common_prefix
+         Printf.printf "%s %s%s\n%!" common_prefix
            (Result.string_of_result result)
            (if Options.show_timings && Result.is_pass result then
               let wall_clock_duration = Unix.gettimeofday () -. start in
